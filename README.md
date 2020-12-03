@@ -4,7 +4,7 @@ Application specific developed for calibrating HVAC pressure switches.
 
 **Design problem**
 
-Create a application that can be used to calibrate various types of pressure switches.
+Create a application that is used to calibrate various types of pressure switches.
 User is able to create different **"Calibration Models"**.
 
 The calibration model contains the following data:
@@ -28,7 +28,7 @@ Sensor type e.g.:
 | tolerance (-) | tolerance (-) |
 
 Data is retrieved via a serial connection.
-There will be 4 types of data provided:
+There are 4 types of data provided:
 - Pressure (Bar)
 - Room temp (Celsius)
 - Relative air moisture rv(%)
@@ -48,7 +48,7 @@ All certificates should have a unique identification number which is generated a
 This so called "counter" is stored in a database file. When needed the counter can be altered whitin the
 settings of the application (not recommended).
 
-The use is able to see the pressure rise and drop in some sort of graphical fashion e.g.
+The user is able to see the pressure rise and drop in some sort of graphical fashion e.g.
 - chart
 - range gauge
 - numeric
