@@ -14,7 +14,12 @@ The calibration model contains the following data:
 
 The Calibration models contains at least 1 **"Sensor Setup"** with a maximum of 2.
 
-A Sensor setup consist of 6 **"Data values"**:
+A Sensor setup consist of a sensor type and 6 **"Data values"**:
+
+Sensor type e.g.:
+- high pressure
+- low pressure
+- condenser pressure
 
 | Upper range   | Lower range   |
 | -----------   | ------------- |
