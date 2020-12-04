@@ -37,8 +37,6 @@ There are 4 types of data provided:
 The users task is to adjust the pressure switch in a way that the switching state changes
 depending on the given range, configured in the Calibration model.
 
-
-
 When a calibration is competed the result are outputted in 3 forms:
 - Hard-copy (wired printer)
 - Pdf (Cloud)
