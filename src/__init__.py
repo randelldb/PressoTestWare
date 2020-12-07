@@ -8,6 +8,8 @@ from flask_marshmallow import Marshmallow
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
+# Flask app instance
+app = Flask(__name__, template_folder=dir_path + '/templates')
 # SQL Alchemy instance
 db = SQLAlchemy()
 # DB Migration instance
@@ -17,11 +19,10 @@ ma = Marshmallow()
 
 
 def create_app(test_config=None):
-    app = Flask(__name__, template_folder=dir_path + '/public')
+    from src import models, routes
+
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + dir_path + '/data/db.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    from src import models
 
     db.init_app(app)
     migrate.init_app(app, db)
