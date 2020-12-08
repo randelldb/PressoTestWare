@@ -1,76 +1,65 @@
-hvPassFlag = 0
-lvPassFlag = 0
+class CalibrationValidator:
+    hvPassFlag = 0
+    lvPassFlag = 0
 
+    def __init__(self, temp, rv, readingHv, highValue, hvPlus, hvMin, readingLv, lowValue, lvPlus, lvMin):
+        self.temp = temp
+        self.rv = rv
 
-def hv_validator(temp, rv, reading, highValue, hvPlus, hvMin):
-    temp = temp
-    rv = rv
-    reading = reading
+        self.readingHv = readingHv
+        self.highValue = highValue
+        self.hvPlus = hvPlus
+        self.hvMin = hvMin
 
-    highValue = highValue
-    hvPlus = hvPlus
-    hvMin = hvMin
+        self.readingLv = readingLv
+        self.lowValue = lowValue
+        self.lvPlus = lvPlus
+        self.lvMin = lvMin
 
-    if 19 <= temp <= 21 and 30 <= rv <= 60:
-        print('Temp is ' + str(temp) + ': Temp is in range')
-        print('Rv is ' + str(rv) + ': Rv is in range')
+    def hv_validator(self):
+        if 19 <= self.temp <= 21 and 30 <= self.rv <= 60:
+            print('Temp is ' + str(self.temp) + ': Temp is in range')
+            print('Rv is ' + str(self.rv) + ': Rv is in range')
 
-        if highValue - hvMin <= reading <= highValue + hvPlus:
-            print('pass')
-            # set Pass Flag for High Value
-            hvPassFlag = 1
+            if self.highValue - self.hvMin <= self.readingHv <= self.highValue + self.hvPlus:
+                print('pass')
+                # set Pass Flag for High Value
+                self.hvPassFlag = 1
+            else:
+                print('fail')
+                self.hvPassFlag = 0
+                self.lvPassFlag = 0
+
         else:
-            print('fail')
-            hvPassFlag, lvPassFlag = 0
+            print('Check temp and Rv!!!')
 
-    else:
-        print('Check temp and Rv!!!')
+    def lv_validator(self):
+        if 19 <= self.temp <= 21 and 30 <= self.rv <= 60:
+            print('Temp is ' + str(self.temp) + ': Temp is in range')
+            print('Rv is ' + str(self.rv) + ': Rv is in range')
 
-    print(hvPassFlag)
+            if self.lowValue - self.lvMin <= self.readingLv <= self.lowValue + self.lvPlus:
+                print('pass')
+                # set Pass Flag for High Value
+                self.lvPassFlag = 1
+            else:
+                print('fail')
+                self.lvPassFlag = 0
+                self.hvPassFlag = 0
 
-
-def lv_validator(temp, rv, reading, lowValue, lvPlus, lvMin):
-    temp = temp
-    rv = rv
-    reading = reading
-
-    lowValue = lowValue
-    lvPlus = lvPlus
-    lvMin = lvMin
-
-    if 19 <= temp <= 21 and 30 <= rv <= 60:
-        print('Temp is ' + str(temp) + ': Temp is in range')
-        print('Rv is ' + str(rv) + ': Rv is in range')
-
-        if lowValue - lvMin <= reading <= lowValue + lvPlus:
-            print('pass')
-            # set Pass Flag for High Value
-            lvPassFlag = 1
         else:
-            print('fail')
-            lvPassFlag, hvPassFlag = 0
+            print('Check temp and Rv!!!')
 
-    else:
-        print('Check temp and Rv!!!')
-
-    print(lvPassFlag)
-
-
-def validation_pass(lvPassFlag, hvPassFlag):
-    print('inside fn')
-    print(lvPassFlag, hvPassFlag)
-    if hvPassFlag and lvPassFlag == 1:
-        print('Full Pass')
-    elif hvPassFlag == 0 and lvPassFlag == 1:
-        print('High value Fail')
-    elif lvPassFlag == 0 and hvPassFlag == 1:
-        print('Low value Fail')
-    elif lvPassFlag and hvPassFlag == 0:
-        print('Full Fail!!')
+    def validation_pass(self):
+        print('inside fn')
+        print(self.lvPassFlag, self.hvPassFlag)
+        if self.hvPassFlag and self.lvPassFlag == 1:
+            print('Calibration Passed')
+        else:
+            print('Calibration Failed')
 
 
-hv_validator(20, 40, 8, 8, 0.4, 0.4)
-
-lv_validator(21, 35, 1.1, 1, 0.1, 0.1)
-
-validation_pass(lvPassFlag, hvPassFlag)
+test_a = CalibrationValidator(20, 40, 8, 8, 0.4, 0.4, 1, 1, 0.1, 0.1)
+test_a.hv_validator()
+test_a.lv_validator()
+test_a.validation_pass()

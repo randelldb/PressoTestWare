@@ -17,6 +17,13 @@ migrate = Migrate()
 # Marshmallow Instance
 ma = Marshmallow()
 
+# Define Pressure switch types
+PsTypes = {
+    1: 'High Pressure',
+    2: 'Low Pressure',
+    3: 'Condenser Pressure'
+}
+
 
 def create_app(test_config=None):
     from src import models, routes
@@ -29,17 +36,20 @@ def create_app(test_config=None):
     ma.init_app(app)
     return app
 
+
 # # Test area #
-# from src.models import CalibrationModel
-#
-# #@staticmethod
-# def create():
-#     testCommit = CalibrationModel('Real Commit', 'Danfos 1234', 'HTM', 1, 2, 3, 4, 5, 6)
-#
-#     session.add(testCommit)
-#     session.commit()
-#     print("im running on my one")
-#     #return testCommit
-#
-# create()
+from src.models import CalibrationModel
+
+
+# @staticmethod
+def create():
+    testCommit = CalibrationModel('Real Commit', 'Danfos 1234', 'HTM', 1, 2, 3, 4, 5, 6)
+
+    db.add(testCommit)
+    db.commit()
+    print("im running on my one")
+    # return testCommit
+
+
+create()
 # # Test area #
