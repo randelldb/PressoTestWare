@@ -24,17 +24,3 @@ class CalibrationModel(db.Model):
     b_lowValue = db.Column(db.Float())
     b_lvPlus = db.Column(db.Float())
     b_lvMin = db.Column(db.Float())
-
-    # def __init__(self, name, model, customer, highValue, hvPlus, hvMin, lowValue, lvPlus, lvMin):
-    #     self.name = name
-    #     self.model = model
-    #     self.customer = customer
-    #     self.highValue = highValue
-    #     self.hvPlus = hvPlus
-    #     self.hvMin = hvMin
-    #     self.lowValue = lowValue
-    #     self.lvPlus = lvPlus
-    #     self.lvMin = lvMin
-
-    # def __repr__(self, name):
-    #      return "<CalibrationModel(title='%s')>" % self.name
