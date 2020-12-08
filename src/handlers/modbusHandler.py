@@ -1,5 +1,6 @@
 import minimalmodbus
 import serial
+from time import time, sleep
 
 instrument = minimalmodbus.Instrument('COM6', 1)  # port name, slave address (in decimal)
 
@@ -15,5 +16,8 @@ instrument.mode = minimalmodbus.MODE_RTU  # rtu or ascii mode
 instrument.clear_buffers_before_each_transaction = True
 
 # Read temperature (PV = ProcessValue) #
-temperature = instrument.read_register(512, 1)  # Registernumber, number of decimals
-print(temperature)
+temperature = instrument.read_register(15, 1)  # Registernumber, number of decimals
+
+while True:
+    sleep(0.5)
+    print(temperature)
