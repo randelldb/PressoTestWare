@@ -16,7 +16,10 @@ instrument.mode = minimalmodbus.MODE_RTU  # rtu or ascii mode
 instrument.clear_buffers_before_each_transaction = True
 
 # Read temperature (PV = ProcessValue) #
-temperature = instrument.read_register(15, 1)  # Registernumber, number of decimals
+temperature = instrument.read_register(512, 1)  # Registernumber, number of decimals
+temperature = instrument.read_register(520, 1)  # Registernumber, number of decimals
+temperature = instrument.read_register(524, 1)  # Registernumber, number of decimals
+temperature = instrument.read_register(528, 1)  # Registernumber, number of decimals
 
 while True:
     sleep(0.5)
