@@ -9,7 +9,7 @@ html = HTML('test.html')
 css = CSS(string='''
     @font-face {
         font-family: Gentium;
-        src: url(http://example.com/fonts/Gentium.otf);
+        js: url(http://example.com/fonts/Gentium.otf);
     }
     h1 { font-family: Gentium }''', font_config=font_config)
 

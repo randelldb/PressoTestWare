@@ -18,7 +18,7 @@ def hello(name=None):
 
     # Updating model test
     # !!move to other file!!
-    cm.update_model(1)
+    #cm.update_model(1)
 
 
-    return render_template('index.html', name=name)
+    return render_template('base.html', name=name)
