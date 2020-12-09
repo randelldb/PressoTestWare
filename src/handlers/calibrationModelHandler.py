@@ -1,7 +1,14 @@
+from flask import jsonify
+
 from src import models, db
 
 
 class CalibrationModelHandler:
+
+    @staticmethod
+    def select_model():
+
+        select_model = models.CalibrationModel.query.get(1)
 
     @staticmethod
     def create_model(name, model, customer, type_a, a_highValue, a_hvPlus, a_hvMin, a_lowValue, a_lvPlus, a_lvMin,
@@ -32,3 +39,17 @@ class CalibrationModelHandler:
             print('Deleting model success!')
         except:
             print('Deleting model failed...')
+
+
+    @staticmethod
+    def update_model(model_id):
+
+        select_model = models.CalibrationModel.query.get(model_id)
+        select_model.name = 'test'
+
+        try:
+            db.session.commit()
+            print('Update model success!')
+        except:
+            print('Update model failed...')
+
