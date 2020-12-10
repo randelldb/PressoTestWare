@@ -28,10 +28,5 @@ def read_data(instrument):
         'press': pressure,
         'swt': switch
     }
-    return reading
 
-open_conn = open_modbus_conn('COM6')
-read_data = read_data(open_conn)
-while True:
-    print(read_data)
-    sleep(0.2)
+    return reading
