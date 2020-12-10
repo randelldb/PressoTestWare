@@ -8,16 +8,18 @@
     <!-- Change to local when done -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title>title</title>
   </head>
   <body>
-    <div class="container-fluid">
+    <div class="container-fluid topline">
+      <p>---------------------------------</p>
+      <p>{{ read_data }}</p>
+      <p>---------------------------------</p>
         <div class="row">
           <div class="col">
             top line
           </div>
         </div>
-
         <div class="row">
           <div class="col">Com select</div>
           <div class="col">Interval Select</div>
@@ -64,6 +66,30 @@
         </div>
 
         <div class="row">Complete Calibration</div>
+
+        <div id="place_for_suggestions">-</div>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        
+        <script>
+          var ajax_call = function(){
+              $.ajax({
+                url: "/suggestions",
+                type: "get",
+                success: function(response) {
+                  $("#place_for_suggestions").html(response);
+                },
+                error: function(xhr) {
+                  //Do Something to handle error
+                }
+              });
+            };
+
+            var interval = 500; // where X is your every X minutes
+            setInterval(ajax_call, interval)
+
+        </script>
+
 
     </div>
 
