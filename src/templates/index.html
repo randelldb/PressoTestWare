@@ -1,31 +1,50 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
 
-    <!-- Change to local when done -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-
-    <title>title</title>
-  </head>
-  <body>
-    <div class="container-fluid topline">
-      <p>---------------------------------</p>
-      <p>{{ read_data }}</p>
-      <p>---------------------------------</p>
+{% block content %}
         <div class="row">
           <div class="col">
-            top line
+            Brouwer Technology
           </div>
         </div>
         <div class="row">
-          <div class="col">Com select</div>
-          <div class="col">Interval Select</div>
-          <div class="col">Model select</div>
-          <div class="col">Main printer select</div>
-          <div class="col">Label writer select</div>
+
+          <div class="col">
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="select_com" data-bs-toggle="dropdown" aria-expanded="false">
+                Com Poort
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="select_com"></ul>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="select_model" data-bs-toggle="dropdown" aria-expanded="false">
+                Calibratie model
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="select_model"></ul>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="main_printer" data-bs-toggle="dropdown" aria-expanded="false">
+                Selecteer printer
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="main_printer"></ul>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="label_writer" data-bs-toggle="dropdown" aria-expanded="false">
+                Selecteer Label writer
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="label_writer"></ul>
+            </div>
+          </div>
+
         </div>
 
         <div class="row">
@@ -43,41 +62,20 @@
           <div class="col">Reset Test</div>
         </div>
 
-        <div class="row">
-          <div class="col">
-            <div class="row">""HighPress""</div>
-            <div class="row">Data high</div>
-            <div class="row">Data high +</div>
-            <div class="row">Data high -</div>
-            <div class="row">Data low</div>
-            <div class="row">Data low +</div>
-            <div class="row">Data low -</div>
-          </div>
-
-          <div class="col">
-            <div class="row">""LowPress""</div>
-            <div class="row">Data high</div>
-            <div class="row">Data high +</div>
-            <div class="row">Data high -</div>
-            <div class="row">Data low</div>
-            <div class="row">Data low +</div>
-            <div class="row">Data low -</div>
-          </div>
-        </div>
+        <div class="row model_preset">(model preset)</div>
 
         <div class="row">Complete Calibration</div>
 
-        <div id="place_for_suggestions">-</div>
-        
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        
+        <div id="modbusData">-</div>
+
+
         <script>
-          var ajax_call = function(){
+          var modbusCall = function(){
               $.ajax({
-                url: "/suggestions",
+                url: "/modbusData",
                 type: "get",
                 success: function(response) {
-                  $("#place_for_suggestions").html(response);
+                  $("#modbusData").html(response);
                 },
                 error: function(xhr) {
                   //Do Something to handle error
@@ -86,15 +84,35 @@
             };
 
             var interval = 500; // where X is your every X minutes
-            setInterval(ajax_call, interval)
+            setInterval(modbusCall, interval)
+
+            var get_model_data = function(){
+              $.ajax({
+                url: "/get_calibration_model",
+                type: "get",
+                success: function(response) {
+                  $("[aria-labelledby='select_model']").html(response);
+                },
+                error: function(xhr) {
+                  //Do Something to handle error
+                }
+              });
+            };
+            get_model_data()
+
+            var get_model_preset = function(){
+              $.ajax({
+                url: "/get_model_preset/1",
+                type: "get",
+                success: function(response) {
+                  $(".model_preset").html(response);
+                },
+                error: function(xhr) {
+                  //Do Something to handle error
+                }
+              });
+            };
+            get_model_preset()
 
         </script>
-
-
-    </div>
-
-    <!-- Change to local when done -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-
-  </body>
-</html>
+{% endblock %}
