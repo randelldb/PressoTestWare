@@ -1,0 +1,7 @@
+{% for port in ports %}
+<tr onclick="set_ports('{{ port }}')">
+    <td>
+        <p>{{ port }}</p>
+    </td>
+</tr>
+{% endfor %}

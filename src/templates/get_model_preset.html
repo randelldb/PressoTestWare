@@ -1,19 +1,23 @@
-    <div class="col">
-        <div class="row">""HighPress""</div>
-        <div class="row">{{ items.a_highValue }} Bar</div>
-        <div class="row">{{ items.a_hvPlus }} Bar</div>
-        <div class="row">{{ items.a_hvMin }} Bar</div>
-        <div class="row">{{ items.a_lowValue }} Bar</div>
-        <div class="row">{{ items.a_lvPlus }} Bar</div>
-        <div class="row">{{ items.a_lvMin }} Bar</div>
+    <div class="col preset">
+        <div class="row justify-content-center fw-bold">{{ type_a }}</div>
+        <div class="row justify-content-center">
+            <div class="col text-center">
+                Bovenwaarde
+                {{ items.a_highValue }} Bar <br>
+                {{ items.a_hvPlus }} / {{ items.a_hvMin }}
+            </div>
+            <div class="col text-center">
+                Onderwaarde
+                {{ items.a_lowValue }} Bar <br>
+                {{ items.a_lvPlus }} / {{ items.a_lvMin }}
+            </div>
+        </div>
     </div>
 
-    <div class="col">
-        <div class="row">""LowPress""</div>
-        <div class="row">{{ items.b_highValue }} Bar</div>
-        <div class="row">{{ items.b_hvPlus }} Bar</div>
-        <div class="row">{{ items.b_hvMin }} Bar</div>
-        <div class="row">{{ items.b_lowValue }} Bar</div>
-        <div class="row">{{ items.b_lvPlus }} Bar</div>
-        <div class="row">{{ items.b_lvMin }} Bar</div>
+    <div class="col preset">
+        <div class="row justify-content-center fw-bold">{{ type_b }}</div>
+        <div class="row justify-content-center">
+            <div class="col text-center">Bovenwaarde {{ items.b_highValue }} Bar | {{ items.b_hvPlus }} / {{ items.b_hvMin }}</div>
+            <div class="col text-center">Onderwaarde {{ items.b_lowValue }} Bar | {{ items.b_lvPlus }} / {{ items.b_lvMin }}</div>
+        </div>
     </div>

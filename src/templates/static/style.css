@@ -1,3 +1,47 @@
 .topline{
+	background-color: #263d6b;
+	height: 5px;
+}
+
+img {  
+	padding: 10px;
+	max-width: 12%;
+	object-fit: cover;  
+}  
+
+.header{
+	background-color: #263252;
+}
+
+.menu{
+	background-color: #2b2b2b;
+	padding-bottom: 10px;
+	padding-top: 10px;
+}
+
+.dropdown{
+	max-width: 100%;
+}
+
+.menuitem{
+	display: flex;
+	justify-content: center;
+}
+
+.preset{
+	background-color: #ccddff;
+	margin-right: 10px;
+	margin-left: 10px;
+	margin-bottom: 5px;
+	border-radius: 5px;
 
 }
+
+.reader{
+	background-color:dimgray;
+}
+
+.reading{
+	text-align: center;
+}
+

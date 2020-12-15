@@ -1,5 +1,9 @@
 {% for item in items %}
-    <tr>
-        <td><a href="get_model_preset/{{ item.id }}">{{ item.name }}</a></td>
+    <tr class="model_item" onclick="get_model_preset({{ item.id }})">
+        <td>
+        	<p>{{ item.name }}</p>
+        </td>
     </tr>
 {% endfor %}
+
+       
