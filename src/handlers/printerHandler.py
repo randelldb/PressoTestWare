@@ -7,10 +7,10 @@ def get_printers():
     result = []
     for printer in printer_list:
         get_printer_name = {key: printer[key] for key in printer.keys() & {'pPrinterName'}}
+        # Used the * to get rid of 'dict_values'
         result.append(*get_printer_name.values())
 
     return result
-
 
 def print_main(selected_printer):
     printer_name = selected_printer

@@ -69,8 +69,8 @@ def get_ports():
 @app.route('/set_ports/<id>')
 def set_ports(id):
     modbusHandler.open_modbus_conn(id)
-    print(id)
-    return render_template('set_ports.html')
+    connected = id
+    return connected
 
 
 @app.route("/")

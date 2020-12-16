@@ -1,70 +1,58 @@
 {% extends "layout.html" %} {% block title %}Index{% endblock %} {% block
 content %}
-<!-- <div class="row header">
-          <div class="col">
-            <img src="{{ url_for('static', filename='img/logo.png') }}">
-          </div>
-        </div> -->
 
-<div class="row menu">
-  <div class="col-md-3 col-sm-3 col-xs-3">
-    <div class="btn-group btn-block">
-      <button
-        class="btn btn-block btn-secondary dropdown-toggle"
-        type="button"
-        id="select_com"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        Connectie
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="select_com"></ul>
-    </div>
+<div class="row topline"></div>
+<div class="row menu" id="mainmenu">
+  <div class="col btn-group">
+    <button
+      class="btn btn-secondary dropdown-toggle"
+      type="button"
+      id="select_com"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      Connectie
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="select_com"></ul>
   </div>
 
-  <div class="col menuitem">
-    <div class="dropdown">
-      <button
-        class="btn btn-secondary dropdown-toggle"
-        type="button"
-        id="select_model"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        Calibratie model
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="select_model"></ul>
-    </div>
+  <div class="col btn-group">
+    <button
+      class="btn btn-secondary dropdown-toggle"
+      type="button"
+      id="select_model"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      Calibratie model
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="select_model"></ul>
   </div>
 
-  <div class="col menuitem">
-    <div class="dropdown">
-      <button
-        class="btn btn-secondary dropdown-toggle"
-        type="button"
-        id="main_printer"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        Selecteer printer
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="main_printer"></ul>
-    </div>
+  <div class="col btn-group">
+    <button
+      class="btn btn-secondary dropdown-toggle"
+      type="button"
+      id="main_printer"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      Selecteer printer
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="main_printer"></ul>
   </div>
 
-  <div class="col menuitem">
-    <div class="dropdown">
-      <button
-        class="btn btn-secondary dropdown-toggle"
-        type="button"
-        id="label_writer"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        Selecteer Label writer
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="label_writer"></ul>
-    </div>
+  <div class="col btn-group">
+    <button
+      class="btn btn-secondary dropdown-toggle"
+      type="button"
+      id="label_writer"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      Selecteer Label writer
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="label_writer"></ul>
   </div>
 </div>
 
@@ -88,7 +76,7 @@ content %}
 </div>
 
 <div class="row">
-  <div class="col">
+  <div class="col-md-6">
     <div id="a_chart"></div>
   </div>
   <div class="col">
@@ -109,6 +97,24 @@ content %}
     <button type="button" class="btn btn-dark">Start</button>
     <button type="button" class="btn btn-dark">Stop</button>
     <button type="button" class="btn btn-dark">Reset</button>
+  </div>
+</div>
+
+<div class="row completed fixed-bottom">
+  <div class="col">
+    <button type="button" class="btn btn-dark full-width-buttons">
+      Voltooi Calibratie
+    </button>
+  </div>
+
+  <div class="col">
+    <h2><span class="badge bg-secondary ">199865</span></h2>
+  </div>
+
+  <div class="col">
+    <button type="button" class="btn btn-dark full-width-buttons">
+      Print opnieuw
+    </button>
   </div>
 </div>
 
