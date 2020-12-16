@@ -5,6 +5,7 @@ $(document).ready(function () {
   // setInterval(modbusCall, interval)
   get_model_data()
   get_model_preset()
+  get_printers()
   get_ports()
   modbusCall()
   chart_aside()
@@ -134,6 +135,19 @@ var set_ports = function (id) {
     },
     error: function (xhr) {
       console.log('js error')
+      //Do Something to handle error
+    }
+  })
+}
+
+var get_printers = function () {
+  $.ajax({
+    url: '/get_printers',
+    type: 'get',
+    success: function (response) {
+      $("[aria-labelledby='main_printer']").html(response)
+    },
+    error: function (xhr) {
       //Do Something to handle error
     }
   })

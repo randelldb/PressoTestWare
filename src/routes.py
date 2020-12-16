@@ -5,8 +5,8 @@ from random import random, uniform, randint
 
 from src import app
 from src.handlers import modbusHandler
+from src.handlers import printerHandler
 from src.handlers.calibrationModelHandler import CalibrationModelHandler
-
 
 # CalibrationModelHandler instance
 cm = CalibrationModelHandler()
@@ -31,7 +31,7 @@ def get_calibration_model():
     items = CalibrationModel.query.all()
     return render_template('get_calibration_model.html', items=items)
 
-    
+
 @app.route('/get_model_preset/<id>')
 def get_model_preset(id):
     items = CalibrationModel.query.filter_by(id=id).first()
@@ -52,6 +52,12 @@ def get_model_preset(id):
     elif type_b == 3:
         type_b = "Condenser Pressure"
     return render_template('get_model_preset.html', items=items, type_a=type_a, type_b=type_b)
+
+
+@app.route('/get_printers')
+def get_printers():
+    printers = printerHandler.get_printers()
+    return render_template('get_printers.html', printers=printers)
 
 
 @app.route('/get_ports')
