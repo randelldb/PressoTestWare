@@ -11,6 +11,10 @@ from src.handlers.calibrationModelHandler import CalibrationModelHandler
 # CalibrationModelHandler instance
 cm = CalibrationModelHandler()
 
+@app.route('/certificate_template')
+def certificate_template():
+
+    return render_template('certificate_template.html')
 
 @app.route('/modbusData')
 def modbusData():
