@@ -1,11 +1,12 @@
 from flask import render_template, request
 from src import db
 from src.models import CalibrationModel
-from random import random
+from random import random, uniform, randint
 
 from src import app
 from src.handlers import modbusHandler
 from src.handlers.calibrationModelHandler import CalibrationModelHandler
+
 
 # CalibrationModelHandler instance
 cm = CalibrationModelHandler()
@@ -13,14 +14,16 @@ cm = CalibrationModelHandler()
 
 @app.route('/modbusData')
 def modbusData():
+    import json
     text = request.args.get('jsdata')
+    x = 4
 
+    a = {'name': 'bar', 'data': x}
+    toJson = json.dumps(a)
 
     # read_data = modbusHandler.read_data(open_conn)
-    x = random()
-
     # return render_template('modbusData.html', suggestion=read_data)
-    return render_template('modbusData.html', suggestion=x)
+    return toJson
 
 
 @app.route('/get_calibration_model')
