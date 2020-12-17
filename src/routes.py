@@ -4,7 +4,6 @@ from flask import render_template, request
 from src import db
 from src.models import CalibrationModel
 from random import random, uniform, randint
-import sqlalchemy_serializer
 
 from src import app
 from src.handlers import modbusHandler
@@ -13,6 +12,25 @@ from src.handlers.calibrationModelHandler import CalibrationModelHandler
 
 # CalibrationModelHandler instance
 cm = CalibrationModelHandler()
+global current_model
+
+
+@app.route('/set_certificate', methods=['GET', 'POST'])
+def set_certificate():
+    global current_model
+    #model = CalibrationModel.query.filter_by(id=current_model).first()
+    print('yheaaaaah im in py')
+    r_a_hi = request.form['r_a_hi']
+    r_a_lo = request.form['r_a_lo']
+    temp_a = request.form['temp_a']
+    rv_a = request.form['rv_a']
+    r_b_hi = request.form['r_b_hi']
+    r_b_lo = request.form['r_b_lo']
+    temp_b = request.form['temp_b']
+    rv_b = request.form['rv_b']
+    print(current_model)
+
+    return current_model
 
 
 @app.route('/certificate_template')
@@ -25,11 +43,9 @@ def modbusData():
     import json
     x = 0
     toJson = json.dumps(x)
-    # text = request.args.get('jsdata')
     # open_conn = modbusHandler.open_modbus_conn('COM7')
     # read_data = modbusHandler.read_data(open_conn)
     # toJson = json.dumps(read_data)
-    # return render_template('modbusData.html', suggestion=read_data)
     return toJson
 
 
@@ -52,6 +68,8 @@ def set_graph_bounds(id):
 
 @app.route('/get_model_preset/<id>')
 def get_model_preset(id):
+    global current_model
+    current_model = id
     items = CalibrationModel.query.filter_by(id=id).first()
     type_a = items.type_a
     type_b = items.type_b

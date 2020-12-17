@@ -7,7 +7,43 @@ $(document).ready(function () {
   get_model_preset()
   get_printers()
   get_ports()
+  set_certificate()
 })
+
+var set_certificate = function () {
+  $('#set_certificate').submit(function (event) {
+    event.preventDefault()
+    var r_a_hi  = $('#r_a_hi').val()
+    var r_a_lo  = $('#r_a_lo').val()
+    var temp_a  = $('#temp_a').val()
+    var rv_a    = $('#rv_a').val()
+    var r_b_hi  = $('#r_b_hi').val()
+    var r_b_lo  = $('#r_b_lo').val()
+    var temp_b  = $('#temp_b').val()
+    var rv_b    = $('#rv_b').val()
+
+    $.ajax({
+      url: '/set_certificate',
+      type: 'post',
+      data: {
+        r_a_hi: r_a_hi,
+        r_a_lo: r_a_lo,
+        temp_a: temp_a,
+        rv_a: rv_a,
+        r_b_hi: r_b_hi,
+        r_b_lo: r_b_lo,
+        temp_b: temp_b,
+        rv_b: rv_b
+      },
+      success: function (response) {
+        console.log('pass')
+      },
+      error: function (xhr) {
+        //Do Something to handle error
+      }
+    })
+  })
+}
 
 var a_chart = function (id) {
   var hvPlus = []
@@ -15,7 +51,7 @@ var a_chart = function (id) {
     console.log(response)
     hvPlus = [response]
     console.log(hvPlus)
-    })
+  })
 
   var ctx = document.getElementById('a_chart').getContext('2d')
   var chart = new Chart(ctx, {
@@ -80,7 +116,7 @@ var a_chart = function (id) {
   function onRefresh (chart) {
     chart.data.datasets.forEach(function (dataset) {
       $.getJSON('/modbusData', function (response) {
-        dataset[1].data.push({
+        dataset.data.push({
           x: Date.now(),
           y: response
         })
@@ -120,8 +156,8 @@ var get_model_preset = function (id = 1) {
     url: '/get_model_preset/' + id,
     type: 'get',
     success: function (response) {
-      $('.model_preset').html(response);
-      a_chart(id);
+      $('.model_preset').html(response)
+      a_chart(id)
     },
     error: function (xhr) {
       //Do Something to handle error

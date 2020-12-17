@@ -17,32 +17,50 @@
         width: 190mm;
         height: 277mm;
         padding: 10mm;
+        /* border: 1px solid black; */
+      }
+
+      .border{
         border: 1px solid black;
+      }
+
+      .margin40 {
+        margin-bottom: 40px;
+      }
+
+      .bold{
+        font-weight: bold;
       }
 
       .row img {
         max-width: 50%;
         margin: auto;
       }
+
+      .center{
+        text-align: center;
+      }
+
       .ta {
         text-align: center !important;
       }
 
-      h5{
+      h5, h2 {
         border-bottom: 1px solid black;
+        border-top: 1px solid black;
       }
     </style>
   </head>
   <body>
     <div class="frame">
       <div class="container">
-        <div class="row">
+        <div class="row margin40">
           <img
             src="{{ url_for('static', filename='img/logo_bw.png') }}"
             alt=""
           />
         </div>
-        <div class="row ta">
+        <div class="row ta margin40">
           <div class="col">
             <h3>CERTIFICAAT</h3>
             <p>PRESSOSTATEN</p>
@@ -51,10 +69,10 @@
 
         <div class="row ta">
           <div class="col">
-            <p>... Volg nummer ...</p>
+            <p>BT0001</p>
           </div>
           <div class="col">
-            <p>... Datum ...</p>
+            <p>17/12/2020</p>
           </div>
         </div>
 
@@ -62,14 +80,14 @@
           <div class="col">
             <h5>Technische informatie</h5>
 
-            <p>Merk: ...</p>
-            <p>Type: ...</p>
+            <p>Merk: Johnson Control</p>
+            <p>Type: P3827Ghs</p>
           </div>
           <div class="col">
             <h5>Klant informatie</h5>
 
-            <p>Klant: ...</p>
-            <p>Referentie: ...</p>
+            <p>Klant: HTM</p>
+            <p>Referentie: ARCUP</p>
           </div>
         </div>
 
@@ -121,7 +139,56 @@
             <p>30% tot 60% Rv</p>
           </div>
         </div>
-      </div>
+
+        <div class="row">
+          <h2 class="center">Calibratie</h2>
+        </div>
+<!-- *************************************************** -->
+<div class="row">
+  <div class="col-6"></div>
+  <div class="col center bold">Lagedruk</div>
+  <div class="col center bold">Hogedruk</div>
+  <br>
+  <br>
+</div>
+
+<div class="row">
+  <div class="col-6 bold">Voorinstelling schakelpunt hoog</div>
+  <div class="col center border">8.0 Bar +0.5/-0.5</div>
+  <div class="col center border">7.5 Bar +0.2/-0.2</div>
+</div>
+
+<div class="row">
+  <div class="col-6 bold">Voorinstelling schakelpunt laag</div>
+  <div class="col center border">2.5 Bar +0.2/-0.2</div>
+  <div class="col center border">0.5 Bar +0.2/-0.2</div>
+</div>
+
+<div class="row">
+  <div class="col-6 bold">Schakeldruk hoog</div>
+  <div class="col center border">8.0 Bar</div>
+  <div class="col center border">2.2 Bar</div>
+</div>
+
+<div class="row">
+  <div class="col-6 bold">Schakelpunt laag</div>
+  <div class="col center border">7.4 Bar</div>
+  <div class="col center border">0.5 Bar</div>
+</div>
+
+<div class="row">
+  <div class="col-6 bold">Omgevingstemperatuur</div>
+  <div class="col center border">20.2 ° Celsius</div>
+  <div class="col center border">19.8 ° Celsius</div>
+</div>
+
+<div class="row">
+  <div class="col-6 bold">Relatieve Luchtvochtigheid</div>
+  <div class="col center border">57.1% Rv</div>
+  <div class="col center border">58.2% Rv</div>
+</div>
+<!-- *************************************************** -->
+</div>
     </div>
   </body>
 </html>
