@@ -7,46 +7,86 @@ $(document).ready(function () {
   get_model_preset()
   get_printers()
   get_ports()
-  modbusCall()
-  chart_aside()
-  chart_bside()
 })
 
-/////////////////////////////////////////////////////// convert later to class//////////////////////////////////
+var a_chart = function (id) {
+  var hvPlus = []
+  $.getJSON('/set_graph_bounds/1', function (response) {
+    console.log(response)
+    hvPlus = [response]
+    console.log(hvPlus)
+    })
 
-var chart_aside = function () {
-  var data = []
-  var options = {
-    chart: {
-      type: 'line',
-      toolbar: false
+  var ctx = document.getElementById('a_chart').getContext('2d')
+  var chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [
+        {
+          data: [],
+          pointRadius: 0,
+          label: 'Dataset 1',
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          lineTension: 0,
+          borderDash: [0, 0]
+        },
+        {
+          data: [2.0],
+          pointRadius: 0,
+          label: 'Dataset 2',
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          lineTension: 0,
+          borderDash: [0, 0]
+        }
+      ]
     },
-    series: [
-      {
-        name: 'bar',
-        data: data
-      }
-    ]
-  }
-
-  var chart = new ApexCharts(document.querySelector('#a_chart'), options)
-  chart.render()
-
-  window.setInterval(function () {
-    $.getJSON('http://127.0.0.1:5000/modbusData'),
-      function (response) {
-        data.push(response)
-        console.log(response)
-        console.log('response')
-
-        chart.updateSeries([
+    options: {
+      events: ['click'],
+      tooltips: {
+        enabled: false
+      },
+      scales: {
+        xAxes: [
           {
-            name: 'bar',
-            data: data
+            ticks: {
+              display: false //this will remove only the label
+            },
+            type: 'realtime',
+            realtime: {
+              onRefresh: onRefresh,
+              duration: 20000, // data in the past 20000 ms will be displayed
+              refresh: 100, // onRefresh callback will be called every 1000 ms
+              delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
+              pause: false, // chart is not paused
+              ttl: undefined // data will be automatically deleted as it disappears off the chart
+            }
           }
-        ])
+        ],
+        yAxes: [
+          {
+            ticks: {
+              max: 5,
+              min: 0,
+              stepSize: 0.5
+            }
+          }
+        ]
       }
-  }, 1000)
+    }
+  })
+  var data = []
+  function onRefresh (chart) {
+    chart.data.datasets.forEach(function (dataset) {
+      $.getJSON('/modbusData', function (response) {
+        dataset[1].data.push({
+          x: Date.now(),
+          y: response
+        })
+      })
+    })
+  }
 }
 
 var modbusCall = function () {
@@ -61,30 +101,6 @@ var modbusCall = function () {
     }
   })
 }
-
-var chart_bside = function () {
-  var options = {
-    chart: {
-      type: 'line',
-      toolbar: false
-    },
-    series: [
-      {
-        name: 'sales',
-        data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
-      }
-    ],
-    xaxis: {
-      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
-    }
-  }
-
-  var chart = new ApexCharts(document.querySelector('#b_chart'), options)
-
-  chart.render()
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var get_model_data = function () {
   $.ajax({
@@ -104,7 +120,8 @@ var get_model_preset = function (id = 1) {
     url: '/get_model_preset/' + id,
     type: 'get',
     success: function (response) {
-      $('.model_preset').html(response)
+      $('.model_preset').html(response);
+      a_chart(id);
     },
     error: function (xhr) {
       //Do Something to handle error

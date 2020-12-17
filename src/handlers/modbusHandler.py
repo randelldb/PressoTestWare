@@ -24,12 +24,13 @@ def read_data(instrument):
         temperature = instrument.read_register(516, 1)  # Registernumber, number of decimals
         pressure = instrument.read_register(520, 1)  # Registernumber, number of decimals
         switch = instrument.read_register(528, 1)  # Registernumber, number of decimals
-        reading = {
-            'rv': rv,
-            'temp': temperature,
-            'press': pressure,
-            'swt': switch
-        }
+        # reading = {
+        #     'rv': rv,
+        #     'temp': temperature,
+        #     'press': pressure,
+        #     'swt': switch
+        # }
+        reading = pressure
         return reading
 
 

@@ -1,7 +1,10 @@
+import json
+
 from flask import render_template, request
 from src import db
 from src.models import CalibrationModel
 from random import random, uniform, randint
+import sqlalchemy_serializer
 
 from src import app
 from src.handlers import modbusHandler
@@ -11,21 +14,21 @@ from src.handlers.calibrationModelHandler import CalibrationModelHandler
 # CalibrationModelHandler instance
 cm = CalibrationModelHandler()
 
+
 @app.route('/certificate_template')
 def certificate_template():
-
     return render_template('certificate_template.html')
+
 
 @app.route('/modbusData')
 def modbusData():
     import json
-    text = request.args.get('jsdata')
-    x = 4
-
-    a = {'name': 'bar', 'data': x}
-    toJson = json.dumps(a)
-
+    x = 0
+    toJson = json.dumps(x)
+    # text = request.args.get('jsdata')
+    # open_conn = modbusHandler.open_modbus_conn('COM7')
     # read_data = modbusHandler.read_data(open_conn)
+    # toJson = json.dumps(read_data)
     # return render_template('modbusData.html', suggestion=read_data)
     return toJson
 
@@ -36,12 +39,22 @@ def get_calibration_model():
     return render_template('get_calibration_model.html', items=items)
 
 
+@app.route('/set_graph_bounds/<id>')
+def set_graph_bounds(id):
+    test = 5
+    items = CalibrationModel.query.filter_by(id=id).first()
+    data = {
+        'hvPlus': items.a_hvPlus
+    }
+    toJson = json.dumps(test)
+    return data
+
+
 @app.route('/get_model_preset/<id>')
 def get_model_preset(id):
     items = CalibrationModel.query.filter_by(id=id).first()
     type_a = items.type_a
     type_b = items.type_b
-
     if type_a == 1:
         type_a = "High Pressure"
     elif type_a == 2:
@@ -72,7 +85,7 @@ def get_ports():
 
 @app.route('/set_ports/<id>')
 def set_ports(id):
-    modbusHandler.open_modbus_conn(id)
+    # modbusHandler.open_modbus_conn('COM7')
     connected = id
     return connected
 
