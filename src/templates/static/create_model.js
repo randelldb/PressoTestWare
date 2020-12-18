@@ -1,10 +1,10 @@
 $(document).ready(function () {
-  get_model_data()
+  get_model_data_list()
 })
 
 
 // get data for dropdown
-var get_model_data = function () {
+var get_model_data_list = function () {
   $.ajax({
     url: '/get_calibration_model',
     type: 'get',
@@ -17,7 +17,7 @@ var get_model_data = function () {
   })
 }
 
-var get_model_form_data = function (id = 1) {
+var get_model_data = function (id = 1) {
   $.ajax({
     url: '/get_model_form_data/' + id,
     type: 'get',

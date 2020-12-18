@@ -78,8 +78,8 @@ def set_graph_bounds(id):
     return data
 
 
-@app.route('/get_model_preset/<id>')
-def get_model_preset(id):
+@app.route('/get_model_data/<id>')
+def get_model_data(id):
     current_model = id
     items = CalibrationModel.query.filter_by(id=id).first()
     type_a = items.type_a
@@ -100,7 +100,7 @@ def get_model_preset(id):
 
     print(current_model)
 
-    return render_template('get_model_preset.html', items=items, type_a=type_a, type_b=type_b)
+    return render_template('get_model_data.html', items=items, type_a=type_a, type_b=type_b)
 
 
 @app.route('/model_view')

@@ -1,8 +1,8 @@
 $(document).ready(function () {
   console.log('ready!')
 
+  get_model_data_list()
   get_model_data()
-  get_model_preset()
   get_printers()
   get_ports()
   set_certificate()
@@ -240,7 +240,7 @@ var modbusCall = function () {
   })
 }
 
-var get_model_data = function () {
+var get_model_data_list = function () {
   $.ajax({
     url: '/get_calibration_model',
     type: 'get',
@@ -253,12 +253,12 @@ var get_model_data = function () {
   })
 }
 
-var get_model_preset = function (id = 1) {
+var get_model_data = function (id = 1) {
   $.ajax({
-    url: '/get_model_preset/' + id,
+    url: '/get_model_data/' + id,
     type: 'get',
     success: function (response) {
-      $('.model_preset').html(response)
+      $('.get_model_data').html(response)
       a_chart(id)
       b_chart(id)
     },
