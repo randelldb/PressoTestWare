@@ -8,8 +8,8 @@ from src.models import CalibrationModel, MainCounter
 from random import random, uniform, randint
 
 from src import app
-from src.handlers import modbusHandler
-from src.handlers import printerHandler
+from src.handlers import modbusHandler, printerHandler
+from src.processor import calibrationProcessor
 from src.handlers.calibrationModelHandler import CalibrationModelHandler
 
 # CalibrationModelHandler instance
@@ -43,7 +43,6 @@ def set_certificate():
     r_b_lo = request.form['r_b_lo']
     temp_b = request.form['temp_b']
     rv_b = request.form['rv_b']
-    print(r_a_hi)
 
     return current_model
 
@@ -103,6 +102,24 @@ def get_model_preset(id):
         type_b = "Condenser Pressure"
     return render_template('get_model_preset.html', items=items, type_a=type_a, type_b=type_b)
 
+@app.route('/create_model')
+def create_model():
+
+    return render_template('create_model.html')
+
+
+@app.route('/get_model_update/<id>')
+def get_model_update(id):
+    global current_model
+    current_model = id
+    items = CalibrationModel.query.filter_by(id=id).first()
+    print(items.type_a)
+    print(items.type_b)
+
+    if items.type_a == 0 or items.type_b == 0:
+        return render_template('get_model_form_solo.html', items=items)
+    else:
+        return render_template('get_model_form_double.html', items=items)
 
 @app.route('/get_printers')
 def get_printers():
@@ -143,5 +160,6 @@ def index(name=None):
     # Updating model test
     # !!move to other file!!
     # cm.update_model(1)
+
 
     return render_template('index.html', name=name)

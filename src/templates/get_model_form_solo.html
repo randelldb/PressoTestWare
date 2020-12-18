@@ -1,0 +1,117 @@
+<form action="/">
+  <div class="row">
+    <div class="col">
+      <p><label for="modelName">Model Naam</label></p>
+      <p>
+        <input
+          type="text"
+          name="modelName"
+          id="modelName"
+          value="{{ items.name }}"
+        />
+      </p>
+      <p><label for="brand">Merk</label></p>
+      <p>
+        <input type="text" name="brand" id="brand" value="{{ items.brand }}" />
+      </p>
+      <p><label for="model">Type</label></p>
+      <p>
+        <input type="text" name="model" id="model" value="{{ items.model }}" />
+      </p>
+    </div>
+
+    <div class="col">
+      <p><label for="customer">Klant</label></p>
+      <p>
+        <input
+          type="text"
+          name="customer"
+          id="customer"
+          value="{{ items.customer }}"
+        />
+      </p>
+      <p><label for="ref">Referentie</label></p>
+      <p><input type="text" name="ref" id="ref" value="{{ items.ref }}" /></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6"></div>
+    <div class="col center bold">...druk...</div>
+    <br />
+    <br />
+  </div>
+
+  <div class="row">
+    <div class="col-6 bold">Voorinstelling schakelpunt hoog</div>
+    <div class="col center border">
+      <input
+        size="2"
+        type="text"
+        name="a_highValue"
+        id="a_highValue"
+        value="{{ items.a_highValue }}"
+      />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6 bold">Tolerantie schakelpunt hoog [ + ] [ - ]</div>
+    <div class="col center border">
+      <input
+        size="2"
+        type="text"
+        name="a_hvPlus"
+        id="a_hvPlus"
+        value="{{ items.a_hvPlus }}"
+      />
+      <input
+        size="2"
+        type="text"
+        name="a_hvMin"
+        id="a_hvMin"
+        value="{{ items.a_hvMin }}"
+      />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6 bold">Voorinstelling schakelpunt laag</div>
+    <div class="col center border">
+      <input
+        size="2"
+        type="text"
+        name="a_lowValue"
+        id="a_lowValue"
+        value="{{ items.a_lowValue }}"
+      />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6 bold">Tolerantie schakelpunt laag [ + ] [ - ]</div>
+    <div class="col center border">
+      <input
+        size="2"
+        type="text"
+        name="a_lvvPlus"
+        id="a_lvPlus"
+        value="{{ items.a_lvPlus }}"
+      />
+      <input
+        size="2"
+        type="text"
+        name="a_lvvMin"
+        id="a_lvMin"
+        value="{{ items.a_lvMin }}"
+      />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <button type="button" class="btn btn-dark full-width-buttons">
+        Update
+      </button>
+    </div>
+  </div>
+</form>

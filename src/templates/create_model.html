@@ -1,0 +1,122 @@
+{% extends "layout.html" %} {% block title %}Create Models{% endblock %} {%
+block content %}
+<script
+  type="text/javascript"
+  src="{{ url_for('static', filename='create_model.js') }}"
+></script>
+
+<div class="col-6 margin-auto">
+  <div class="row">
+    <div class="col">
+      <a href="/create_model"
+        ><button
+          type="button"
+          style="width:100%"
+          id="create_new_model"
+          class="btn btn-dark"
+        >
+          Nieuw model
+        </button></a
+      >
+    </div>
+    <div class="col btn-group">
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        id="select_model"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        Selecteer model
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="select_model"></ul>
+    </div>
+  </div>
+  <div id="get_model_update">
+    <form action="/">
+      <div class="row">
+        <div class="col">
+          <p><label for="modelName">Model Naam</label></p>
+          <p><input type="text" name="modelName" id="modelName" /></p>
+          <p><label for="brand">Merk</label></p>
+          <p><input type="text" name="brand" id="brand" /></p>
+          <p><label for="type">Type</label></p>
+          <p><input type="text" name="type" id="type" /></p>
+        </div>
+
+        <div class="col">
+          <p><label for="customer">Klant</label></p>
+          <p><input type="text" name="customer" id="customer" /></p>
+          <p><label for="ref">Referentie</label></p>
+          <p><input type="text" name="ref" id="ref" /></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6"></div>
+        <div class="col center bold">Lagedruk</div>
+        <div class="col center bold">Hogedruk</div>
+        <br />
+        <br />
+      </div>
+
+      <div class="row">
+        <div class="col-6 bold">Voorinstelling schakelpunt hoog</div>
+        <div class="col center border">
+          <input size="2" type="text" name="a_highValue" id="a_highValue" />
+        </div>
+        <div class="col center border">
+          <input size="2" type="text" name="b_highValue" id="b_highValue" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6 bold">Tolerantie schakelpunt hoog [ + ] [ - ]</div>
+        <div class="col center border">
+          <input size="2" type="text" name="a_hvPlus" id="a_hvPlus" />
+          <input size="2" type="text" name="a_hvMin" id="a_hvMin" />
+        </div>
+        <div class="col center border">
+          <input size="2" type="text" name="b_hvPlus" id="b_hvPlus" />
+          <input size="2" type="text" name="b_hvMin" id="b_hvMin" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6 bold">Voorinstelling schakelpunt laag</div>
+        <div class="col center border">
+          <input size="2" type="text" name="a_lowValue" id="a_lowValue" />
+        </div>
+        <div class="col center border">
+          <input size="2" type="text" name="b_lowValue" id="b_lowValue" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6 bold">Tolerantie schakelpunt laag [ + ] [ - ]</div>
+        <div class="col center border">
+          <input size="2" type="text" name="a_lvvPlus" id="a_lvPlus" />
+          <input size="2" type="text" name="a_lvvMin" id="a_lvMin" />
+        </div>
+        <div class="col center border">
+          <input size="2" type="text" name="b_lvvPlus" id="b_lvPlus" />
+          <input size="2" type="text" name="b_lvvMin" id="b_lvMin" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <button type="button" class="btn btn-dark full-width-buttons">
+            Opslaan
+          </button>
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-dark full-width-buttons">
+            Reset
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

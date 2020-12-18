@@ -1,17 +1,35 @@
 {% extends "layout.html" %} {% block title %}Index{% endblock %} {% block
 content %}
+
+<script
+  type="text/javascript"
+  src="{{ url_for('static', filename='index.js') }}"
+></script>
+<script
+  type="text/javascript"
+  src="{{ url_for('static', filename='moment.js') }}"
+></script>
+<script
+  type="text/javascript"
+  src="{{ url_for('static', filename='Chart.js') }}"
+></script>
+<script
+  type="text/javascript"
+  src="{{ url_for('static', filename='chartjs-plugin-streaming.js') }}"
+></script>
+
 <!-- Test///////////////////////////////////////// -->
 
 <form action="/" id="set_certificate">
-  <input type="text" name="r_a_hi" id="r_a_hi">
-  <input type="text" name="r_a_lo" id="r_a_lo">
-  <input type="text" name="temp_a" id="temp_a">
-  <input type="text" name="rv_a"   id="rv_a">
-  <input type="text" name="r_b_hi" id="r_b_hi">
-  <input type="text" name="r_b_lo" id="r_b_lo">
-  <input type="text" name="temp_b" id="temp_b">
-  <input type="text" name="rv_b"   id="rv_b">
-  <input type="submit" value="Search">
+  <input type="text" name="r_a_hi" id="r_a_hi" />
+  <input type="text" name="r_a_lo" id="r_a_lo" />
+  <input type="text" name="temp_a" id="temp_a" />
+  <input type="text" name="rv_a" id="rv_a" />
+  <input type="text" name="r_b_hi" id="r_b_hi" />
+  <input type="text" name="r_b_lo" id="r_b_lo" />
+  <input type="text" name="temp_b" id="temp_b" />
+  <input type="text" name="rv_b" id="rv_b" />
+  <input type="submit" value="Search" />
 </form>
 
 <!-- Test///////////////////////////////////////// -->
@@ -90,35 +108,39 @@ content %}
   </div>
 </div>
 <div class="row h-100 test">
-<div class="row">
-  <div class="col">
-    <canvas id="a_chart"></canvas>
-  </div>
-  <div class="col">
-    <canvas id="b_chart"></canvas>
-  </div>
-</div>
-
-<div class="row model_preset"></div>
-
-<div class="row">
-  <div class="col">
-    <button type="button" class="btn btn-dark">Start</button>
-    <button type="button" class="btn btn-dark">Stop</button>
-    <button type="button" class="btn btn-dark">Reset</button>
+  <div class="row">
+    <div class="col">
+      <canvas id="a_chart"></canvas>
+    </div>
+    <div class="col">
+      <canvas id="b_chart"></canvas>
+    </div>
   </div>
 
-  <div class="col">
-    <button type="button" class="btn btn-dark">Start</button>
-    <button type="button" class="btn btn-dark">Stop</button>
-    <button type="button" class="btn btn-dark">Reset</button>
+  <div class="row model_preset"></div>
+
+  <div class="row">
+    <div class="col">
+      <button type="button" class="btn btn-dark">Start</button>
+      <button type="button" class="btn btn-dark">Stop</button>
+      <button type="button" class="btn btn-dark">Reset</button>
+    </div>
+
+    <div class="col">
+      <button type="button" class="btn btn-dark">Start</button>
+      <button type="button" class="btn btn-dark">Stop</button>
+      <button type="button" class="btn btn-dark">Reset</button>
+    </div>
   </div>
-</div>
 </div>
 
 <div class="row completed ">
   <div class="col">
-    <button type="button" id="complete_calibration" class="btn btn-dark full-width-buttons">
+    <button
+      type="button"
+      id="complete_calibration"
+      class="btn btn-dark full-width-buttons"
+    >
       Voltooi Calibratie
     </button>
   </div>
