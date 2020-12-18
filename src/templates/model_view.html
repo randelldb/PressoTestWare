@@ -7,8 +7,18 @@ block content %}
 
 <div class="col-6 margin-auto">
   <div class="row">
+    <a href="/"
+      ><button type="button" style="width:100%" id="terug" class="btn btn-dark">
+        Terug
+      </button></a
+    >
+  </div>
+
+  <br />
+
+  <div class="row">
     <div class="col">
-      <a href="/create_model"
+      <a href="/model_view"
         ><button
           type="button"
           style="width:100%"
@@ -32,16 +42,16 @@ block content %}
       <ul class="dropdown-menu" aria-labelledby="select_model"></ul>
     </div>
   </div>
-  <div id="get_model_update">
-    <form action="/">
+  <div id="get_model_form_data">
+    <form action="/create_model" id="create_model" method="POST">
       <div class="row">
         <div class="col">
           <p><label for="modelName">Model Naam</label></p>
           <p><input type="text" name="modelName" id="modelName" /></p>
           <p><label for="brand">Merk</label></p>
           <p><input type="text" name="brand" id="brand" /></p>
-          <p><label for="type">Type</label></p>
-          <p><input type="text" name="type" id="type" /></p>
+          <p><label for="model">Type</label></p>
+          <p><input type="text" name="model" id="model" /></p>
         </div>
 
         <div class="col">
@@ -94,18 +104,18 @@ block content %}
       <div class="row">
         <div class="col-6 bold">Tolerantie schakelpunt laag [ + ] [ - ]</div>
         <div class="col center border">
-          <input size="2" type="text" name="a_lvvPlus" id="a_lvPlus" />
-          <input size="2" type="text" name="a_lvvMin" id="a_lvMin" />
+          <input size="2" type="text" name="a_lvPlus" id="a_lvPlus" />
+          <input size="2" type="text" name="a_lvMin" id="a_lvMin" />
         </div>
         <div class="col center border">
-          <input size="2" type="text" name="b_lvvPlus" id="b_lvPlus" />
-          <input size="2" type="text" name="b_lvvMin" id="b_lvMin" />
+          <input size="2" type="text" name="b_lvPlus" id="b_lvPlus" />
+          <input size="2" type="text" name="b_lvMin" id="b_lvMin" />
         </div>
       </div>
 
       <div class="row">
         <div class="col">
-          <button type="button" class="btn btn-dark full-width-buttons">
+          <button type="submit" form="create_model" type="button" class="btn btn-dark full-width-buttons">
             Opslaan
           </button>
         </div>

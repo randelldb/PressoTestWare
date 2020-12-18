@@ -57,9 +57,7 @@ def modbusData():
     import json
     x = 0
     toJson = json.dumps(x)
-    # open_conn = modbusHandler.open_modbus_conn('COM7')
-    # read_data = modbusHandler.read_data(open_conn)
-    # toJson = json.dumps(read_data)
+
     return toJson
 
 
@@ -76,13 +74,12 @@ def set_graph_bounds(id):
     data = {
         'hvPlus': items.a_hvPlus
     }
-    toJson = json.dumps(test)
+
     return data
 
 
 @app.route('/get_model_preset/<id>')
 def get_model_preset(id):
-    global current_model
     current_model = id
     items = CalibrationModel.query.filter_by(id=id).first()
     type_a = items.type_a
@@ -100,26 +97,63 @@ def get_model_preset(id):
         type_b = "Low Pressure"
     elif type_b == 3:
         type_b = "Condenser Pressure"
+
+    print(current_model)
+
     return render_template('get_model_preset.html', items=items, type_a=type_a, type_b=type_b)
 
-@app.route('/create_model')
+
+@app.route('/model_view')
+def model_view():
+    return render_template('model_view.html')
+
+
+@app.route('/create_model', methods=['GET', 'POST'])
 def create_model():
+    modelName = request.form['modelName']
+    brand = request.form['brand']
+    model = request.form['model']
+    customer = request.form['customer']
+    ref = request.form['ref']
 
-    return render_template('create_model.html')
+    type_a = 1
+    a_highValue = request.form['a_highValue']
+    b_highValue = request.form['b_highValue']
+    a_hvPlus = request.form['a_hvPlus']
+    a_hvMin = request.form['a_hvMin']
+    b_hvPlus = request.form['b_hvPlus']
+    b_hvMin = request.form['b_hvMin']
 
+    type_b = 1
+    a_lowValue = request.form['a_lowValue']
+    b_lowValue = request.form['b_lowValue']
+    a_lvPlus = request.form['a_lvPlus']
+    a_lvMin = request.form['a_lvMin']
+    b_lvPlus = request.form['b_lvPlus']
+    b_lvMin = request.form['b_lvMin']
 
-@app.route('/get_model_update/<id>')
-def get_model_update(id):
-    global current_model
-    current_model = id
+    cm.create_model(modelName, brand, model, customer, ref,
+                    type_a, a_highValue, b_highValue, a_hvPlus, a_hvMin, b_hvPlus, b_hvMin,
+                    type_b, a_lowValue, b_lowValue, a_lvPlus, a_lvMin, b_lvPlus, b_lvMin)
+
+    return render_template('model_view.html')
+
+@app.route('/model_delete/<id>')
+def model_delete(id):
+    cm.delete_model(id)
+
+    print('deleted')
+
+@app.route('/get_model_form_data/<id>')
+def get_model_form_data(id):
     items = CalibrationModel.query.filter_by(id=id).first()
-    print(items.type_a)
-    print(items.type_b)
+
 
     if items.type_a == 0 or items.type_b == 0:
-        return render_template('get_model_form_solo.html', items=items)
+        return render_template('model_form_solo.html', items=items)
     else:
-        return render_template('get_model_form_double.html', items=items)
+        return render_template('model_form_double.html', items=items)
+
 
 @app.route('/get_printers')
 def get_printers():
@@ -135,7 +169,6 @@ def get_ports():
 
 @app.route('/set_ports/<id>')
 def set_ports(id):
-    # modbusHandler.open_modbus_conn('COM7')
     connected = id
     return connected
 
@@ -149,17 +182,4 @@ def get_count():
 
 @app.route("/")
 def index(name=None):
-    # Adding model test
-    # cm.create_model('SLT Pass.', 'Emmerson B100', 'NedTrain',
-    #              1, 8, 0.5, 0.5, 6, 0.2, 0.2,
-    #              2, 2, 0.1, 0.1, 1, 0.1, 0.1)
-
-    # Deleting model test
-    # cm.delete_model(1)
-
-    # Updating model test
-    # !!move to other file!!
-    # cm.update_model(1)
-
-
     return render_template('index.html', name=name)

@@ -1,8 +1,6 @@
 $(document).ready(function () {
   console.log('ready!')
 
-  // var interval = 500 // where X is your every X minutes
-  // setInterval(modbusCall, interval)
   get_model_data()
   get_model_preset()
   get_printers()

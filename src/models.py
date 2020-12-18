@@ -11,11 +11,10 @@ class CalibrationModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
-    ref = db.Column(db.String(255))
     brand = db.Column(db.String(255))
     model = db.Column(db.String(255))
-    ref = db.Column(db.String(255))
     customer = db.Column(db.String(255))
+    ref = db.Column(db.String(255))
 
     type_a = db.Column(db.Integer())
     a_highValue = db.Column(db.Float())
