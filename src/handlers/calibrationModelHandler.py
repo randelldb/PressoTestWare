@@ -17,6 +17,7 @@ class CalibrationModelHandler:
 
         select_model = models.CalibrationModel.query.get(1)
 
+
     @staticmethod
     def create_model(name, model, customer, type_a, a_highValue, a_hvPlus, a_hvMin, a_lowValue, a_lvPlus, a_lvMin,
                      type_b, b_highValue, b_hvPlus, b_hvMin, b_lowValue, b_lvPlus, b_lvMin):

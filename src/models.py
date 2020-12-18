@@ -1,5 +1,10 @@
 from src import db
 
+class MainCounter(db.Model):
+    __tablename__ = 'MainCounter'
+
+    id = db.Column(db.Integer, primary_key=True)
+    count = db.Column(db.Integer())
 
 class CalibrationModel(db.Model):
     __tablename__ = 'CalibrationModel'

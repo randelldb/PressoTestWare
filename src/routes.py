@@ -1,8 +1,10 @@
 import json
 
 from flask import render_template, request
+from jinja2.runtime import to_string
+
 from src import db
-from src.models import CalibrationModel
+from src.models import CalibrationModel, MainCounter
 from random import random, uniform, randint
 
 from src import app
@@ -15,10 +17,23 @@ cm = CalibrationModelHandler()
 global current_model
 
 
+@app.route('/complete_calibration')
+def complete_calibration():
+    # update counter
+    try:
+        db.session.add(MainCounter())
+        db.session.commit()
+        print('Count update success!')
+    except:
+        print('Count update  failed...')
+
+    return 'Completed'
+
+
 @app.route('/set_certificate', methods=['GET', 'POST'])
 def set_certificate():
     global current_model
-    #model = CalibrationModel.query.filter_by(id=current_model).first()
+    model = CalibrationModel.query.filter_by(id=current_model).first()
     print('yheaaaaah im in py')
     r_a_hi = request.form['r_a_hi']
     r_a_lo = request.form['r_a_lo']
@@ -28,7 +43,7 @@ def set_certificate():
     r_b_lo = request.form['r_b_lo']
     temp_b = request.form['temp_b']
     rv_b = request.form['rv_b']
-    print(current_model)
+    print(r_a_hi)
 
     return current_model
 
@@ -106,6 +121,13 @@ def set_ports(id):
     # modbusHandler.open_modbus_conn('COM7')
     connected = id
     return connected
+
+
+@app.route('/get_count')
+def get_count():
+    get_certificate_id = MainCounter.query.order_by(MainCounter.id.desc()).first()
+    count = to_string(get_certificate_id.id + 1)
+    return count
 
 
 @app.route("/")
