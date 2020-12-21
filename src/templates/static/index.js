@@ -23,6 +23,19 @@ var get_count = function () {
   })
 }
 
+var validate_hv = function () {
+  $.ajax({
+    url: '/validate_hv',
+    type: 'get',
+    success: function (response) {
+      $('.get_model_data').html(response)
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  })
+}
+
 var complete_calibration = function () {
   $('#complete_calibration').click(function (event) {
     $.ajax({
@@ -75,12 +88,9 @@ var set_certificate = function () {
 }
 
 var a_chart = function (id) {
-  var hvPlus = []
-  $.getJSON('/set_graph_bounds/1', function (response) {
-    console.log(response)
-    hvPlus = [response]
-    console.log(hvPlus)
-  })
+  $.getJSON('/set_graph_bounds/' + id, function (get_bounds) {
+    console.log(get_bounds)
+  
 
   var ctx = document.getElementById('a_chart').getContext('2d')
   var data = []
@@ -95,7 +105,7 @@ var a_chart = function (id) {
           backgroundColor: 'rgba(255, 99, 132, 0.5)',
           lineTension: 0,
           borderDash: [0, 0]
-        },
+        }
       ]
     },
     options: {
@@ -113,7 +123,7 @@ var a_chart = function (id) {
             realtime: {
               onRefresh: onRefresh,
               duration: 20000, // data in the past 20000 ms will be displayed
-              refresh: 100, // onRefresh callback will be called every 1000 ms
+              refresh: 1000, // onRefresh callback will be called every 1000 ms
               delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
               pause: false, // chart is not paused
               ttl: undefined // data will be automatically deleted as it disappears off the chart
@@ -127,6 +137,26 @@ var a_chart = function (id) {
               min: 0,
               stepSize: 0.5
             }
+          }
+        ]
+      },
+      annotation: {
+        annotations: [
+          {
+            type: 'line',
+            mode: 'horizontal',
+            scaleID: 'y-axis-0',
+            value: get_bounds['a_hvPlus'],
+            borderColor: 'rgb(75, 192, 192)',
+            borderWidth: 2,
+          },
+          {
+            type: 'line',
+            mode: 'horizontal',
+            scaleID: 'y-axis-0',
+            value: get_bounds['a_hvMin'],
+            borderColor: 'rgb(75, 192, 192)',
+            borderWidth: 2,
           }
         ]
       }
@@ -143,8 +173,7 @@ var a_chart = function (id) {
       })
     })
   }
-
-
+})
 }
 
 var b_chart = function () {

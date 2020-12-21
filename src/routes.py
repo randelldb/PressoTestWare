@@ -30,6 +30,11 @@ def complete_calibration():
     return 'Completed'
 
 
+@app.route('/validate_hv')
+def validate_hv():
+    print('valitdate')
+    return ''
+
 @app.route('/set_certificate', methods=['GET', 'POST'])
 def set_certificate():
     global current_model
@@ -69,13 +74,14 @@ def get_calibration_model():
 
 @app.route('/set_graph_bounds/<id>')
 def set_graph_bounds(id):
-    test = 5
     items = CalibrationModel.query.filter_by(id=id).first()
     data = {
-        'hvPlus': items.a_hvPlus
+        'a_hvPlus': items.a_highValue + items.a_hvPlus,
+        'a_hvMin': items.a_lowValue - items.a_hvMin
     }
+    toJson = json.dumps(data, indent=4, sort_keys=True)
 
-    return data
+    return toJson
 
 
 @app.route('/get_model_data/<id>')
