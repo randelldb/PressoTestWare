@@ -83,6 +83,7 @@ var a_chart = function (id) {
   })
 
   var ctx = document.getElementById('a_chart').getContext('2d')
+  var data = []
   var chart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -90,21 +91,11 @@ var a_chart = function (id) {
         {
           data: [],
           pointRadius: 0,
-          label: 'Dataset 1',
           borderColor: 'rgb(255, 99, 132)',
           backgroundColor: 'rgba(255, 99, 132, 0.5)',
           lineTension: 0,
           borderDash: [0, 0]
         },
-        {
-          data: [2.0],
-          pointRadius: 0,
-          label: 'Dataset 2',
-          borderColor: 'rgb(255, 99, 132)',
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
-          lineTension: 0,
-          borderDash: [0, 0]
-        }
       ]
     },
     options: {
@@ -141,7 +132,7 @@ var a_chart = function (id) {
       }
     }
   })
-  var data = []
+
   function onRefresh (chart) {
     chart.data.datasets.forEach(function (dataset) {
       $.getJSON('/modbusData', function (response) {
@@ -152,6 +143,8 @@ var a_chart = function (id) {
       })
     })
   }
+
+
 }
 
 var b_chart = function () {

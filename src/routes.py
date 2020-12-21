@@ -49,7 +49,7 @@ def set_certificate():
 
 @app.route('/certificate_template')
 def certificate_template():
-    return render_template('certificate_template.html')
+    return render_template('certificate_template_base.html')
 
 
 @app.route('/modbusData')
@@ -80,7 +80,10 @@ def set_graph_bounds(id):
 
 @app.route('/get_model_data/<id>')
 def get_model_data(id):
+    global current_model
     current_model = id
+    print(current_model)
+
     items = CalibrationModel.query.filter_by(id=id).first()
     type_a = items.type_a
     type_b = items.type_b
@@ -97,8 +100,6 @@ def get_model_data(id):
         type_b = "Low Pressure"
     elif type_b == 3:
         type_b = "Condenser Pressure"
-
-    print(current_model)
 
     return render_template('get_model_data.html', items=items, type_a=type_a, type_b=type_b)
 
@@ -138,16 +139,48 @@ def create_model():
 
     return render_template('model_view.html')
 
+
 @app.route('/model_delete/<id>')
 def model_delete(id):
     cm.delete_model(id)
-
     print('deleted')
+    return render_template('model_view.html')
+
+
+@app.route('/model_update/<id>', methods=['GET', 'POST'])
+def model_update(id):
+    print('if')
+    modelName = request.form['modelName']
+    brand = request.form['brand']
+    model = request.form['model']
+    customer = request.form['customer']
+    ref = request.form['ref']
+    type_a = 1
+    a_highValue = request.form['a_highValue']
+    a_hvPlus = request.form['a_hvPlus']
+    a_hvMin = request.form['a_hvMin']
+    a_lowValue = request.form['a_lowValue']
+    a_lvPlus = request.form['a_lvPlus']
+    a_lvMin = request.form['a_lvMin']
+    type_b = 2
+    b_highValue = request.form['b_highValue']
+    b_hvPlus = request.form['b_hvPlus']
+    b_hvMin = request.form['b_hvMin']
+    b_lowValue = request.form['b_lowValue']
+    b_lvPlus = request.form['b_lvPlus']
+    b_lvMin = request.form['b_lvMin']
+
+    cm.update_model(id, modelName, brand, model, customer, ref, type_a, a_highValue, a_hvPlus, a_hvMin, a_lowValue,
+                    a_lvPlus, a_lvMin, type_b, b_highValue, b_hvPlus, b_hvMin, b_lowValue, b_lvPlus, b_lvMin)
+    return ''
+
 
 @app.route('/get_model_form_data/<id>')
 def get_model_form_data(id):
+    global current_model
+    current_model = id
+    print(current_model)
     items = CalibrationModel.query.filter_by(id=id).first()
-
 
     if items.type_a == 0 or items.type_b == 0:
         return render_template('model_form_solo.html', items=items)
@@ -170,6 +203,7 @@ def get_ports():
 @app.route('/set_ports/<id>')
 def set_ports(id):
     connected = id
+    print(id)
     return connected
 
 

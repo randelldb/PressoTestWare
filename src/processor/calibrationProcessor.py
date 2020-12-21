@@ -64,7 +64,7 @@ class CalibrationValidator:
             print('Calibration Failed')
 
 
-# test_a = CalibrationValidator(5001, 20, 40, 8, 8, 0.4, 0.4, 6, 6, 0.1, 0.1)
+# test_a = CalibrationValidator(5001, 20, 40, 8, 8, 0.4, 0.4, 7, 6, 0.1, 0.1)
 # test_a.hv_validator()
 # test_a.lv_validator()
 # test_a.validation_pass()

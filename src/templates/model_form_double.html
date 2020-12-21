@@ -128,14 +128,14 @@
       <input
         size="2"
         type="text"
-        name="a_lvvPlus"
+        name="a_lvPlus"
         id="a_lvPlus"
         value="{{ items.a_lvPlus }}"
       />
       <input
         size="2"
         type="text"
-        name="a_lvvMin"
+        name="a_lvMin"
         id="a_lvMin"
         value="{{ items.a_lvMin }}"
       />
@@ -144,14 +144,14 @@
       <input
         size="2"
         type="text"
-        name="b_lvvPlus"
+        name="b_lvPlus"
         id="b_lvPlus"
         value="{{ items.b_lvPlus }}"
       />
       <input
         size="2"
         type="text"
-        name="b_lvvMin"
+        name="b_lvMin"
         id="b_lvMin"
         value="{{ items.b_lvMin }}"
       />
@@ -160,16 +160,22 @@
 
   <div class="row">
     <div class="col">
-      <button type="button" class="btn btn-dark full-width-buttons">
-        Update
-      </button>
-
-      <form action="/delete_model">
-        <button type="button" class="btn btn-dark full-width-buttons">
-          Delete
+      <div class="col">
+        <button
+          type="button"
+          onclick="model_update({{ items.id }})"
+          class="btn btn-dark full-width-buttons"
+        >
+          Update
         </button>
-      </form>
-
+      
+      <button
+        type="submit"
+        formaction="/model_delete/{{ items.id }}"
+        class="btn btn-dark full-width-buttons"
+      >
+        Delete
+      </button>
     </div>
   </div>
 </form>
