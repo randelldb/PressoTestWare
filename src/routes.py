@@ -1,19 +1,20 @@
 import json
 
-from flask import render_template, request
+from flask import render_template, request, redirect
 from jinja2.runtime import to_string
 
 from src import db
-from src.models import CalibrationModel, MainCounter
+from src.models import CalibrationModel, MainCounter, CertificateTemplate
 from random import random, uniform, randint
 
 from src import app
 from src.handlers import modbusHandler, printerHandler
-from src.processor import calibrationProcessor
 from src.handlers.calibrationModelHandler import CalibrationModelHandler
+from src.handlers.templateHandler import TemplateHandler
 
 # CalibrationModelHandler instance
 cm = CalibrationModelHandler()
+th = TemplateHandler()
 global current_model
 
 
@@ -34,6 +35,51 @@ def complete_calibration():
 def validate_hv():
     print('valitdate')
     return ''
+
+
+@app.route('/update_certificate_template', methods=['GET', 'POST'])
+def update_certificate_template():
+    cert_data_1 = request.form['cert_data_1']
+    cert_data_2 = request.form['cert_data_2']
+    cert_data_3 = request.form['cert_data_3']
+    cert_data_4 = request.form['cert_data_4']
+    cert_data_5 = request.form['cert_data_5']
+    cert_data_6 = request.form['cert_data_6']
+    cert_data_7 = request.form['cert_data_7']
+    cert_data_8 = request.form['cert_data_8']
+    cert_data_9 = request.form['cert_data_9']
+    cert_data_10 = request.form['cert_data_10']
+    cert_data_11 = request.form['cert_data_11']
+    cert_data_12 = request.form['cert_data_12']
+    cert_data_13 = request.form['cert_data_13']
+    cert_data_14 = request.form['cert_data_14']
+    cert_data_15 = request.form['cert_data_15']
+    cert_data_16 = request.form['cert_data_16']
+    cert_data_17 = request.form['cert_data_17']
+    cert_data_18 = request.form['cert_data_18']
+    cert_data_19 = request.form['cert_data_19']
+    cert_data_20 = request.form['cert_data_20']
+    cert_data_21 = request.form['cert_data_21']
+    cert_data_22 = request.form['cert_data_22']
+    cert_data_23 = request.form['cert_data_23']
+    cert_data_24 = request.form['cert_data_24']
+    cert_data_25 = request.form['cert_data_25']
+    cert_data_26 = request.form['cert_data_26']
+
+    th.update_template(cert_data_1, cert_data_2, cert_data_3, cert_data_4, cert_data_5, cert_data_6, cert_data_7,
+                        cert_data_8, cert_data_9, cert_data_10, cert_data_11, cert_data_12, cert_data_13, cert_data_14,
+                        cert_data_15, cert_data_16, cert_data_17, cert_data_18, cert_data_19, cert_data_20,
+                        cert_data_21, cert_data_22, cert_data_23, cert_data_24, cert_data_25, cert_data_26)
+
+    return redirect('/get_certificate_edit_data')
+
+
+@app.route('/get_certificate_edit_data')
+def get_certificate_edit_data():
+    items = CertificateTemplate.query.filter_by(id=1).first()
+
+    return render_template('certificate_template_edit.html', items=items)
+
 
 @app.route('/set_certificate', methods=['GET', 'POST'])
 def set_certificate():
@@ -200,6 +246,12 @@ def get_printers():
     return render_template('get_printers.html', printers=printers)
 
 
+@app.route('/get_writers')
+def get_writers():
+    printers = printerHandler.get_printers()
+    return render_template('get_writers.html', printers=printers)
+
+
 @app.route('/get_ports')
 def get_ports():
     ports = modbusHandler.serial_ports()
@@ -210,6 +262,8 @@ def get_ports():
 def set_ports(id):
     connected = id
     print(id)
+
+    # modbusHandler.open_modbus_conn(id)
     return connected
 
 

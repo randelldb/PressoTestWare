@@ -4,6 +4,7 @@ $(document).ready(function () {
   get_model_data_list()
   get_model_data()
   get_printers()
+  get_writers()
   get_ports()
   set_certificate()
   complete_calibration()
@@ -90,90 +91,89 @@ var set_certificate = function () {
 var a_chart = function (id) {
   $.getJSON('/set_graph_bounds/' + id, function (get_bounds) {
     console.log(get_bounds)
-  
 
-  var ctx = document.getElementById('a_chart').getContext('2d')
-  var data = []
-  var chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      datasets: [
-        {
-          data: [],
-          pointRadius: 0,
-          borderColor: 'rgb(255, 99, 132)',
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
-          lineTension: 0,
-          borderDash: [0, 0]
-        }
-      ]
-    },
-    options: {
-      events: ['click'],
-      tooltips: {
-        enabled: false
-      },
-      scales: {
-        xAxes: [
+    var ctx = document.getElementById('a_chart').getContext('2d')
+    var data = []
+    var chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        datasets: [
           {
-            ticks: {
-              display: false //this will remove only the label
+            data: [],
+            pointRadius: 0,
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            lineTension: 0,
+            borderDash: [0, 0]
+          }
+        ]
+      },
+      options: {
+        events: ['click'],
+        tooltips: {
+          enabled: false
+        },
+        scales: {
+          xAxes: [
+            {
+              ticks: {
+                display: false //this will remove only the label
+              },
+              type: 'realtime',
+              realtime: {
+                onRefresh: onRefresh,
+                duration: 20000, // data in the past 20000 ms will be displayed
+                refresh: 100, // onRefresh callback will be called every 1000 ms
+                delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
+                pause: false, // chart is not paused
+                ttl: undefined // data will be automatically deleted as it disappears off the chart
+              }
+            }
+          ],
+          yAxes: [
+            {
+              ticks: {
+                max: 5,
+                min: 0,
+                stepSize: 0.5
+              }
+            }
+          ]
+        },
+        annotation: {
+          annotations: [
+            {
+              type: 'line',
+              mode: 'horizontal',
+              scaleID: 'y-axis-0',
+              value: get_bounds['a_hvPlus'],
+              borderColor: 'rgb(75, 192, 192)',
+              borderWidth: 2
             },
-            type: 'realtime',
-            realtime: {
-              onRefresh: onRefresh,
-              duration: 20000, // data in the past 20000 ms will be displayed
-              refresh: 1000, // onRefresh callback will be called every 1000 ms
-              delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
-              pause: false, // chart is not paused
-              ttl: undefined // data will be automatically deleted as it disappears off the chart
+            {
+              type: 'line',
+              mode: 'horizontal',
+              scaleID: 'y-axis-0',
+              value: get_bounds['a_hvMin'],
+              borderColor: 'rgb(75, 192, 192)',
+              borderWidth: 2
             }
-          }
-        ],
-        yAxes: [
-          {
-            ticks: {
-              max: 5,
-              min: 0,
-              stepSize: 0.5
-            }
-          }
-        ]
-      },
-      annotation: {
-        annotations: [
-          {
-            type: 'line',
-            mode: 'horizontal',
-            scaleID: 'y-axis-0',
-            value: get_bounds['a_hvPlus'],
-            borderColor: 'rgb(75, 192, 192)',
-            borderWidth: 2,
-          },
-          {
-            type: 'line',
-            mode: 'horizontal',
-            scaleID: 'y-axis-0',
-            value: get_bounds['a_hvMin'],
-            borderColor: 'rgb(75, 192, 192)',
-            borderWidth: 2,
-          }
-        ]
+          ]
+        }
       }
-    }
-  })
+    })
 
-  function onRefresh (chart) {
-    chart.data.datasets.forEach(function (dataset) {
-      $.getJSON('/modbusData', function (response) {
-        dataset.data.push({
-          x: Date.now(),
-          y: response
+    function onRefresh (chart) {
+      chart.data.datasets.forEach(function (dataset) {
+        $.getJSON('/modbusData', function (response) {
+          dataset.data.push({
+            x: Date.now(),
+            y: response
+          })
         })
       })
-    })
-  }
-})
+    }
+  })
 }
 
 var b_chart = function () {
@@ -236,6 +236,7 @@ var b_chart = function () {
       }
     }
   })
+
   var data = []
   function onRefresh (chart) {
     chart.data.datasets.forEach(function (dataset) {
@@ -308,8 +309,7 @@ var set_ports = function (id) {
     url: '/set_ports/' + id,
     type: 'get',
     success: function (response) {
-      console.log('pass')
-      //$(".model_preset").html(response);
+      console.log('pass' + id)
     },
     error: function (xhr) {
       console.log('js error')
@@ -330,3 +330,17 @@ var get_printers = function () {
     }
   })
 }
+
+var get_writers = function () {
+  $.ajax({
+    url: '/get_writers',
+    type: 'get',
+    success: function (response) {
+      $("[aria-labelledby='label_writer']").html(response)
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  })
+}
+
