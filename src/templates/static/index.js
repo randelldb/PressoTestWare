@@ -6,7 +6,6 @@ $(document).ready(function () {
   get_printers()
   get_writers()
   get_ports()
-  set_certificate()
   complete_calibration()
   get_count()
 })
@@ -43,43 +42,7 @@ var complete_calibration = function () {
       url: '/complete_calibration',
       type: 'get',
       success: function (response) {
-        console.log(response)
         get_count()
-      },
-      error: function (xhr) {
-        //Do Something to handle error
-      }
-    })
-  })
-}
-
-var set_certificate = function () {
-  $('#set_certificate').submit(function (event) {
-    event.preventDefault()
-    var r_a_hi = $('#r_a_hi').val()
-    var r_a_lo = $('#r_a_lo').val()
-    var temp_a = $('#temp_a').val()
-    var rv_a = $('#rv_a').val()
-    var r_b_hi = $('#r_b_hi').val()
-    var r_b_lo = $('#r_b_lo').val()
-    var temp_b = $('#temp_b').val()
-    var rv_b = $('#rv_b').val()
-
-    $.ajax({
-      url: '/set_certificate',
-      type: 'post',
-      data: {
-        r_a_hi: r_a_hi,
-        r_a_lo: r_a_lo,
-        temp_a: temp_a,
-        rv_a: rv_a,
-        r_b_hi: r_b_hi,
-        r_b_lo: r_b_lo,
-        temp_b: temp_b,
-        rv_b: rv_b
-      },
-      success: function (response) {
-        console.log('pass')
       },
       error: function (xhr) {
         //Do Something to handle error
@@ -90,7 +53,6 @@ var set_certificate = function () {
 
 var a_chart = function (id) {
   $.getJSON('/set_graph_bounds/' + id, function (get_bounds) {
-    console.log(get_bounds)
 
     var ctx = document.getElementById('a_chart').getContext('2d')
     var data = []
@@ -255,7 +217,6 @@ var modbusCall = function () {
     url: '/modbusData',
     type: 'get',
     success: function (response) {
-      console.log('from ajax call')
     },
     error: function (xhr) {
       //Do Something to handle error
@@ -309,10 +270,8 @@ var set_ports = function (id) {
     url: '/set_ports/' + id,
     type: 'get',
     success: function (response) {
-      console.log('pass' + id)
     },
     error: function (xhr) {
-      console.log('js error')
       //Do Something to handle error
     }
   })

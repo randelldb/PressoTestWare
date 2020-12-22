@@ -2,12 +2,12 @@ import json
 
 from flask import render_template, request, redirect
 from jinja2.runtime import to_string
-
-from src import db
-from src.models import CalibrationModel, MainCounter, CertificateTemplate
 from random import random, uniform, randint
 
 from src import app
+from src import db
+
+from src.models import CalibrationModel, MainCounter, CertificateTemplate
 from src.handlers import modbusHandler, printerHandler
 from src.handlers.calibrationModelHandler import CalibrationModelHandler
 from src.handlers.templateHandler import TemplateHandler
@@ -15,8 +15,8 @@ from src.handlers.templateHandler import TemplateHandler
 # CalibrationModelHandler instance
 cm = CalibrationModelHandler()
 th = TemplateHandler()
-global current_model
 
+# ------------------------- Handling: Complete calibration
 
 @app.route('/complete_calibration')
 def complete_calibration():
@@ -31,12 +31,20 @@ def complete_calibration():
     return 'Completed'
 
 
-@app.route('/validate_hv')
-def validate_hv():
-    print('valitdate')
-    return ''
+# ------------------------- Handling: graphs
+@app.route('/set_graph_bounds/<id>')
+def set_graph_bounds(id):
+    items = CalibrationModel.query.filter_by(id=id).first()
+    data = {
+        'a_hvPlus': items.a_highValue + items.a_hvPlus,
+        'a_hvMin': items.a_lowValue - items.a_hvMin
+    }
+    toJson = json.dumps(data, indent=4, sort_keys=True)
+
+    return toJson
 
 
+# ------------------------- Handling: Certificates
 @app.route('/update_certificate_template', methods=['GET', 'POST'])
 def update_certificate_template():
     cert_data_1 = request.form['cert_data_1']
@@ -67,9 +75,9 @@ def update_certificate_template():
     cert_data_26 = request.form['cert_data_26']
 
     th.update_template(cert_data_1, cert_data_2, cert_data_3, cert_data_4, cert_data_5, cert_data_6, cert_data_7,
-                        cert_data_8, cert_data_9, cert_data_10, cert_data_11, cert_data_12, cert_data_13, cert_data_14,
-                        cert_data_15, cert_data_16, cert_data_17, cert_data_18, cert_data_19, cert_data_20,
-                        cert_data_21, cert_data_22, cert_data_23, cert_data_24, cert_data_25, cert_data_26)
+                       cert_data_8, cert_data_9, cert_data_10, cert_data_11, cert_data_12, cert_data_13, cert_data_14,
+                       cert_data_15, cert_data_16, cert_data_17, cert_data_18, cert_data_19, cert_data_20,
+                       cert_data_21, cert_data_22, cert_data_23, cert_data_24, cert_data_25, cert_data_26)
 
     return redirect('/certificate_template_edit')
 
@@ -80,62 +88,15 @@ def certificate_template_edit():
 
     return render_template('certificate_template_edit.html', items=items)
 
-
-@app.route('/set_certificate', methods=['GET', 'POST'])
-def set_certificate():
-    global current_model
-    model = CalibrationModel.query.filter_by(id=current_model).first()
-    print('yheaaaaah im in py')
-    r_a_hi = request.form['r_a_hi']
-    r_a_lo = request.form['r_a_lo']
-    temp_a = request.form['temp_a']
-    rv_a = request.form['rv_a']
-    r_b_hi = request.form['r_b_hi']
-    r_b_lo = request.form['r_b_lo']
-    temp_b = request.form['temp_b']
-    rv_b = request.form['rv_b']
-
-    return current_model
-
-
-@app.route('/certificate_template')
-def certificate_template():
-    return render_template('certificate_template_base.html')
-
-
-@app.route('/modbusData')
-def modbusData():
-    import json
-    x = 0
-    toJson = json.dumps(x)
-
-    return toJson
-
-
+# ------------------------- Handling: Views
 @app.route('/get_calibration_model')
 def get_calibration_model():
     items = CalibrationModel.query.all()
     return render_template('get_calibration_model.html', items=items)
 
 
-@app.route('/set_graph_bounds/<id>')
-def set_graph_bounds(id):
-    items = CalibrationModel.query.filter_by(id=id).first()
-    data = {
-        'a_hvPlus': items.a_highValue + items.a_hvPlus,
-        'a_hvMin': items.a_lowValue - items.a_hvMin
-    }
-    toJson = json.dumps(data, indent=4, sort_keys=True)
-
-    return toJson
-
-
 @app.route('/get_model_data/<id>')
 def get_model_data(id):
-    global current_model
-    current_model = id
-    print(current_model)
-
     items = CalibrationModel.query.filter_by(id=id).first()
     type_a = items.type_a
     type_b = items.type_b
@@ -161,6 +122,12 @@ def model_view():
     return render_template('model_view.html')
 
 
+@app.route('/certificate_template')
+def certificate_template():
+    return render_template('certificate_template_base.html')
+
+
+# ------------------------- Handling: models
 @app.route('/create_model', methods=['GET', 'POST'])
 def create_model():
     modelName = request.form['modelName']
@@ -190,6 +157,16 @@ def create_model():
                     type_b, a_lowValue, b_lowValue, a_lvPlus, a_lvMin, b_lvPlus, b_lvMin)
 
     return render_template('model_view.html')
+
+
+@app.route('/get_model_form_data/<id>')
+def get_model_form_data(id):
+    items = CalibrationModel.query.filter_by(id=id).first()
+
+    if items.type_a == 0 or items.type_b == 0:
+        return render_template('model_form_solo.html', items=items)
+    else:
+        return render_template('model_form_double.html', items=items)
 
 
 @app.route('/model_delete/<id>')
@@ -227,19 +204,7 @@ def model_update(id):
     return ''
 
 
-@app.route('/get_model_form_data/<id>')
-def get_model_form_data(id):
-    global current_model
-    current_model = id
-    print(current_model)
-    items = CalibrationModel.query.filter_by(id=id).first()
-
-    if items.type_a == 0 or items.type_b == 0:
-        return render_template('model_form_solo.html', items=items)
-    else:
-        return render_template('model_form_double.html', items=items)
-
-# ------------------------- Function: Printers and writers
+# ------------------------- Handling: Printers and writers
 @app.route('/get_printers')
 def get_printers():
     printers = printerHandler.get_printers()
@@ -251,7 +216,8 @@ def get_writers():
     printers = printerHandler.get_printers()
     return render_template('get_writers.html', printers=printers)
 
-# ------------------------- Function: Com
+
+# ------------------------- Handling: Com connection
 @app.route('/get_ports')
 def get_ports():
     ports = modbusHandler.serial_ports()
@@ -263,14 +229,25 @@ def set_ports(id):
     connected = modbusHandler.open_modbus_conn(id)
     return ''
 
-# ------------------------- Function: Counter
+
+@app.route('/modbusData')
+def modbusData():
+    import json
+    x = 0
+    toJson = json.dumps(x)
+
+    return toJson
+
+
+# ------------------------- Handling: Counter
 @app.route('/get_count')
 def get_count():
     get_certificate_id = MainCounter.query.order_by(MainCounter.id.desc()).first()
     count = to_string(get_certificate_id.id + 1)
     return count
 
-# ------------------------- Function: Index
+
+# ------------------------- Handling: Index
 @app.route("/")
 def index(name=None):
     return render_template('index.html', name=name)
