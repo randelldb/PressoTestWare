@@ -95,9 +95,9 @@ var a_chart = function (id) {
           yAxes: [
             {
               ticks: {
-                max: 5,
+                max: 6,
                 min: 0,
-                stepSize: 0.5
+                stepSize: 0.4
               }
             }
           ]
@@ -108,16 +108,16 @@ var a_chart = function (id) {
               type: 'line',
               mode: 'horizontal',
               scaleID: 'y-axis-0',
-              value: get_bounds['a_hvPlus'],
-              borderColor: 'rgb(75, 192, 192)',
+              value: get_bounds['a_lvPlus'],
+              borderColor: 'rgb(255,140,0)',
               borderWidth: 2
             },
             {
               type: 'line',
               mode: 'horizontal',
               scaleID: 'y-axis-0',
-              value: get_bounds['a_hvMin'],
-              borderColor: 'rgb(75, 192, 192)',
+              value: get_bounds['a_lvMin'],
+              borderColor: 'rgb(255,140,0)',
               borderWidth: 2
             }
           ]

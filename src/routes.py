@@ -16,6 +16,7 @@ from src.handlers.templateHandler import TemplateHandler
 cm = CalibrationModelHandler()
 th = TemplateHandler()
 
+
 # ------------------------- Handling: Complete calibration
 
 @app.route('/complete_calibration')
@@ -37,7 +38,9 @@ def set_graph_bounds(id):
     items = CalibrationModel.query.filter_by(id=id).first()
     data = {
         'a_hvPlus': items.a_highValue + items.a_hvPlus,
-        'a_hvMin': items.a_lowValue - items.a_hvMin
+        'a_hvMin': items.a_highValue - items.a_hvMin,
+        'a_lvPlus': items.a_lowValue + items.a_lvPlus,
+        'a_lvMin': items.a_lowValue - items.a_lvMin
     }
     toJson = json.dumps(data, indent=4, sort_keys=True)
 
@@ -87,6 +90,7 @@ def certificate_template_edit():
     items = CertificateTemplate.query.filter_by(id=1).first()
 
     return render_template('certificate_template_edit.html', items=items)
+
 
 # ------------------------- Handling: Views
 @app.route('/get_calibration_model')
