@@ -22,22 +22,6 @@ content %}
   src="{{ url_for('static', filename='chartjs-plugin-annotation.min.js') }}"
 ></script>
 
-<!-- Test///////////////////////////////////////// -->
-
-<form action="/" id="set_certificate">
-  <input type="text" name="r_a_hi" id="r_a_hi" />
-  <input type="text" name="r_a_lo" id="r_a_lo" />
-  <input type="text" name="temp_a" id="temp_a" />
-  <input type="text" name="rv_a" id="rv_a" />
-  <input type="text" name="r_b_hi" id="r_b_hi" />
-  <input type="text" name="r_b_lo" id="r_b_lo" />
-  <input type="text" name="temp_b" id="temp_b" />
-  <input type="text" name="rv_b" id="rv_b" />
-  <input type="submit" value="Search" />
-</form>
-
-<!-- Test///////////////////////////////////////// -->
-
 <div class="row topline"></div>
 <div class="row menu" id="mainmenu">
   <div class="col btn-group">
@@ -90,6 +74,35 @@ content %}
       Selecteer Label writer
     </button>
     <ul class="dropdown-menu" aria-labelledby="label_writer"></ul>
+  </div>
+
+  <div class="col btn-group">
+    <button
+      class="btn btn-secondary dropdown-toggle"
+      type="button"
+      id="options"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      Instellingen
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="options">
+      <tr>
+        <td>
+          <a class="alt_dropdown" href="/model_view"
+            ><p>Model configuratie</p></a
+          >
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <a class="alt_dropdown" href="/certificate_template_edit"
+            ><p>Template configuratie</p></a
+          >
+        </td>
+      </tr>
+    </ul>
   </div>
 </div>
 

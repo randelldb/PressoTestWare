@@ -71,11 +71,11 @@ def update_certificate_template():
                         cert_data_15, cert_data_16, cert_data_17, cert_data_18, cert_data_19, cert_data_20,
                         cert_data_21, cert_data_22, cert_data_23, cert_data_24, cert_data_25, cert_data_26)
 
-    return redirect('/get_certificate_edit_data')
+    return redirect('/certificate_template_edit')
 
 
-@app.route('/get_certificate_edit_data')
-def get_certificate_edit_data():
+@app.route('/certificate_template_edit')
+def certificate_template_edit():
     items = CertificateTemplate.query.filter_by(id=1).first()
 
     return render_template('certificate_template_edit.html', items=items)
@@ -239,7 +239,7 @@ def get_model_form_data(id):
     else:
         return render_template('model_form_double.html', items=items)
 
-
+# ------------------------- Function: Printers and writers
 @app.route('/get_printers')
 def get_printers():
     printers = printerHandler.get_printers()
@@ -251,7 +251,7 @@ def get_writers():
     printers = printerHandler.get_printers()
     return render_template('get_writers.html', printers=printers)
 
-
+# ------------------------- Function: Com
 @app.route('/get_ports')
 def get_ports():
     ports = modbusHandler.serial_ports()
@@ -260,20 +260,17 @@ def get_ports():
 
 @app.route('/set_ports/<id>')
 def set_ports(id):
-    connected = id
-    print(id)
+    connected = modbusHandler.open_modbus_conn(id)
+    return ''
 
-    # modbusHandler.open_modbus_conn(id)
-    return connected
-
-
+# ------------------------- Function: Counter
 @app.route('/get_count')
 def get_count():
     get_certificate_id = MainCounter.query.order_by(MainCounter.id.desc()).first()
     count = to_string(get_certificate_id.id + 1)
     return count
 
-
+# ------------------------- Function: Index
 @app.route("/")
 def index(name=None):
     return render_template('index.html', name=name)

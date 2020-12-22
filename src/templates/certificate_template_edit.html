@@ -15,6 +15,11 @@
       href="{{ url_for('static', filename='template.css') }}"
       rel="stylesheet"
     />
+
+    <link
+      href="{{ url_for('static', filename='style.css') }}"
+      rel="stylesheet"
+    />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
     <script
@@ -23,316 +28,328 @@
     ></script>
   </head>
   <body>
-    <div class="frame">
+    <div class="container_template">
       <form action="/update_certificate_template" id="update" method="POST">
-      <div class="container">
-        <div class="row margin40">
-          <img
-            src="{{ url_for('static', filename='img/logo_bw.png') }}"
-            alt=""
-          />
-        </div>
-        <div class="row ta margin40">
-          <div class="col">
-            <h3>
-              <input
-                type="text"
-                name="cert_data_1"
-                id="cert_data_1"
-                value="{{ items.cert_data_1 }}"
-              />
-            </h3>
-            <p>
-              <input
-                type="text"
-                name="cert_data_2"
-                id="cert_data_2"
-                value="{{ items.cert_data_2 }}"
-              />
-            </p>
+          <div class="row">
+            <a href="/"
+              ><button
+                type="button"
+                style="width:100%"
+                id="terug"
+                class="btn btn-dark"
+              >
+                Terug
+              </button></a
+            >
           </div>
-        </div>
+          <div class="row margin40">
+            <img
+              src="{{ url_for('static', filename='img/logo_bw.png') }}"
+              alt=""
+            />
+          </div>
+          <div class="row ta margin40">
+            <div class="col">
+              <h3>
+                <input
+                  type="text"
+                  name="cert_data_1"
+                  id="cert_data_1"
+                  value="{{ items.cert_data_1 }}"
+                />
+              </h3>
+              <p>
+                <input
+                  type="text"
+                  name="cert_data_2"
+                  id="cert_data_2"
+                  value="{{ items.cert_data_2 }}"
+                />
+              </p>
+            </div>
+          </div>
 
-        <div class="row ta">
-          <div class="col">
-            <p>
-              <input
-                type="text"
-                name="cert_data_3"
-                id="cert_data_3"
-                value="{{ items.cert_data_3 }}"
-              />
-            </p>
+          <div class="row ta">
+            <div class="col">
+              <p>
+                <input
+                  type="text"
+                  name="cert_data_3"
+                  id="cert_data_3"
+                  value="{{ items.cert_data_3 }}"
+                />
+              </p>
+            </div>
+            <div class="col">
+              <p>
+                <input
+                  type="text"
+                  name="cert_data_4"
+                  id="cert_data_4"
+                  value="{{ items.cert_data_4 }}"
+                />
+              </p>
+            </div>
           </div>
-          <div class="col">
-            <p>
-              <input
-                type="text"
-                name="cert_data_4"
-                id="cert_data_4"
-                value="{{ items.cert_data_4 }}"
-              />
-            </p>
-          </div>
-        </div>
 
-        <div class="row">
-          <div class="col">
+          <div class="row">
+            <div class="col">
+              <h5>
+                <input
+                  type="text"
+                  name="cert_data_5"
+                  id="cert_data_5"
+                  value="{{ items.cert_data_5 }}"
+                />
+              </h5>
+
+              <p>
+                <input
+                  type="text"
+                  name="cert_data_6"
+                  id="cert_data_6"
+                  value="{{ items.cert_data_6 }}"
+                />
+              </p>
+              <p>
+                <input
+                  type="text"
+                  name="cert_data_7"
+                  id="cert_data_7"
+                  value="{{ items.cert_data_7 }}"
+                />
+              </p>
+            </div>
+            <div class="col">
+              <h5>
+                <input
+                  type="text"
+                  name="cert_data_8"
+                  id="cert_data_8"
+                  value="{{ items.cert_data_8 }}"
+                />
+              </h5>
+
+              <p>
+                <input
+                  type="text"
+                  name="cert_data_9"
+                  id="cert_data_9"
+                  value="{{ items.cert_data_9 }}"
+                />
+              </p>
+              <p>
+                <input
+                  type="text"
+                  name="cert_data_10"
+                  id="cert_data_10"
+                  value="{{ items.cert_data_10 }}"
+                />
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
             <h5>
               <input
                 type="text"
-                name="cert_data_5"
-                id="cert_data_5"
-                value="{{ items.cert_data_5 }}"
+                name="cert_data_11"
+                id="cert_data_11"
+                value="{{ items.cert_data_11 }}"
               />
             </h5>
+          </div>
 
-            <p>
+          <div class="row">
+            <div class="col">
+              <b
+                ><p>
+                  <input
+                    type="text"
+                    name="cert_data_12"
+                    id="cert_data_12"
+                    value="{{ items.cert_data_12 }}"
+                  /></p
+              ></b>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <b
+                ><p>
+                  <input
+                    type="text"
+                    name="cert_data_13"
+                    id="cert_data_13"
+                    value="{{ items.cert_data_13 }}"
+                  /></p
+              ></b>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <b
+                ><p>
+                  <input
+                    type="text"
+                    name="cert_data_14"
+                    id="cert_data_14"
+                    value="{{ items.cert_data_14 }}"
+                  /></p
+              ></b>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <b
+                ><p>
+                  <input
+                    type="text"
+                    name="cert_data_15"
+                    id="cert_data_15"
+                    value="{{ items.cert_data_15 }}"
+                  /></p
+              ></b>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <b
+                ><p>
+                  <input
+                    type="text"
+                    name="cert_data_16"
+                    id="cert_data_16"
+                    value="{{ items.cert_data_16 }}"
+                  /></p
+              ></b>
+            </div>
+          </div>
+
+          <div class="row">
+            <h2 class="center">
               <input
                 type="text"
-                name="cert_data_6"
-                id="cert_data_6"
-                value="{{ items.cert_data_6 }}"
+                name="cert_data_17"
+                id="cert_data_17"
+                value="{{ items.cert_data_17 }}"
               />
-            </p>
-            <p>
+            </h2>
+          </div>
+          <!-- *************************************************** -->
+
+          <div class="row">
+            <p>Pressostaat types, bijv: Hogedruk, lagedruk of condensor druk</p>
+          </div>
+          <div class="row">
+            <div class="col center bold">
               <input
                 type="text"
-                name="cert_data_7"
-                id="cert_data_7"
-                value="{{ items.cert_data_7 }}"
+                name="cert_data_18"
+                id="cert_data_18"
+                value="{{ items.cert_data_18 }}"
               />
-            </p>
-          </div>
-          <div class="col">
-            <h5>
+            </div>
+            <div class="col center bold">
               <input
                 type="text"
-                name="cert_data_8"
-                id="cert_data_8"
-                value="{{ items.cert_data_8 }}"
+                name="cert_data_19"
+                id="cert_data_19"
+                value="{{ items.cert_data_19 }}"
               />
-            </h5>
-
-            <p>
+            </div>
+            <div class="col center bold">
               <input
                 type="text"
-                name="cert_data_9"
-                id="cert_data_9"
-                value="{{ items.cert_data_9 }}"
+                name="cert_data_20"
+                id="cert_data_20"
+                value="{{ items.cert_data_20 }}"
               />
-            </p>
-            <p>
+            </div>
+            <br />
+            <br />
+          </div>
+
+          <div class="row">
+            <div class="col-6 bold">
               <input
                 type="text"
-                name="cert_data_10"
-                id="cert_data_10"
-                value="{{ items.cert_data_10 }}"
+                name="cert_data_21"
+                id="cert_data_21"
+                value="{{ items.cert_data_21 }}"
               />
-            </p>
+            </div>
           </div>
-        </div>
 
-        <div class="row">
-          <h5>
-            <input
-              type="text"
-              name="cert_data_11"
-              id="cert_data_11"
-              value="{{ items.cert_data_11 }}"
-            />
-          </h5>
-        </div>
+          <div class="row">
+            <div class="col-6 bold">
+              <input
+                type="text"
+                name="cert_data_22"
+                id="cert_data_22"
+                value="{{ items.cert_data_22 }}"
+              />
+            </div>
+          </div>
 
-        <div class="row">
-          <div class="col">
-            <b
-              ><p>
-                <input
-                  type="text"
-                  name="cert_data_12"
-                  id="cert_data_12"
-                  value="{{ items.cert_data_12 }}"
-                /></p
-            ></b>
+          <div class="row">
+            <div class="col-6 bold">
+              <input
+                type="text"
+                name="cert_data_23"
+                id="cert_data_23"
+                value="{{ items.cert_data_23 }}"
+              />
+            </div>
           </div>
-        </div>
 
-        <div class="row">
-          <div class="col">
-            <b
-              ><p>
-                <input
-                  type="text"
-                  name="cert_data_13"
-                  id="cert_data_13"
-                  value="{{ items.cert_data_13 }}"
-                /></p
-            ></b>
+          <div class="row">
+            <div class="col-6 bold">
+              <input
+                type="text"
+                name="cert_data_24"
+                id="cert_data_24"
+                value="{{ items.cert_data_24 }}"
+              />
+            </div>
           </div>
-        </div>
 
-        <div class="row">
-          <div class="col">
-            <b
-              ><p>
-                <input
-                  type="text"
-                  name="cert_data_14"
-                  id="cert_data_14"
-                  value="{{ items.cert_data_14 }}"
-                /></p
-            ></b>
+          <div class="row">
+            <div class="col-6 bold">
+              <input
+                type="text"
+                name="cert_data_25"
+                id="cert_data_25"
+                value="{{ items.cert_data_25 }}"
+              />
+            </div>
           </div>
-        </div>
 
-        <div class="row">
-          <div class="col">
-            <b
-              ><p>
-                <input
-                  type="text"
-                  name="cert_data_15"
-                  id="cert_data_15"
-                  value="{{ items.cert_data_15 }}"
-                /></p
-            ></b>
+          <div class="row">
+            <div class="col-6 bold">
+              <input
+                type="text"
+                name="cert_data_26"
+                id="cert_data_26"
+                value="{{ items.cert_data_26 }}"
+              />
+            </div>
           </div>
-        </div>
+          <!-- *************************************************** -->
 
-        <div class="row">
-          <div class="col">
-            <b
-              ><p>
-                <input
-                  type="text"
-                  name="cert_data_16"
-                  id="cert_data_16"
-                  value="{{ items.cert_data_16 }}"
-                /></p
-            ></b>
-          </div>
-        </div>
-
-        <div class="row">
-          <h2 class="center">
-            <input
-              type="text"
-              name="cert_data_17"
-              id="cert_data_17"
-              value="{{ items.cert_data_17 }}"
-            />
-          </h2>
-        </div>
-        <!-- *************************************************** -->
-
-        <div class="row">
-          <p>Pressostaat types, bijv: Hogedruk, lagedruk of condensor druk</p>
-        </div>
-        <div class="row">
-          <div class="col center bold">
-            <input
-              type="text"
-              name="cert_data_18"
-              id="cert_data_18"
-              value="{{ items.cert_data_18 }}"
-            />
-          </div>
-          <div class="col center bold">
-            <input
-              type="text"
-              name="cert_data_19"
-              id="cert_data_19"
-              value="{{ items.cert_data_19 }}"
-            />
-          </div>
-          <div class="col center bold">
-            <input
-              type="text"
-              name="cert_data_20"
-              id="cert_data_20"
-              value="{{ items.cert_data_20 }}"
-            />
-          </div>
-          <br />
-          <br />
-        </div>
-
-        <div class="row">
-          <div class="col-6 bold">
-            <input
-              type="text"
-              name="cert_data_21"
-              id="cert_data_21"
-              value="{{ items.cert_data_21 }}"
-            />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-6 bold">
-            <input
-              type="text"
-              name="cert_data_22"
-              id="cert_data_22"
-              value="{{ items.cert_data_22 }}"
-            />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-6 bold">
-            <input
-              type="text"
-              name="cert_data_23"
-              id="cert_data_23"
-              value="{{ items.cert_data_23 }}"
-            />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-6 bold">
-            <input
-              type="text"
-              name="cert_data_24"
-              id="cert_data_24"
-              value="{{ items.cert_data_24 }}"
-            />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-6 bold">
-            <input
-              type="text"
-              name="cert_data_25"
-              id="cert_data_25"
-              value="{{ items.cert_data_25 }}"
-            />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-6 bold">
-            <input
-              type="text"
-              name="cert_data_26"
-              id="cert_data_26"
-              value="{{ items.cert_data_26 }}"
-            />
-          </div>
-        </div>
-        <!-- *************************************************** -->
-      </div>
-      <button
-        type="submit"
-        form="update"
-        class="btn btn-dark full-width-buttons"
-      >
-        Update
-      </button>
-    </form>
+        <button
+          type="submit"
+          form="update"
+          style="width:100%"
+          class="btn btn-dark full-width-buttons"
+        >
+          Update
+        </button>
+      </form>
     </div>
   </body>
 </html>
