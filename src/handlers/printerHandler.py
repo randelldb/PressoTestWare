@@ -1,5 +1,6 @@
 import win32api
 import win32print
+from win32com.client import Dispatch
 
 
 def get_printers():
@@ -12,11 +13,12 @@ def get_printers():
 
     return result
 
+
 def print_main(selected_printer):
     printer_name = selected_printer
     win32print.SetDefaultPrinter(printer_name)
 
-    pdf_file_name = 'test.html'
+    pdf_file_name = 'my.label'
     win32api.ShellExecute(0, "print", pdf_file_name, None, ".", 0)
 
 
