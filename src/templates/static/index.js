@@ -1,14 +1,121 @@
+var gid
+
 $(document).ready(function () {
   console.log('ready!')
+  var CurrentId = 1
 
   get_model_data_list()
-  get_model_data()
   get_printers()
   get_writers()
   get_ports()
   complete_calibration()
   get_count()
+  a_chart()
 })
+
+var get_model_data = function (NewID = 1) {
+  CurrentId = NewID
+  $.ajax({
+    url: '/get_model_data/' + NewID,
+    type: 'get',
+    success: function (response) {
+      $('.get_model_data').html(response)
+      gid = NewID
+
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  })
+}
+
+var a_chart = function () {
+
+  var chart
+  var x = []
+  var data = []
+  var ctx = document.getElementById('a_chart').getContext('2d')
+  var chart_options = {
+    type: 'line',
+    data: {
+      datasets: [
+        {
+          data: [],
+          pointRadius: 0,
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          lineTension: 0,
+          borderDash: [0, 0]
+        }
+      ]
+    },
+    options: {
+      events: ['click'],
+      tooltips: {
+        enabled: false
+      },
+      scales: {
+        xAxes: [
+          {
+            ticks: {
+              display: false //this will remove only the label
+            },
+            type: 'realtime',
+            realtime: {
+              onRefresh: onRefresh,
+              duration: 20000, // data in the past 20000 ms will be displayed
+              refresh: 100, // onRefresh callback will be called every 1000 ms
+              delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
+              pause: false, // chart is not paused
+              ttl: undefined // data will be automatically deleted as it disappears off the chart
+            }
+          }
+        ],
+        yAxes: [
+          {
+            ticks: {
+              max: 6,
+              min: 0,
+              stepSize: 0.4
+            }
+          }
+        ]
+      },
+      annotation: {
+        annotations: [
+          {
+            type: 'line',
+            mode: 'horizontal',
+            scaleID: 'y-axis-0',
+            value: x = [],
+            borderColor: 'rgb(255,140,0)',
+            borderWidth: 2
+          }
+        ]
+      }
+    }
+  }
+
+  chart = new Chart(ctx, chart_options)
+
+  function onRefresh (chart) {
+
+    $.getJSON('/set_graph_bounds/' + gid, function (response) {
+      z = response['a_hvPlus']
+    })
+
+    chart.data.datasets.forEach(function (dataset) {
+      $.getJSON('/modbusData', function (response) {
+        dataset.data.push({
+          x: Date.now(),
+          y: response
+        })
+      })
+    })
+  }
+
+
+}
 
 var get_count = function () {
   $.ajax({
@@ -51,173 +158,11 @@ var complete_calibration = function () {
   })
 }
 
-var a_chart = function (id) {
-  $.getJSON('/set_graph_bounds/' + id, function (get_bounds) {
-
-    var ctx = document.getElementById('a_chart').getContext('2d')
-    var data = []
-    var chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        datasets: [
-          {
-            data: [],
-            pointRadius: 0,
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            lineTension: 0,
-            borderDash: [0, 0]
-          }
-        ]
-      },
-      options: {
-        events: ['click'],
-        tooltips: {
-          enabled: false
-        },
-        scales: {
-          xAxes: [
-            {
-              ticks: {
-                display: false //this will remove only the label
-              },
-              type: 'realtime',
-              realtime: {
-                onRefresh: onRefresh,
-                duration: 20000, // data in the past 20000 ms will be displayed
-                refresh: 100, // onRefresh callback will be called every 1000 ms
-                delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
-                pause: false, // chart is not paused
-                ttl: undefined // data will be automatically deleted as it disappears off the chart
-              }
-            }
-          ],
-          yAxes: [
-            {
-              ticks: {
-                max: 6,
-                min: 0,
-                stepSize: 0.4
-              }
-            }
-          ]
-        },
-        annotation: {
-          annotations: [
-            {
-              type: 'line',
-              mode: 'horizontal',
-              scaleID: 'y-axis-0',
-              value: get_bounds['a_lvPlus'],
-              borderColor: 'rgb(255,140,0)',
-              borderWidth: 2
-            },
-            {
-              type: 'line',
-              mode: 'horizontal',
-              scaleID: 'y-axis-0',
-              value: get_bounds['a_lvMin'],
-              borderColor: 'rgb(255,140,0)',
-              borderWidth: 2
-            }
-          ]
-        }
-      }
-    })
-
-    function onRefresh (chart) {
-      chart.data.datasets.forEach(function (dataset) {
-        $.getJSON('/modbusData', function (response) {
-          dataset.data.push({
-            x: Date.now(),
-            y: response
-          })
-        })
-      })
-    }
-  })
-}
-
-var b_chart = function () {
-  var ctx = document.getElementById('b_chart').getContext('2d')
-  var chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      datasets: [
-        {
-          data: [],
-          pointRadius: 0,
-          label: 'Dataset 1',
-          borderColor: 'rgb(255, 99, 132)',
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
-          lineTension: 0,
-          borderDash: [0, 0]
-        },
-        {
-          data: [2.0],
-          pointRadius: 0,
-          label: 'Dataset 2',
-          borderColor: 'rgb(255, 99, 132)',
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
-          lineTension: 0,
-          borderDash: [0, 0]
-        }
-      ]
-    },
-    options: {
-      events: ['click'],
-      tooltips: {
-        enabled: false
-      },
-      scales: {
-        xAxes: [
-          {
-            ticks: {
-              display: false //this will remove only the label
-            },
-            type: 'realtime',
-            realtime: {
-              onRefresh: onRefresh,
-              duration: 20000, // data in the past 20000 ms will be displayed
-              refresh: 100, // onRefresh callback will be called every 1000 ms
-              delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
-              pause: false, // chart is not paused
-              ttl: undefined // data will be automatically deleted as it disappears off the chart
-            }
-          }
-        ],
-        yAxes: [
-          {
-            ticks: {
-              max: 5,
-              min: 0,
-              stepSize: 0.5
-            }
-          }
-        ]
-      }
-    }
-  })
-
-  var data = []
-  function onRefresh (chart) {
-    chart.data.datasets.forEach(function (dataset) {
-      $.getJSON('/modbusData', function (response) {
-        dataset.data.push({
-          x: Date.now(),
-          y: response
-        })
-      })
-    })
-  }
-}
-
 var modbusCall = function () {
   $.ajax({
     url: '/modbusData',
     type: 'get',
-    success: function (response) {
-    },
+    success: function (response) {},
     error: function (xhr) {
       //Do Something to handle error
     }
@@ -230,21 +175,6 @@ var get_model_data_list = function () {
     type: 'get',
     success: function (response) {
       $("[aria-labelledby='select_model']").html(response)
-    },
-    error: function (xhr) {
-      //Do Something to handle error
-    }
-  })
-}
-
-var get_model_data = function (id = 1) {
-  $.ajax({
-    url: '/get_model_data/' + id,
-    type: 'get',
-    success: function (response) {
-      $('.get_model_data').html(response)
-      a_chart(id)
-      b_chart(id)
     },
     error: function (xhr) {
       //Do Something to handle error
@@ -269,8 +199,7 @@ var set_ports = function (id) {
   $.ajax({
     url: '/set_ports/' + id,
     type: 'get',
-    success: function (response) {
-    },
+    success: function (response) {},
     error: function (xhr) {
       //Do Something to handle error
     }
@@ -302,4 +231,3 @@ var get_writers = function () {
     }
   })
 }
-

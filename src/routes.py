@@ -22,8 +22,11 @@ th = TemplateHandler()
 @app.route('/complete_calibration')
 def complete_calibration():
     # update counter
+
     try:
-        db.session.add(MainCounter())
+        printerHandler.print_label()
+        get_certificate_id = MainCounter.query.get(1)
+        get_certificate_id.count = get_certificate_id.count + 1
         db.session.commit()
         print('Count update success!')
     except:
@@ -36,11 +39,15 @@ def complete_calibration():
 @app.route('/set_graph_bounds/<id>')
 def set_graph_bounds(id):
     items = CalibrationModel.query.filter_by(id=id).first()
+    # data = {
+    #     'a_hvPlus': items.a_highValue + items.a_hvPlus,
+    #     'a_hvMin': items.a_highValue - items.a_hvMin,
+    #     'a_lvPlus': items.a_lowValue + items.a_lvPlus,
+    #     'a_lvMin': items.a_lowValue - items.a_lvMin
+    # }
+
     data = {
-        'a_hvPlus': items.a_highValue + items.a_hvPlus,
-        'a_hvMin': items.a_highValue - items.a_hvMin,
-        'a_lvPlus': items.a_lowValue + items.a_lvPlus,
-        'a_lvMin': items.a_lowValue - items.a_lvMin
+        'a_hvPlus': 3,
     }
     toJson = json.dumps(data, indent=4, sort_keys=True)
 
@@ -237,7 +244,7 @@ def set_ports(id):
 @app.route('/modbusData')
 def modbusData():
     import json
-    x = 0
+    x = 1
     toJson = json.dumps(x)
 
     return toJson
@@ -246,13 +253,12 @@ def modbusData():
 # ------------------------- Handling: Counter
 @app.route('/get_count')
 def get_count():
-    get_certificate_id = MainCounter.query.order_by(MainCounter.id.desc()).first()
-    count = to_string(get_certificate_id.id + 1)
+    get_certificate_id = MainCounter.query.filter_by(id=1).first()
+    count = to_string(get_certificate_id.count + 1)
     return count
 
 
 # ------------------------- Handling: Index
 @app.route("/")
 def index(name=None):
-
     return render_template('index.html', name=name)
