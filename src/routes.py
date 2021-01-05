@@ -39,16 +39,13 @@ def complete_calibration():
 @app.route('/set_graph_bounds/<id>')
 def set_graph_bounds(id):
     items = CalibrationModel.query.filter_by(id=id).first()
-    # data = {
-    #     'a_hvPlus': items.a_highValue + items.a_hvPlus,
-    #     'a_hvMin': items.a_highValue - items.a_hvMin,
-    #     'a_lvPlus': items.a_lowValue + items.a_lvPlus,
-    #     'a_lvMin': items.a_lowValue - items.a_lvMin
-    # }
-
     data = {
-        'a_hvPlus': 3,
+        'a_hvPlus': items.a_highValue + items.a_hvPlus,
+        'a_hvMin': items.a_highValue - items.a_hvMin,
+        'a_lvPlus': items.a_lowValue + items.a_lvPlus,
+        'a_lvMin': items.a_lowValue - items.a_lvMin
     }
+
     toJson = json.dumps(data, indent=4, sort_keys=True)
 
     return toJson
