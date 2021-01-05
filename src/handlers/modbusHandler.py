@@ -24,18 +24,26 @@ def open_modbus_conn(port=None):
 
 
 
-def read_data(instrument):
-    rv = instrument.read_register(512, 1)  # Registernumber, number of decimals
-    temperature = instrument.read_register(516, 1)  # Registernumber, number of decimals
-    pressure = instrument.read_register(520, 1)  # Registernumber, number of decimals
-    switch = instrument.read_register(528, 1)  # Registernumber, number of decimals
+def read_data():
+# def read_data(instrument):
+    # rv = instrument.read_register(512, 1)  # Registernumber, number of decimals
+    # temperature = instrument.read_register(516, 1)  # Registernumber, number of decimals
+    # pressure = instrument.read_register(520, 1)  # Registernumber, number of decimals
+    # switch = instrument.read_register(528, 1)  # Registernumber, number of decimals
     # reading = {
     #     'rv': rv,
     #     'temp': temperature,
     #     'press': pressure,
     #     'swt': switch
     # }
-    reading = pressure
+
+    reading = {
+        'rv': 40,
+        'temp': 20,
+        'press': 8,
+        'swt': 1
+    }
+
     return reading
 
 

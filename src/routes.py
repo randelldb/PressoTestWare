@@ -1,4 +1,5 @@
 import json
+import time
 
 from flask import render_template, request, redirect
 from jinja2.runtime import to_string
@@ -11,13 +12,14 @@ from src.models import CalibrationModel, MainCounter, CertificateTemplate
 from src.handlers import modbusHandler, printerHandler
 from src.handlers.calibrationModelHandler import CalibrationModelHandler
 from src.handlers.templateHandler import TemplateHandler
+from src.processor.calibrationProcessor import CalibrationValidator
 
 # CalibrationModelHandler instance
 cm = CalibrationModelHandler()
 th = TemplateHandler()
 
 
-# ------------------------- Handling: Complete calibration
+# ------------------------- Handling: Calibration
 
 @app.route('/complete_calibration')
 def complete_calibration():
@@ -33,6 +35,68 @@ def complete_calibration():
         print('Count update  failed...')
 
     return 'Completed'
+
+
+@app.route('/start_calibration')
+def start_calibration():
+    print("Start test")
+    reading = modbusHandler.read_data()
+    startClicked = 1
+    hvPassFlag = 0
+    lvPassFlag = 0
+
+
+    ######
+    temp = 20
+    rv = 60
+    press = 8
+    switch = 1
+    ######
+
+    while startClicked == 1:
+        if switch == 1:
+            validateHv = CalibrationValidator(temp, rv, press, 8, 0.5, 0.5)
+            hvPassFlag = validateHv.validator()
+
+            ########
+            if hvPassFlag == 1:
+
+                print("pass hv")
+                # Call function to write to certification template
+            else:
+                print("Fail hv test")
+            ########
+
+        if switch == 0 and hvPassFlag == 1:
+            validateLv = CalibrationValidator(temp, rv, press, 6, 0.5, 0.5)
+            lvPassFlag = validateLv.validator()
+
+            ########
+            if lvPassFlag == 1:
+                print("pass lv")
+                # Call function to write to certification template
+            else:
+                print("Fail lv test")
+            ########
+
+        if hvPassFlag == 1 and lvPassFlag == 1:
+            print("test passed")
+            break
+
+        ############
+        time.sleep(5)
+        if switch == 0:
+            temp = 20
+            rv = 60
+            press = 8
+            switch = 1
+        elif switch == 1:
+            temp = 20
+            rv = 60
+            press = 6
+            switch = 0
+        ###############
+    return ''
 
 
 # ------------------------- Handling: graphs
