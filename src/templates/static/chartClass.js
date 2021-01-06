@@ -42,8 +42,8 @@ var chart_options = {
       yAxes: [
         {
           ticks: {
-            max: 6,
-            min: 0,
+            max: 25,
+            min: 16,
             stepSize: 0.4
           }
         }
@@ -53,7 +53,34 @@ var chart_options = {
       annotations: [
         {
           type: 'line',
-          id: 'bounds',
+          id: 'a_lvPlus',
+          mode: 'horizontal',
+          scaleID: 'y-axis-0',
+          value: 1,
+          borderColor: 'rgb(255,140,0)',
+          borderWidth: 2
+        },
+        {
+          type: 'line',
+          id: 'a_lvMin',
+          mode: 'horizontal',
+          scaleID: 'y-axis-0',
+          value: 1,
+          borderColor: 'rgb(255,140,0)',
+          borderWidth: 2
+        },
+        {
+          type: 'line',
+          id: 'a_hvPlus',
+          mode: 'horizontal',
+          scaleID: 'y-axis-0',
+          value: 1,
+          borderColor: 'rgb(255,140,0)',
+          borderWidth: 2
+        },
+        {
+          type: 'line',
+          id: 'a_hvMin',
           mode: 'horizontal',
           scaleID: 'y-axis-0',
           value: 1,
@@ -78,10 +105,41 @@ function onRefresh (chart) {
   })
 }
 
+function updateScales(chart) {
+  chart.options.scales = {
+      yAxes: [{
+          display: true,
+          ticks: {
+            max: 25,
+            min: 0,
+            stepSize: 0.4
+          }
+      }]
+  };
+  chart.update();
+  // need to update the reference
+}
+
 function set_bounds(id){
   console.log('Triggerd')
+  get_model_data(id)
   $.getJSON('set_graph_bounds/' + id, function(get_bounds){
-    chart.annotation.elements['bounds'].options.value = get_bounds['a_lvPlus']
+    chart.annotation.elements['a_lvPlus'].options.value = get_bounds['a_lvPlus']
+    chart.annotation.elements['a_lvMin'].options.value = get_bounds['a_lvMin']
+    chart.annotation.elements['a_hvPlus'].options.value = get_bounds['a_hvPlus']
+    chart.annotation.elements['a_hvMin'].options.value = get_bounds['a_hvMin']
+
+    chart.options.scales = {
+      yAxes: [{
+          display: true,
+          ticks: {
+            max: get_bounds['a_hvPlus'] + 2,
+            min: get_bounds['a_lvMin'] - 2,
+            stepSize: 1
+          }
+      }]
+  };
+
     chart.update()
   })
 }

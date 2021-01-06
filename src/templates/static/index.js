@@ -7,23 +7,28 @@ $(document).ready(function () {
   get_ports()
   complete_calibration()
   get_count()
-  start_calibration()
+  controle_calibration()
 
 })
 
-var start_calibration = function (){
+var controle_calibration = function (){
   $('#start_a').click(function(){
     $.ajax({
       url: '/start_calibration/' + 'start',
       type: 'get',
-      success: function (response) {
-        
-      },
-      error: function (xhr) {
-      }
+      success: function (response) {},error: function (xhr) {}
+    })
+  })
+
+  $('#stop_a').click(function(){
+    $.ajax({
+      url: '/start_calibration/' + 'stop',
+      type: 'get',
+      success: function (response) {},error: function (xhr) {}
     })
   })
 }
+
 
 var get_model_data = function (NewID = 1) {
   $.ajax({

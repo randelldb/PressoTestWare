@@ -40,13 +40,13 @@ def complete_calibration():
     return 'Completed'
 
 
-@app.route('/start_calibration/<state>')
+@app.route('/start_calibration')
 def start_calibration(state):
-    print("Start test")
     print(state)
 
     data = cm.select_model(current_id)
-    startClicked = state
+
+    hvPassFlag = 0
     lvPassFlag = 0
 
     ### TEST CODE ###
@@ -55,8 +55,7 @@ def start_calibration(state):
     press = 8
     switch = 1
     ### TEST CODE ###
-
-    while startClicked == 'start':
+    while True:
         if switch == 1:
             validateHv = CalibrationValidator(temp, rv, press, data.a_highValue, data.a_hvPlus, data.a_hvMin)
             hvPassFlag = validateHv.validator()
@@ -65,7 +64,6 @@ def start_calibration(state):
                 # Call function to write to certification template
             else:
                 print("Fail hv test")
-
         if switch == 0 and hvPassFlag == 1:
             validateLv = CalibrationValidator(temp, rv, press, data.a_highValue, data.a_hvPlus, data.a_hvMin)
             lvPassFlag = validateLv.validator()
@@ -74,11 +72,9 @@ def start_calibration(state):
                 # Call function to write to certification template
             else:
                 print("Fail lv test")
-
         if hvPassFlag == 1 and lvPassFlag == 1:
             print("test passed")
             break
-
         ### TEST CODE ###
         time.sleep(5)
         if switch == 0:
@@ -92,6 +88,7 @@ def start_calibration(state):
             press = 6
             switch = 0
         ### TEST CODE ###
+
     return ''
 
 
