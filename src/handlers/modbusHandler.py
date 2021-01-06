@@ -1,3 +1,5 @@
+import random
+
 import minimalmodbus
 import serial
 from time import time, sleep
@@ -36,6 +38,37 @@ def read_data(instrument):
     }
 
     return reading
+
+
+###
+#global debug data
+###
+data = {
+'rv': 3,
+        'temp': 20,
+        'press': 2,
+        'swt': 10
+    }
+
+def reset():
+    data['rv'] = 3
+    return 'good'
+
+def debug_data():
+    randomlist = [-0.1,-0.15,-0.2,0.1,0.15,0.2]
+
+    for key in data:
+        randomchoice = random.choice(randomlist)
+        if key == "rv":
+            if data['rv'] < 1:
+                randomchoice = +0.3
+            elif data['rv'] > 7:
+                randomchoice = 2
+
+        data[key] = data[key] + randomchoice
+
+    return data
+
 
 
 def serial_ports():

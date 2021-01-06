@@ -7,6 +7,7 @@ from jinja2.runtime import to_string
 from src import app
 from src import db
 from src import cache
+from src.handlers.modbusHandler import debug_data, reset
 
 from src.models import CalibrationModel, MainCounter, CertificateTemplate
 from src.handlers import modbusHandler, printerHandler
@@ -332,10 +333,18 @@ def set_ports(id):
 @app.route('/modbusData')
 def modbusData():
     import json
-    x = 1
+    x = 2
     toJson = json.dumps(x)
 
     return toJson
+
+@app.route('/modbusDebug')
+def modbusDebug():
+    return json.dumps(debug_data())
+
+@app.route('/modbusReset')
+def modbusReset():
+    return reset()
 
 
 # ------------------------- Handling: Counter

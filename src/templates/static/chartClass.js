@@ -96,10 +96,10 @@ chart = new Chart(ctx, chart_options)
 
 function onRefresh (chart) {
     chart.data.datasets.forEach(function (dataset) {
-    $.getJSON('/modbusData', function (response) {
+    $.getJSON('/modbusDebug', function (response) {
       dataset.data.push({
         x: Date.now(),
-        y: response
+        y: response.rv
       })
     })
   })

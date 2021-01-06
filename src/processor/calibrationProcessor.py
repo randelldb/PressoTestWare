@@ -13,6 +13,14 @@ class CalibrationValidator:
         self.tollPlus = tollPlus
         self.tollMin = tollMin
 
+        self.checks = []
+
+    def add(self):
+        pass
+
+    def validate(self):
+        pass
+
     def validator(self):
         if 19 <= self.temp <= 21 and 30 <= self.rv <= 60:
             # print('Temp is ' + str(self.temp) + ': Temp is in range')
