@@ -8,27 +8,31 @@ $(document).ready(function () {
   complete_calibration()
   get_count()
   controle_calibration()
-
 })
 
-var controle_calibration = function (){
-  $('#start_a').click(function(){
+var controle_calibration = function () {
+  $('#start_a').click(function () {
     $.ajax({
-      url: '/start_calibration/' + 'start',
+      url: '/run',
       type: 'get',
-      success: function (response) {},error: function (xhr) {}
+      success: function (response) {
+        console.log('start')
+      },
+      error: function (xhr) {}
     })
   })
 
-  $('#stop_a').click(function(){
+  $('#stop_a').click(function () {
     $.ajax({
-      url: '/start_calibration/' + 'stop',
+      url: '/stop',
       type: 'get',
-      success: function (response) {},error: function (xhr) {}
+      success: function (response) {
+        console.log('stop')
+      },
+      error: function (xhr) {}
     })
   })
 }
-
 
 var get_model_data = function (NewID = 1) {
   $.ajax({
@@ -37,8 +41,7 @@ var get_model_data = function (NewID = 1) {
     success: function (response) {
       $('.get_model_data').html(response)
     },
-    error: function (xhr) {
-    }
+    error: function (xhr) {}
   })
 }
 
@@ -131,6 +134,17 @@ var get_printers = function () {
   })
 }
 
+var set_printer = function (selectedPrinter) {
+  $.ajax({
+    url: '/set_printer/' + selectedPrinter,
+    type: 'get',
+    success: function (response) {},
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  })
+}
+
 var get_writers = function () {
   $.ajax({
     url: '/get_writers',
@@ -138,6 +152,17 @@ var get_writers = function () {
     success: function (response) {
       $("[aria-labelledby='label_writer']").html(response)
     },
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  })
+}
+
+var set_writer = function (selectedWriter) {
+  $.ajax({
+    url: '/set_writer/' + selectedWriter,
+    type: 'get',
+    success: function (response) {},
     error: function (xhr) {
       //Do Something to handle error
     }

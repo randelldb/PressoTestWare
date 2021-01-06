@@ -1,11 +1,12 @@
 import json
+from threading import Thread
 import time
-
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, Response
 from jinja2.runtime import to_string
 
 from src import app
 from src import db
+from src import cache
 
 from src.models import CalibrationModel, MainCounter, CertificateTemplate
 from src.handlers import modbusHandler, printerHandler
@@ -17,8 +18,8 @@ cm = CalibrationModelHandler()
 th = TemplateHandler()
 
 ### GLOBALS ###
-global current_id
 current_id = 1
+start = False
 ### GLOBALS ###
 
 
@@ -40,24 +41,21 @@ def complete_calibration():
     return 'Completed'
 
 
-@app.route('/start_calibration')
-def start_calibration(state):
-    print(state)
-
-    data = cm.select_model(current_id)
-
+def calibration_loop():
+    with app.app_context():
+        data = cm.select_model(current_id)
     hvPassFlag = 0
     lvPassFlag = 0
-
     ### TEST CODE ###
     temp = 20
     rv = 60
-    press = 8
+    press = 2
     switch = 1
     ### TEST CODE ###
-    while True:
+    global start_stop
+    while start_stop:
         if switch == 1:
-            validateHv = CalibrationValidator(temp, rv, press, data.a_highValue, data.a_hvPlus, data.a_hvMin)
+            validateHv = CalibrationValidator('a', temp, rv, press, data.a_highValue, data.a_hvPlus, data.a_hvMin)
             hvPassFlag = validateHv.validator()
             if hvPassFlag == 1:
                 print("pass hv")
@@ -65,7 +63,7 @@ def start_calibration(state):
             else:
                 print("Fail hv test")
         if switch == 0 and hvPassFlag == 1:
-            validateLv = CalibrationValidator(temp, rv, press, data.a_highValue, data.a_hvPlus, data.a_hvMin)
+            validateLv = CalibrationValidator('b', temp, rv, press, data.a_lowValue, data.a_lvPlus, data.a_lvMin)
             lvPassFlag = validateLv.validator()
             if lvPassFlag == 1:
                 print("pass lv")
@@ -76,20 +74,42 @@ def start_calibration(state):
             print("test passed")
             break
         ### TEST CODE ###
-        time.sleep(5)
+        time.sleep(1)
         if switch == 0:
             temp = 20
             rv = 60
-            press = 8
+            press = 22
             switch = 1
         elif switch == 1:
             temp = 20
             rv = 60
-            press = 6
+            press = 18
             switch = 0
         ### TEST CODE ###
 
-    return ''
+    def store_data():
+        pass
+
+def manual_run():
+    t = Thread(target=calibration_loop)
+    t.start()
+    return "Processing"
+
+
+@app.route('/run', methods=['GET'])
+def run():
+    # stop the function test
+    global start_stop
+    start_stop = True
+    return Response(manual_run(), mimetype="text/html")
+
+
+@app.route('/stop', methods=['GET'])
+def stop():
+    global start_stop
+    start_stop = False
+    print(cache.get('a_temp'))
+    return 'stopped'
 
 
 # ------------------------- Handling: graphs
@@ -165,7 +185,6 @@ def get_calibration_model():
 
 @app.route('/get_model_data/<id>')
 def get_model_data(id):
-    print(id + "::" + current_id)
     ### GOBALS ###
     items = CalibrationModel.query.filter_by(id=id).first()
     type_a = items.type_a
@@ -275,16 +294,26 @@ def model_update(id):
 
 
 # ------------------------- Handling: Printers and writers
+@app.route('/set_printer/<selectedPrinter>')
+def set_printers(selectedPrinter):
+    cache.set('default_printer', selectedPrinter)
+    return ''
+
 @app.route('/get_printers')
 def get_printers():
     printers = printerHandler.get_printers()
     return render_template('get_printers.html', printers=printers)
 
+@app.route('/set_writer/<selectedWriter>')
+def set_writer(selectedWriter):
+    cache.set('default_writer', selectedWriter)
+    print(cache.get('default_writer'))
+    return ''
 
 @app.route('/get_writers')
 def get_writers():
-    printers = printerHandler.get_printers()
-    return render_template('get_writers.html', printers=printers)
+    writers = printerHandler.get_printers()
+    return render_template('get_writers.html', writers=writers)
 
 
 # ------------------------- Handling: Com connection

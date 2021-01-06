@@ -4,6 +4,7 @@ import win32api
 import win32print
 
 from src.models import MainCounter
+from src import cache
 
 
 def get_printers():
@@ -17,8 +18,8 @@ def get_printers():
     return result
 
 
-def print_main(selected_printer):
-    printer_name = selected_printer
+def print_main():
+    printer_name = cache.get('default_printer')
     win32print.SetDefaultPrinter(printer_name)
 
     pdf_file_name = 'my.label'
@@ -26,11 +27,11 @@ def print_main(selected_printer):
 
 
 def print_label():
+    writer_name = cache.get('default_writer')
+    win32print.SetDefaultPrinter(writer_name)
 
     get_certificate_id = MainCounter.query.get(1)
     count = get_certificate_id.count + 1
-
-    #win32print.SetDefaultPrinter(selected_printer)
 
     import sys
     from datetime import datetime, timedelta
@@ -44,7 +45,7 @@ def print_label():
     labelCom = Dispatch('Dymo.DymoAddIn')
     labelText = Dispatch('Dymo.DymoLabels')
     isOpen = labelCom.Open(mylabel)
-    selectPrinter = 'DYMO LabelWriter 450'
+    selectPrinter = writer_name
     labelCom.SelectPrinter(selectPrinter)
 
     labelText.SetField('TESTO1', now.strftime('%Y/%m/%d'))

@@ -16,7 +16,8 @@ var get_model_data_list = function () {
   })
 }
 
-var get_model_data = function (id = 1) {
+// bad naming, should be fixxed
+var set_bounds = function (id = 1) {
   $.ajax({
     url: '/get_model_form_data/' + id,
     type: 'get',

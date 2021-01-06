@@ -1,7 +1,7 @@
-{% for printer in printers %}
-<tr onclick="">
+{% for writer in writers %}
+<tr onclick="set_writer('{{ writer }}')">
     <td>
-        <p>{{ printer }}</p>
+        <p>{{ writer }}</p>
     </td>
 </tr>
 {% endfor %}

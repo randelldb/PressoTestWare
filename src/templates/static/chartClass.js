@@ -42,9 +42,9 @@ var chart_options = {
       yAxes: [
         {
           ticks: {
-            max: 25,
-            min: 16,
-            stepSize: 0.4
+            max: 10,
+            min: 0,
+            stepSize: 1
           }
         }
       ]
@@ -57,7 +57,7 @@ var chart_options = {
           mode: 'horizontal',
           scaleID: 'y-axis-0',
           value: 1,
-          borderColor: 'rgb(255,140,0)',
+          borderColor: 'rgb(235, 131, 52)',
           borderWidth: 2
         },
         {
@@ -66,7 +66,7 @@ var chart_options = {
           mode: 'horizontal',
           scaleID: 'y-axis-0',
           value: 1,
-          borderColor: 'rgb(255,140,0)',
+          borderColor: 'rgb(235, 131, 52)',
           borderWidth: 2
         },
         {
@@ -75,7 +75,7 @@ var chart_options = {
           mode: 'horizontal',
           scaleID: 'y-axis-0',
           value: 1,
-          borderColor: 'rgb(255,140,0)',
+          borderColor: 'rgb(235, 131, 52)',
           borderWidth: 2
         },
         {
@@ -84,7 +84,7 @@ var chart_options = {
           mode: 'horizontal',
           scaleID: 'y-axis-0',
           value: 1,
-          borderColor: 'rgb(255,140,0)',
+          borderColor: 'rgb(235, 131, 52)',
           borderWidth: 2
         }
       ]
@@ -105,21 +105,6 @@ function onRefresh (chart) {
   })
 }
 
-function updateScales(chart) {
-  chart.options.scales = {
-      yAxes: [{
-          display: true,
-          ticks: {
-            max: 25,
-            min: 0,
-            stepSize: 0.4
-          }
-      }]
-  };
-  chart.update();
-  // need to update the reference
-}
-
 function set_bounds(id){
   console.log('Triggerd')
   get_model_data(id)
@@ -133,8 +118,8 @@ function set_bounds(id){
       yAxes: [{
           display: true,
           ticks: {
-            max: get_bounds['a_hvPlus'] + 2,
-            min: get_bounds['a_lvMin'] - 2,
+            max: get_bounds['a_hvPlus'] + 1,
+            min: get_bounds['a_lvMin'] - 1,
             stepSize: 1
           }
       }]

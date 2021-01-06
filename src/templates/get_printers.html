@@ -1,5 +1,5 @@
 {% for printer in printers %}
-<tr onclick="">
+<tr onclick="set_printer('{{ printer }}')">
     <td>
         <p>{{ printer }}</p>
     </td>
