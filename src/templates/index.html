@@ -25,18 +25,6 @@ content %}
   src="{{ url_for('static', filename='chartjs-plugin-annotation.min.js') }}"
 ></script>
 
-<form action="/start_calibration" method="POST">
-  <label for="temp">Temp</label>
-  <input type="text" name="temp" id="temp">
-  <label for="rv">RV</label>
-  <input type="text" name='rv' id="rv">
-  <label for="press">Pressure</label>
-  <input type="text" name='press' id="press">
-  <label for="swt">Switch</label>
-  <input type="text" name='swt' id="swt">
-  <input type="submit" name="send" id="send">
-</form>
-
 <div class="row topline"></div>
 <div class="row menu" id="mainmenu">
   <div class="col btn-group">

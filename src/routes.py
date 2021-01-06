@@ -3,7 +3,6 @@ import time
 
 from flask import render_template, request, redirect
 from jinja2.runtime import to_string
-from random import random, uniform, randint
 
 from src import app
 from src import db
@@ -14,9 +13,13 @@ from src.handlers.calibrationModelHandler import CalibrationModelHandler
 from src.handlers.templateHandler import TemplateHandler
 from src.processor.calibrationProcessor import CalibrationValidator
 
-# CalibrationModelHandler instance
 cm = CalibrationModelHandler()
 th = TemplateHandler()
+
+### GLOBALS ###
+global current_id
+current_id = 1
+### GLOBALS ###
 
 
 # ------------------------- Handling: Calibration
@@ -37,53 +40,46 @@ def complete_calibration():
     return 'Completed'
 
 
-@app.route('/start_calibration')
-def start_calibration():
+@app.route('/start_calibration/<state>')
+def start_calibration(state):
     print("Start test")
-    reading = modbusHandler.read_data()
-    startClicked = 1
-    hvPassFlag = 0
+    print(state)
+
+    data = cm.select_model(current_id)
+    startClicked = state
     lvPassFlag = 0
 
-
-    ######
+    ### TEST CODE ###
     temp = 20
     rv = 60
     press = 8
     switch = 1
-    ######
+    ### TEST CODE ###
 
-    while startClicked == 1:
+    while startClicked == 'start':
         if switch == 1:
-            validateHv = CalibrationValidator(temp, rv, press, 8, 0.5, 0.5)
+            validateHv = CalibrationValidator(temp, rv, press, data.a_highValue, data.a_hvPlus, data.a_hvMin)
             hvPassFlag = validateHv.validator()
-
-            ########
             if hvPassFlag == 1:
-
                 print("pass hv")
                 # Call function to write to certification template
             else:
                 print("Fail hv test")
-            ########
 
         if switch == 0 and hvPassFlag == 1:
-            validateLv = CalibrationValidator(temp, rv, press, 6, 0.5, 0.5)
+            validateLv = CalibrationValidator(temp, rv, press, data.a_highValue, data.a_hvPlus, data.a_hvMin)
             lvPassFlag = validateLv.validator()
-
-            ########
             if lvPassFlag == 1:
                 print("pass lv")
                 # Call function to write to certification template
             else:
                 print("Fail lv test")
-            ########
 
         if hvPassFlag == 1 and lvPassFlag == 1:
             print("test passed")
             break
 
-        ############
+        ### TEST CODE ###
         time.sleep(5)
         if switch == 0:
             temp = 20
@@ -95,13 +91,16 @@ def start_calibration():
             rv = 60
             press = 6
             switch = 0
-        ###############
+        ### TEST CODE ###
     return ''
 
 
 # ------------------------- Handling: graphs
 @app.route('/set_graph_bounds/<id>')
 def set_graph_bounds(id):
+    ### GLOBALS ###
+    global current_id
+    current_id = id
     items = CalibrationModel.query.filter_by(id=id).first()
     data = {
         'a_hvPlus': items.a_highValue + items.a_hvPlus,
@@ -169,6 +168,8 @@ def get_calibration_model():
 
 @app.route('/get_model_data/<id>')
 def get_model_data(id):
+    print(id + "::" + current_id)
+    ### GOBALS ###
     items = CalibrationModel.query.filter_by(id=id).first()
     type_a = items.type_a
     type_b = items.type_b

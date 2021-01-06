@@ -3,16 +3,11 @@ from src import models, db
 
 
 class CalibrationModelHandler:
-    # Define Pressure switch types
-    # PsTypes = {
-    #     1: 'High Pressure',
-    #     2: 'Low Pressure',
-    #     3: 'Condenser Pressure'
-    # }
-
     @staticmethod
-    def select_model():
-        select_model = models.CalibrationModel.query.get(1)
+    def select_model(id):
+        select_model = models.CalibrationModel.query.filter_by(id=id).first()
+
+        return select_model
 
     @staticmethod
     def create_model(name, brand, model, customer, ref, type_a, a_highValue, a_hvPlus, a_hvMin, a_lowValue, a_lvPlus,

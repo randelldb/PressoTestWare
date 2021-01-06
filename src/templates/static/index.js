@@ -14,7 +14,7 @@ $(document).ready(function () {
 var start_calibration = function (){
   $('#start_a').click(function(){
     $.ajax({
-      url: '/start_calibration',
+      url: '/start_calibration/' + 'start',
       type: 'get',
       success: function (response) {
         
@@ -43,19 +43,6 @@ var get_count = function () {
     type: 'get',
     success: function (response) {
       $('#get_counter').html(response)
-    },
-    error: function (xhr) {
-      //Do Something to handle error
-    }
-  })
-}
-
-var validate_hv = function () {
-  $.ajax({
-    url: '/validate_hv',
-    type: 'get',
-    success: function (response) {
-      $('.get_model_data').html(response)
     },
     error: function (xhr) {
       //Do Something to handle error
