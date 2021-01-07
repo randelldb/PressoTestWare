@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Certificate</title>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" rel="stylesheet"/>
+
+    <style>
+      .frame {
+    position: relative;
+    width: 190mm;
+    height: 277mm;
+    padding: 10mm;
+    /* border: 1px solid black; */
+  }
+
+  .container_template{
+    margin: auto;
+    max-width: 80vh!important;
+  }
+
+  .border{
+    border: 1px solid black;
+  }
+
+  .margin40 {
+    margin-bottom: 40px;
+  }
+
+  .bold{
+    font-weight: bold;
+  }
+
+  .row img {
+    max-width: 50%;
+    margin: auto;
+  }
+
+  .center{
+    text-align: center;
+  }
+
+  .ta {
+    text-align: center !important;
+  }
+
+  h5, h2 {
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+  }
+
+  input{
+    margin: 10px;
+    width: 100%;
+  }
+    </style></head>
+  <body>
+    <div class="frame">
+      <div class="container">
+        <div class="row margin40">
+          <img alt="" src="logo_bw.png"/>
+        </div>
+        <div class="row ta margin40">
+          <div class="col">
+            <h3><div class="fixed_cert_data" id="cert_data_1"><span>CERTIFICAAT</span></div></h3>
+           <div class="fixed_cert_data" id="cert_data_2"><span>PRESSOSTATEN</span></div>
+          </div>
+        </div>
+
+        <div class="row ta">
+          <div class="col">
+            <div class="fixed_cert_data" id="cert_data_3"><span>Cert nummer</span></div>
+            <p>BT0001</p>
+          </div>
+          <div class="col">
+            <div class="fixed_cert_data" id="cert_data_4"><span>Datum</span></div>
+            <p>17/12/2020</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <h5><div class="fixed_cert_data" id="cert_data_5"><span>Technische informatie</span></div></h5>
+
+            <div class="fixed_cert_data" id="cert_data_6"><span>Merk</span></div><p> Johnson Control</p>
+            <div class="fixed_cert_data" id="cert_data_7"><span>Type</span></div><p> P3827Ghs</p>
+          </div>
+          <div class="col">
+            <h5><div class="fixed_cert_data" id="cert_data_8"><span>Klant informatie</span></div></h5>
+
+            <div class="fixed_cert_data" id="cert_data_9"><span>Klant</span></div><p> Johnson Control</p>
+            <div class="fixed_cert_data" id="cert_data_10"><span>Referentie</span></div><p> P3827Ghs</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <h5><div class="fixed_cert_data" id="cert_data_11"><span>Test informatie</span></div></h5>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <b><div class="fixed_cert_data" id="cert_data_12"><span>Test apparatuur</span></div></b>
+          </div>
+          <div class="col">
+            <p>Digitale manometer</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <b><div class="fixed_cert_data" id="cert_data_13"><span>Meetbereik &amp; naukeurigheid</span></div></b>
+          </div>
+          <div class="col">
+            <p>0 tot 25 bar / 0,1 % FS</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <b><div class="fixed_cert_data" id="cert_data_14"><span>Meetonnaukeurigheid</span></div></b>
+          </div>
+          <div class="col">
+            <p>+/- 0,03 bar</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <b><div class="fixed_cert_data" id="cert_data_15"><span>Test omgevingstemperatuur</span></div></b>
+          </div>
+          <div class="col">
+            <p>20 +1 / -1 graden Celcius</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <b><div class="fixed_cert_data" id="cert_data_16"><span>Test relative luchtvochtigheid</span></div></b>
+          </div>
+          <div class="col">
+            <p>30% tot 60% Rv</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <h2 class="center"><div class="fixed_cert_data" id="cert_data_17"><span>Calibratie</span></div></h2>
+        </div>
+<!-- *************************************************** -->
+<div class="row">
+  <div class="col-6"></div>
+  <div class="col center bold"><div class="fixed_cert_data" id="cert_data_18"><span>Hogedruk</span></div></div>
+  <div class="col center bold"><div class="fixed_cert_data" id="cert_data_19"><span>Lagedruk</span></div></div>
+  <div class="col center bold"><div class="fixed_cert_data" id="cert_data_20"><span>Condensordruk</span></div></div>
+  <br/>
+  <br/>
+</div>
+
+<div class="row">
+  <div class="col-6 bold" id="cert_data_21"><div class="fixed_cert_data" id="cert_data_21"><span>Voorinstelling schakelpunt hoog</span></div></div>
+  <div class="col center border">8.0 Bar +0.5/-0.5</div>
+  <div class="col center border">7.5 Bar +0.2/-0.2</div>
+</div>
+
+<div class="row">
+  <div class="col-6 bold"><div class="fixed_cert_data" id="cert_data_22"><span>Voorinstelling schakelpunt laag</span></div></div>
+  <div class="col center border">2.5 Bar +0.2/-0.2</div>
+  <div class="col center border">0.5 Bar +0.2/-0.2</div>
+</div>
+
+<div class="row">
+  <div class="col-6 bold"><div class="fixed_cert_data" id="cert_data_23"><span>Schakeldruk hoog</span></div></div>
+  <div class="col center border"><div class="dynamic_data" id="hi_pressureReading"><span>22</span></div> Bar</div>
+  <div class="col center border">2.2 Bar</div>
+</div>
+
+<div class="row">
+  <div class="col-6 bold"><div class="fixed_cert_data" id="cert_data_24"><span>Schakeldruk laag</span></div></div>
+  <div class="col center border"><div class="dynamic_data" id="lo_pressureReading"><span>18</span></div> Bar</div>
+  <div class="col center border">0.5 Bar</div>
+</div>
+
+<div class="row">
+  <div class="col-6 bold"><div class="fixed_cert_data" id="cert_data_25"><span>Omgevingstemperatuur</span></div></div>
+  <div class="col center border"><div class="dynamic_data" id="hi_temp"><span>20</span></div> ° Celsius</div>
+  <div class="col center border">19.8 ° Celsius</div>
+</div>
+
+<div class="row">
+  <div class="col-6 bold"><div class="fixed_cert_data" id="cert_data_26"><span>Relatieve luchtvochtigheid</span></div></div>
+  <div class="col center border"><div class="dynamic_data" id="hi_rv"><span>60</span></div> % Rv</div>
+  <div class="col center border">58.2% Rv</div>
+</div>
+<!-- *************************************************** -->
+</div>
+    </div>
+  
+
+</body></html>

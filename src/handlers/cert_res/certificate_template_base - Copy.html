@@ -11,18 +11,62 @@
       crossorigin="anonymous"
     />
 
-    <link
-    href="{{ url_for('static', filename='template.css') }}"
-    rel="stylesheet"
-  />
+    <style>
+      .frame {
+    position: relative;
+    width: 190mm;
+    height: 277mm;
+    padding: 10mm;
+    /* border: 1px solid black; */
+  }
+
+  .container_template{
+    margin: auto;
+    max-width: 80vh!important;
+  }
+
+  .border{
+    border: 1px solid black;
+  }
+
+  .margin40 {
+    margin-bottom: 40px;
+  }
+
+  .bold{
+    font-weight: bold;
+  }
+
+  .row img {
+    max-width: 50%;
+    margin: auto;
+  }
+
+  .center{
+    text-align: center;
+  }
+
+  .ta {
+    text-align: center !important;
+  }
+
+  h5, h2 {
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+  }
+
+  input{
+    margin: 10px;
+    width: 100%;
+  }
+    </style>
   </head>
   <body>
-    {{ r_a_hi }}
     <div class="frame">
       <div class="container">
         <div class="row margin40">
           <img
-            src="{{ url_for('static', filename='img/logo_bw.png') }}"
+            src="logo_bw.png"
             alt=""
           />
         </div>

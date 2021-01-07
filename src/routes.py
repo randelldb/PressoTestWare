@@ -10,7 +10,7 @@ from src import cache
 from src.handlers.modbusHandler import debug_data, reset
 
 from src.models import CalibrationModel, MainCounter, CertificateTemplate
-from src.handlers import modbusHandler, printerHandler
+from src.handlers import modbusHandler, printerHandler, certificateWriter
 from src.handlers.calibrationModelHandler import CalibrationModelHandler
 from src.handlers.templateHandler import TemplateHandler
 from src.processor.calibrationProcessor import CalibrationValidator
@@ -21,6 +21,8 @@ th = TemplateHandler()
 ### GLOBALS ###
 current_id = 1
 start = False
+
+
 ### GLOBALS ###
 
 
@@ -29,6 +31,14 @@ start = False
 @app.route('/complete_calibration')
 def complete_calibration():
     # update counter
+    hi_temp = cache.get('hi_temp')
+    hi_rv = cache.get('hi_rv')
+    hi_pressureReading = cache.get('hi_pressureReading')
+    lo_pressureReading = cache.get('lo_pressureReading')
+    reading = {"hi_temp": hi_temp, "hi_rv": hi_rv, "hi_pressureReading": hi_pressureReading, "lo_pressureReading": lo_pressureReading}
+
+    get_fixed_cert_data = CertificateTemplate.query.filter_by(id=1).first()
+    certificateWriter.write_data(get_fixed_cert_data, reading)
 
     try:
         printerHandler.print_label()
@@ -50,30 +60,29 @@ def calibration_loop():
     ### TEST CODE ###
     temp = 20
     rv = 60
-    press = 2
+    press = 22
     switch = 1
     ### TEST CODE ###
     global start_stop
     while start_stop:
         if switch == 1:
-            validateHv = CalibrationValidator('a', temp, rv, press, data.a_highValue, data.a_hvPlus, data.a_hvMin)
+            validateHv = CalibrationValidator('hi', temp, rv, press, data.a_highValue, data.a_hvPlus, data.a_hvMin)
             hvPassFlag = validateHv.validator()
             if hvPassFlag == 1:
                 print("pass hv")
-                # Call function to write to certification template
             else:
                 print("Fail hv test")
         if switch == 0 and hvPassFlag == 1:
-            validateLv = CalibrationValidator('b', temp, rv, press, data.a_lowValue, data.a_lvPlus, data.a_lvMin)
+            validateLv = CalibrationValidator('lo', temp, rv, press, data.a_lowValue, data.a_lvPlus, data.a_lvMin)
             lvPassFlag = validateLv.validator()
             if lvPassFlag == 1:
                 print("pass lv")
-                # Call function to write to certification template
             else:
                 print("Fail lv test")
         if hvPassFlag == 1 and lvPassFlag == 1:
             print("test passed")
             break
+
         ### TEST CODE ###
         time.sleep(1)
         if switch == 0:
@@ -82,14 +91,12 @@ def calibration_loop():
             press = 22
             switch = 1
         elif switch == 1:
-            temp = 20
+            temp = 19.9
             rv = 60
             press = 18
             switch = 0
         ### TEST CODE ###
 
-    def store_data():
-        pass
 
 def manual_run():
     t = Thread(target=calibration_loop)
@@ -109,7 +116,6 @@ def run():
 def stop():
     global start_stop
     start_stop = False
-    print(cache.get('a_temp'))
     return 'stopped'
 
 
@@ -300,16 +306,18 @@ def set_printers(selectedPrinter):
     cache.set('default_printer', selectedPrinter)
     return ''
 
+
 @app.route('/get_printers')
 def get_printers():
     printers = printerHandler.get_printers()
     return render_template('get_printers.html', printers=printers)
 
+
 @app.route('/set_writer/<selectedWriter>')
 def set_writer(selectedWriter):
     cache.set('default_writer', selectedWriter)
-    print(cache.get('default_writer'))
     return ''
+
 
 @app.route('/get_writers')
 def get_writers():
@@ -338,9 +346,11 @@ def modbusData():
 
     return toJson
 
+
 @app.route('/modbusDebug')
 def modbusDebug():
     return json.dumps(debug_data())
+
 
 @app.route('/modbusReset')
 def modbusReset():
@@ -348,6 +358,7 @@ def modbusReset():
 
 
 # ------------------------- Handling: Counter
+# 
 @app.route('/get_count')
 def get_count():
     get_certificate_id = MainCounter.query.filter_by(id=1).first()
