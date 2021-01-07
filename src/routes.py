@@ -35,7 +35,8 @@ def complete_calibration():
     hi_rv = cache.get('hi_rv')
     hi_pressureReading = cache.get('hi_pressureReading')
     lo_pressureReading = cache.get('lo_pressureReading')
-    reading = {"hi_temp": hi_temp, "hi_rv": hi_rv, "hi_pressureReading": hi_pressureReading, "lo_pressureReading": lo_pressureReading}
+    reading = {"hi_temp": hi_temp, "hi_rv": hi_rv, "hi_pressureReading": hi_pressureReading,
+               "lo_pressureReading": lo_pressureReading}
 
     get_fixed_cert_data = CertificateTemplate.query.filter_by(id=1).first()
     certificateWriter.write_data(get_fixed_cert_data, reading)
@@ -223,7 +224,7 @@ def certificate_template():
     return render_template('certificate_template_base.html')
 
 
-# ------------------------- Handling: models
+# ------------------------- Handling: Calibration models
 @app.route('/create_model', methods=['GET', 'POST'])
 def create_model():
     modelName = request.form['modelName']
@@ -254,7 +255,7 @@ def create_model():
 
     return render_template('model_view.html')
 
-
+# Function to get a calibration model 
 @app.route('/get_model_form_data/<id>')
 def get_model_form_data(id):
     items = CalibrationModel.query.filter_by(id=id).first()
@@ -264,7 +265,7 @@ def get_model_form_data(id):
     else:
         return render_template('model_form_double.html', items=items)
 
-
+# Delete function to delete a calibration model from the 'Model configuratie' view
 @app.route('/model_delete/<id>')
 def model_delete(id):
     cm.delete_model(id)
@@ -272,6 +273,7 @@ def model_delete(id):
     return render_template('model_view.html')
 
 
+# Update function to update a calibration model from the 'Model configuratie' view
 @app.route('/model_update/<id>', methods=['GET', 'POST'])
 def model_update(id):
     print('if')
@@ -301,24 +303,28 @@ def model_update(id):
 
 
 # ------------------------- Handling: Printers and writers
+# Set the chosen printer from get_printers() as active
 @app.route('/set_printer/<selectedPrinter>')
 def set_printers(selectedPrinter):
     cache.set('default_printer', selectedPrinter)
     return ''
 
 
+# Get list of available printers on the system
 @app.route('/get_printers')
 def get_printers():
     printers = printerHandler.get_printers()
     return render_template('get_printers.html', printers=printers)
 
 
+# Set the chosen label writer from get_writers() as active
 @app.route('/set_writer/<selectedWriter>')
 def set_writer(selectedWriter):
     cache.set('default_writer', selectedWriter)
     return ''
 
 
+# Get list of available label writers on the system
 @app.route('/get_writers')
 def get_writers():
     writers = printerHandler.get_printers()
@@ -326,18 +332,21 @@ def get_writers():
 
 
 # ------------------------- Handling: Com connection
+# Display list of serial ports available on the system
 @app.route('/get_ports')
 def get_ports():
     ports = modbusHandler.serial_ports()
     return render_template('get_ports.html', ports=ports)
 
 
+# Set the chosen port from get_ports() as active
 @app.route('/set_ports/<id>')
 def set_ports(id):
     connected = modbusHandler.open_modbus_conn(id)
     return ''
 
 
+# function to open modbus connection
 @app.route('/modbusData')
 def modbusData():
     import json
@@ -358,7 +367,7 @@ def modbusReset():
 
 
 # ------------------------- Handling: Counter
-# 
+# Counter used as calibration id number
 @app.route('/get_count')
 def get_count():
     get_certificate_id = MainCounter.query.filter_by(id=1).first()
