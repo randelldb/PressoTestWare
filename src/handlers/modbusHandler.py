@@ -4,7 +4,6 @@ import minimalmodbus
 import serial
 from time import time, sleep
 
-
 def open_modbus_conn(port=None):
     if port is None:
         print('Com not selected')
@@ -20,25 +19,47 @@ def open_modbus_conn(port=None):
             # instrument.address  # this is the slave address number
             instrument.mode = minimalmodbus.MODE_RTU  # rtu or ascii mode
             instrument.clear_buffers_before_each_transaction = True
-            return instrument
+            rv = int(instrument.read_register(512, 1))  # Registernumber, number of decimals
+            temp = int(instrument.read_register(516, 1))
+            press = int(instrument.read_register(520, 1))
+            switch = int(instrument.read_register(528, 1))
+
+            reading = {
+                'rv': rv,
+                'temp': temp,
+                'press': press,
+                'switch': switch
+            }
+            return reading
         except:
             print('Select a valid com port')
 
+def serial_ports():
+    ports = ['COM%s' % (i + 1) for i in range(256)]
 
-def read_data(instrument):
-    rv = instrument.read_register(512, 1)  # Registernumber, number of decimals
-    temperature = instrument.read_register(516, 1)  # Registernumber, number of decimals
-    pressure = instrument.read_register(520, 1)  # Registernumber, number of decimals
-    switch = instrument.read_register(528, 1)  # Registernumber, number of decimals
-    reading = {
-        'rv': rv,
-        'temp': temperature,
-        'press': pressure,
-        'swt': switch
-    }
+    result = []
+    for port in ports:
+        try:
+            s = serial.Serial(port)
+            s.close()
+            result.append(port)
+        except (OSError, serial.SerialException):
+            pass
+    return result
 
-    return reading
-
+# def read_data(instrument):
+#     rv = instrument.read_register(512, 1)  # Registernumber, number of decimals
+#     temperature = instrument.read_register(516, 1)  # Registernumber, number of decimals
+#     pressure = instrument.read_register(520, 1)  # Registernumber, number of decimals
+#     switch = instrument.read_register(528, 1)  # Registernumber, number of decimals
+#     reading = {
+#         'rv': rv,
+#         'temp': temperature,
+#         'press': pressure,
+#         'swt': switch
+#     }
+#     return reading
+#
 
 ###
 #global debug data
@@ -71,15 +92,4 @@ def debug_data():
 
 
 
-def serial_ports():
-    ports = ['COM%s' % (i + 1) for i in range(256)]
 
-    result = []
-    for port in ports:
-        try:
-            s = serial.Serial(port)
-            s.close()
-            result.append(port)
-        except (OSError, serial.SerialException):
-            pass
-    return result

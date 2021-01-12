@@ -48,14 +48,8 @@ def print_label():
     selectPrinter = writer_name
     labelCom.SelectPrinter(selectPrinter)
 
-    labelText.SetField('TESTO1', now.strftime('%Y/%m/%d'))
-    labelText.SetField('TESTO2', count)
-
-    labelText.SetField('TESTO3', now.strftime('%Y/%m/%d'))
-    labelText.SetField('TESTO4', count)
-
-    labelText.SetField('TESTO5', now.strftime('%Y/%m/%d'))
-    labelText.SetField('TESTO6', count)
+    labelText.SetField('cert_nr', count)
+    labelText.SetField('date', now.strftime('%d/%m/%Y'))
 
     labelCom.StartPrintJob()
     labelCom.Print(1, False)

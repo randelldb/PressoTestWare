@@ -11,27 +11,32 @@ $(document).ready(function () {
 })
 
 var controle_calibration = function () {
-  $('#start_a').click(function () {
+  $('.start_graph').click(function(){
+    var getId = $(this).attr('id')
+    var stripId = getId.split('start_').pop()
     $.ajax({
-      url: '/run',
+      url: '/run/' + stripId,
       type: 'get',
       success: function (response) {
-        console.log('start')
+        console.log('start:' + stripId)
       },
       error: function (xhr) {}
     })
   })
 
-  $('#stop_a').click(function () {
+  $('.stop_graph').click(function(){
+    var getId = $(this).attr('id')
+    var stripId = getId.split('stop_').pop()
     $.ajax({
-      url: '/stop',
+      url: '/stop/' + stripId,
       type: 'get',
       success: function (response) {
-        console.log('stop')
+        console.log('stop:' + stripId)
       },
       error: function (xhr) {}
     })
   })
+
 }
 
 var get_model_data = function (NewID = 1) {

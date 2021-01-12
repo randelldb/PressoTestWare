@@ -1,6 +1,8 @@
 import json
 from threading import Thread
 import time
+from datetime import date
+
 from flask import render_template, request, redirect, Response
 from jinja2.runtime import to_string
 
@@ -8,6 +10,7 @@ from src import app
 from src import db
 from src import cache
 from src.handlers.modbusHandler import debug_data, reset
+from src.config import confReader
 
 from src.models import CalibrationModel, MainCounter, CertificateTemplate
 from src.handlers import modbusHandler, printerHandler, certificateWriter
@@ -17,6 +20,7 @@ from src.processor.calibrationProcessor import CalibrationValidator
 
 cm = CalibrationModelHandler()
 th = TemplateHandler()
+today = date.today()
 
 ### GLOBALS ###
 current_id = 1
@@ -25,98 +29,206 @@ start = False
 
 ### GLOBALS ###
 
-
 # ------------------------- Handling: Calibration
 
 @app.route('/complete_calibration')
 def complete_calibration():
-    # update counter
-    hi_temp = cache.get('hi_temp')
-    hi_rv = cache.get('hi_rv')
-    hi_pressureReading = cache.get('hi_pressureReading')
-    lo_pressureReading = cache.get('lo_pressureReading')
-    reading = {"hi_temp": hi_temp, "hi_rv": hi_rv, "hi_pressureReading": hi_pressureReading,
-               "lo_pressureReading": lo_pressureReading}
-
-    get_fixed_cert_data = CertificateTemplate.query.filter_by(id=1).first()
-    certificateWriter.write_data(get_fixed_cert_data, reading)
-
-    try:
-        printerHandler.print_label()
-        get_certificate_id = MainCounter.query.get(1)
-        get_certificate_id.count = get_certificate_id.count + 1
-        db.session.commit()
-        print('Count update success!')
-    except:
-        print('Count update  failed...')
+    printerHandler.print_label()
+    get_certificate_id = MainCounter.query.filter_by(id=1).first()
+    get_certificate_id.count = get_certificate_id.count + 1
+    db.session.commit()
+    print('Count update success!')
 
     return 'Completed'
 
 
-def calibration_loop():
+def calibration_loop(selector):
+    # with app.app_context():
+    #     data = cm.select_model(current_id)
+    # hvPassFlag = 0
+    # lvPassFlag = 0
+    # ### TEST CODE ###
+    #
+    # if selector == 'a':
+    #     # A is low pressure side
+    #     temp = 20
+    #     rv = 60
+    #     press = 2
+    #     switch = 1
+    #
+    # if selector == 'b':
+    #     # B is high pressure side
+    #     temp = 20
+    #     rv = 60
+    #     press = 22
+    #     switch = 1
+    #
+    # ### TEST CODE ###
+    #
+    #
+    # global start_stop
+    # while start_stop:
+    #     if switch == 1:
+    #         validateHv = CalibrationValidator(selector,
+    #                                           'hi',
+    #                                           temp,
+    #                                           rv,
+    #                                           press,
+    #                                           getattr(data, selector + '_highValue'),
+    #                                           getattr(data, selector + '_hvPlus'),
+    #                                           getattr(data, selector + '_hvMin'))
+    #
+    #         hvPassFlag = validateHv.validator()
+    #
+    #         if hvPassFlag == 1:
+    #             print(selector + " pass hv")
+    #         else:
+    #             print(selector + " Fail hv test")
+    #
+    #     if switch == 0 and hvPassFlag == 1:
+    #         validateLv = CalibrationValidator(selector,
+    #                                           'lo',
+    #                                           temp,
+    #                                           rv,
+    #                                           press,
+    #                                           getattr(data, selector + '_lowValue'),
+    #                                           getattr(data, selector + '_lvPlus'),
+    #                                           getattr(data, selector + '_lvMin'))
+    #
+    #         lvPassFlag = validateLv.validator()
+    #
+    #         if lvPassFlag == 1:
+    #             print(selector + " pass lv")
+    #         else:
+    #             print(selector + " Fail lv test")
+    #
+    #     if hvPassFlag == 1 and lvPassFlag == 1:
+    #         print(selector + " test passed")
+    #         break
+    #
+    #     ### TEST CODE ###
+    #     if selector == 'a':
+    #         time.sleep(1)
+    #         if switch == 0:
+    #             temp = 20
+    #             rv = 60
+    #             press = 2
+    #             switch = 1
+    #         elif switch == 1:
+    #             temp = 19.9
+    #             rv = 60
+    #             press = 1
+    #             switch = 0
+    #     elif selector == 'b':
+    #         time.sleep(1)
+    #         if switch == 0:
+    #             temp = 20
+    #             rv = 60
+    #             press = 22
+    #             switch = 1
+    #         elif switch == 1:
+    #             temp = 19.9
+    #             rv = 60
+    #             press = 20
+    #             switch = 0
+    #     ### TEST CODE ###
+
     with app.app_context():
         data = cm.select_model(current_id)
     hvPassFlag = 0
     lvPassFlag = 0
-    ### TEST CODE ###
-    temp = 20
-    rv = 60
-    press = 22
-    switch = 1
-    ### TEST CODE ###
+
     global start_stop
     while start_stop:
-        if switch == 1:
-            validateHv = CalibrationValidator('hi', temp, rv, press, data.a_highValue, data.a_hvPlus, data.a_hvMin)
+        if modbusData.switch > 5000:
+            validateHv = CalibrationValidator(selector,
+                                              'hi',
+                                              modbusData.temp,
+                                              modbusData.rv,
+                                              modbusData.press,
+                                              getattr(data, selector + '_highValue'),
+                                              getattr(data, selector + '_hvPlus'),
+                                              getattr(data, selector + '_hvMin'))
+
             hvPassFlag = validateHv.validator()
+
             if hvPassFlag == 1:
-                print("pass hv")
+                print(selector + " pass hv")
             else:
-                print("Fail hv test")
-        if switch == 0 and hvPassFlag == 1:
-            validateLv = CalibrationValidator('lo', temp, rv, press, data.a_lowValue, data.a_lvPlus, data.a_lvMin)
+                print(selector + " Fail hv test")
+
+        if modbusData.switch <= 5000 and hvPassFlag == 1:
+            validateLv = CalibrationValidator(selector,
+                                              'lo',
+                                              modbusData.temp,
+                                              modbusData.rv,
+                                              modbusData.press,
+                                              getattr(data, selector + '_lowValue'),
+                                              getattr(data, selector + '_lvPlus'),
+                                              getattr(data, selector + '_lvMin'))
+
             lvPassFlag = validateLv.validator()
+
             if lvPassFlag == 1:
-                print("pass lv")
+                print(selector + " pass lv")
             else:
-                print("Fail lv test")
+                print(selector + " Fail lv test")
+
         if hvPassFlag == 1 and lvPassFlag == 1:
-            print("test passed")
+            print(selector + " test passed")
             break
 
-        ### TEST CODE ###
-        time.sleep(1)
-        if switch == 0:
-            temp = 20
-            rv = 60
-            press = 22
-            switch = 1
-        elif switch == 1:
-            temp = 19.9
-            rv = 60
-            press = 18
-            switch = 0
-        ### TEST CODE ###
 
-
-def manual_run():
-    t = Thread(target=calibration_loop)
+def manual_run(selector):
+    t = Thread(target=calibration_loop(selector))
     t.start()
     return "Processing"
 
 
-@app.route('/run', methods=['GET'])
-def run():
+@app.route('/run/<selector>', methods=['GET'])
+def run(selector):
     # stop the function test
     global start_stop
     start_stop = True
-    return Response(manual_run(), mimetype="text/html")
+    return Response(manual_run(selector), mimetype="text/html")
 
 
-@app.route('/stop', methods=['GET'])
-def stop():
+@app.route('/stop/<selector>', methods=['GET'])
+def stop(selector):
     global start_stop
     start_stop = False
+
+    # Get general dynamic data
+    get_certificate_id = get_count()
+    cur_date = today.strftime("%d/%m/%Y")
+
+    # Get dynamic data from cache
+    a_hi_temp = cache.get('a_hi_temp')
+    a_hi_rv = cache.get('a_hi_rv')
+    b_hi_temp = cache.get('b_hi_temp')
+    b_hi_rv = cache.get('b_hi_rv')
+    a_hi_pressureReading = cache.get('a_hi_pressureReading')
+    a_lo_pressureReading = cache.get('a_lo_pressureReading')
+    b_hi_pressureReading = cache.get('b_hi_pressureReading')
+    b_lo_pressureReading = cache.get('b_lo_pressureReading')
+
+    get_dynamic_cert_data = \
+        {"a_hi_temp": a_hi_temp,
+         "a_hi_rv": a_hi_rv,
+         "b_hi_temp": b_hi_temp,
+         "b_hi_rv": b_hi_rv,
+         "a_hi_pressureReading": a_hi_pressureReading,
+         "a_lo_pressureReading": a_lo_pressureReading,
+         "b_hi_pressureReading": b_hi_pressureReading,
+         "b_lo_pressureReading": b_lo_pressureReading,
+         "get_certificate_id": get_certificate_id,
+         "cur_date": cur_date}
+
+    # Get static data for template (data can be changed in the gui template manager)
+    get_fixed_cert_data = CertificateTemplate.query.filter_by(id=1).first()
+    get_model_cert_data = CalibrationModel.query.filter_by(id=current_id).first()
+    certificateWriter.write_data(get_fixed_cert_data, get_dynamic_cert_data, get_model_cert_data)
+
     return 'stopped'
 
 
@@ -255,7 +367,8 @@ def create_model():
 
     return render_template('model_view.html')
 
-# Function to get a calibration model 
+
+# Function to get a calibration model
 @app.route('/get_model_form_data/<id>')
 def get_model_form_data(id):
     items = CalibrationModel.query.filter_by(id=id).first()
@@ -264,6 +377,7 @@ def get_model_form_data(id):
         return render_template('model_form_solo.html', items=items)
     else:
         return render_template('model_form_double.html', items=items)
+
 
 # Delete function to delete a calibration model from the 'Model configuratie' view
 @app.route('/model_delete/<id>')
@@ -306,7 +420,7 @@ def model_update(id):
 # Set the chosen printer from get_printers() as active
 @app.route('/set_printer/<selectedPrinter>')
 def set_printers(selectedPrinter):
-    cache.set('default_printer', selectedPrinter)
+    confReader.writeConfig('default-settings', 'writer', selectedPrinter)
     return ''
 
 
@@ -320,7 +434,7 @@ def get_printers():
 # Set the chosen label writer from get_writers() as active
 @app.route('/set_writer/<selectedWriter>')
 def set_writer(selectedWriter):
-    cache.set('default_writer', selectedWriter)
+    confReader.writeConfig('default-settings', 'writer', selectedWriter)
     return ''
 
 
@@ -342,18 +456,19 @@ def get_ports():
 # Set the chosen port from get_ports() as active
 @app.route('/set_ports/<id>')
 def set_ports(id):
-    connected = modbusHandler.open_modbus_conn(id)
-    return ''
+    #set port in config file
+    confReader.writeConfig('default-settings', 'com', id)
 
 
 # function to open modbus connection
 @app.route('/modbusData')
 def modbusData():
-    import json
-    x = 2
-    toJson = json.dumps(x)
+    readConfig = confReader.readConfig()
+    defaultCom = readConfig['default-settings']['com']
+    reading = modbusHandler.open_modbus_conn(defaultCom)
+    reading_object = json.dumps(reading, indent=4)
 
-    return toJson
+    return reading_object
 
 
 @app.route('/modbusDebug')

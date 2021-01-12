@@ -1,0 +1,4 @@
+default-settings:
+  com: COM4
+  printer: root
+  writer: DYMO LabelWriter 450
