@@ -1,10 +1,12 @@
 from src import db
 
+
 class MainCounter(db.Model):
     __tablename__ = 'MainCounter'
 
     id = db.Column(db.Integer, primary_key=True)
     count = db.Column(db.Integer())
+
 
 class DefaultSettings(db.Model):
     __tablename__ = 'DefaultSettings'
@@ -13,6 +15,7 @@ class DefaultSettings(db.Model):
     com = db.Column(db.String(255))
     main_printer = db.Column(db.String(255))
     label_writer = db.Column(db.String(255))
+
 
 class CertificateTemplate(db.Model):
     __tablename__ = 'CertificateTemplate'
@@ -45,6 +48,7 @@ class CertificateTemplate(db.Model):
     cert_data_25 = db.Column(db.String(255))
     cert_data_26 = db.Column(db.String(255))
 
+
 class CalibrationModel(db.Model):
     __tablename__ = 'CalibrationModel'
 
@@ -55,7 +59,7 @@ class CalibrationModel(db.Model):
     customer = db.Column(db.String(255))
     ref = db.Column(db.String(255))
 
-    type_a = db.Column(db.Integer())
+    type_a = db.Column(db.String(255))
     a_highValue = db.Column(db.Float())
     a_hvPlus = db.Column(db.Float())
     a_hvMin = db.Column(db.Float())
@@ -63,7 +67,7 @@ class CalibrationModel(db.Model):
     a_lvPlus = db.Column(db.Float())
     a_lvMin = db.Column(db.Float())
 
-    type_b = db.Column(db.Integer())
+    type_b = db.Column(db.String(255))
     b_highValue = db.Column(db.Float())
     b_hvPlus = db.Column(db.Float())
     b_hvMin = db.Column(db.Float())

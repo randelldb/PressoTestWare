@@ -15,10 +15,8 @@ app = Flask(__name__,
 
 cache = Cache(config={'CACHE_TYPE': 'simple'})
 
-
 # SQL Alchemy instance
 db = SQLAlchemy()
-mem = SQLAlchemy()
 # DB Migration instance
 migrate = Migrate()
 # Marshmallow Instance
@@ -32,4 +30,5 @@ def create_app(test_config=None):
     migrate.init_app(app, db)
     ma.init_app(app)
     cache.init_app(app)
+
     return app

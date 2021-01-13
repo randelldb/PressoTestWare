@@ -27,15 +27,18 @@ current_id = 1
 start = False
 
 
-### GLOBALS ###
-
 # ------------------------- Handling: Calibration
 
 @app.route('/complete_calibration')
 def complete_calibration():
-    printerHandler.print_label()
+    # print label 3 times
+    for i in range(3):
+        printerHandler.print_label()
+
+    # when completed update counter
     get_certificate_id = MainCounter.query.filter_by(id=1).first()
     get_certificate_id.count = get_certificate_id.count + 1
+
     db.session.commit()
     print('Count update success!')
 
@@ -43,95 +46,6 @@ def complete_calibration():
 
 
 def calibration_loop(selector):
-    # with app.app_context():
-    #     data = cm.select_model(current_id)
-    # hvPassFlag = 0
-    # lvPassFlag = 0
-    # ### TEST CODE ###
-    #
-    # if selector == 'a':
-    #     # A is low pressure side
-    #     temp = 20
-    #     rv = 60
-    #     press = 2
-    #     switch = 1
-    #
-    # if selector == 'b':
-    #     # B is high pressure side
-    #     temp = 20
-    #     rv = 60
-    #     press = 22
-    #     switch = 1
-    #
-    # ### TEST CODE ###
-    #
-    #
-    # global start_stop
-    # while start_stop:
-    #     if switch == 1:
-    #         validateHv = CalibrationValidator(selector,
-    #                                           'hi',
-    #                                           temp,
-    #                                           rv,
-    #                                           press,
-    #                                           getattr(data, selector + '_highValue'),
-    #                                           getattr(data, selector + '_hvPlus'),
-    #                                           getattr(data, selector + '_hvMin'))
-    #
-    #         hvPassFlag = validateHv.validator()
-    #
-    #         if hvPassFlag == 1:
-    #             print(selector + " pass hv")
-    #         else:
-    #             print(selector + " Fail hv test")
-    #
-    #     if switch == 0 and hvPassFlag == 1:
-    #         validateLv = CalibrationValidator(selector,
-    #                                           'lo',
-    #                                           temp,
-    #                                           rv,
-    #                                           press,
-    #                                           getattr(data, selector + '_lowValue'),
-    #                                           getattr(data, selector + '_lvPlus'),
-    #                                           getattr(data, selector + '_lvMin'))
-    #
-    #         lvPassFlag = validateLv.validator()
-    #
-    #         if lvPassFlag == 1:
-    #             print(selector + " pass lv")
-    #         else:
-    #             print(selector + " Fail lv test")
-    #
-    #     if hvPassFlag == 1 and lvPassFlag == 1:
-    #         print(selector + " test passed")
-    #         break
-    #
-    #     ### TEST CODE ###
-    #     if selector == 'a':
-    #         time.sleep(1)
-    #         if switch == 0:
-    #             temp = 20
-    #             rv = 60
-    #             press = 2
-    #             switch = 1
-    #         elif switch == 1:
-    #             temp = 19.9
-    #             rv = 60
-    #             press = 1
-    #             switch = 0
-    #     elif selector == 'b':
-    #         time.sleep(1)
-    #         if switch == 0:
-    #             temp = 20
-    #             rv = 60
-    #             press = 22
-    #             switch = 1
-    #         elif switch == 1:
-    #             temp = 19.9
-    #             rv = 60
-    #             press = 20
-    #             switch = 0
-    #     ### TEST CODE ###
 
     with app.app_context():
         data = cm.select_model(current_id)
@@ -307,25 +221,9 @@ def get_calibration_model():
 
 @app.route('/get_model_data/<id>')
 def get_model_data(id):
-    ### GOBALS ###
     items = CalibrationModel.query.filter_by(id=id).first()
-    type_a = items.type_a
-    type_b = items.type_b
-    if type_a == 1:
-        type_a = "High Pressure"
-    elif type_a == 2:
-        type_a = "Low Pressure"
-    elif type_a == 3:
-        type_a = "Condenser Pressure"
 
-    if type_b == 1:
-        type_b = "High Pressure"
-    elif type_b == 2:
-        type_b = "Low Pressure"
-    elif type_b == 3:
-        type_b = "Condenser Pressure"
-
-    return render_template('get_model_data.html', items=items, type_a=type_a, type_b=type_b)
+    return render_template('get_model_data.html', items=items)
 
 
 @app.route('/model_view')
@@ -347,7 +245,7 @@ def create_model():
     customer = request.form['customer']
     ref = request.form['ref']
 
-    type_a = 1
+    type_a = request.form['drop_a']
     a_highValue = request.form['a_highValue']
     b_highValue = request.form['b_highValue']
     a_hvPlus = request.form['a_hvPlus']
@@ -355,7 +253,7 @@ def create_model():
     b_hvPlus = request.form['b_hvPlus']
     b_hvMin = request.form['b_hvMin']
 
-    type_b = 1
+    type_b = request.form['drop_b']
     a_lowValue = request.form['a_lowValue']
     b_lowValue = request.form['b_lowValue']
     a_lvPlus = request.form['a_lvPlus']

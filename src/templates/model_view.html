@@ -63,8 +63,22 @@ block content %}
       </div>
       <div class="row">
         <div class="col-6"></div>
-        <div class="col center bold">Lagedruk</div>
-        <div class="col center bold">Hogedruk</div>
+        <div class="col center bold">
+          <select name="drop_a" id="drop_a">
+            <option value="Leeg">Leeg</option>
+            <option value="Lagedruk">Lagedruk</option>
+            <option value="Hogedruk">Hogedruk</option>
+            <option value="Condensordruk">Condensordruk</option>
+          </select>
+        </div>
+        <div class="col center bold">
+          <select name="drop_b" id="drop_b">
+            <option value="Leeg">Leeg</option>
+            <option value="Lagedruk">Lagedruk</option>
+            <option value="Hogedruk">Hogedruk</option>
+            <option value="Condensordruk">Condensordruk</option>
+          </select>
+        </div>
         <br />
         <br />
       </div>
@@ -72,44 +86,44 @@ block content %}
       <div class="row">
         <div class="col-6 bold">Voorinstelling schakelpunt hoog</div>
         <div class="col center border">
-          <input size="2" type="text" name="a_highValue" id="a_highValue" />
+          <input size="2" value="0.0" type="text" name="a_highValue" id="a_highValue" />
         </div>
         <div class="col center border">
-          <input size="2" type="text" name="b_highValue" id="b_highValue" />
+          <input size="2" value="0.0" type="text" name="b_highValue" id="b_highValue" />
         </div>
       </div>
 
       <div class="row">
         <div class="col-6 bold">Tolerantie schakelpunt hoog [ + ] [ - ]</div>
         <div class="col center border">
-          <input size="2" type="text" name="a_hvPlus" id="a_hvPlus" />
-          <input size="2" type="text" name="a_hvMin" id="a_hvMin" />
+          <input size="2" value="0.0" type="text" name="a_hvPlus" id="a_hvPlus" />
+          <input size="2" value="0.0" type="text" name="a_hvMin" id="a_hvMin" />
         </div>
         <div class="col center border">
-          <input size="2" type="text" name="b_hvPlus" id="b_hvPlus" />
-          <input size="2" type="text" name="b_hvMin" id="b_hvMin" />
+          <input size="2" value="0.0" type="text" name="b_hvPlus" id="b_hvPlus" />
+          <input size="2" value="0.0" type="text" name="b_hvMin" id="b_hvMin" />
         </div>
       </div>
 
       <div class="row">
         <div class="col-6 bold">Voorinstelling schakelpunt laag</div>
         <div class="col center border">
-          <input size="2" type="text" name="a_lowValue" id="a_lowValue" />
+          <input size="2" value="0.0" type="text" name="a_lowValue" id="a_lowValue" />
         </div>
         <div class="col center border">
-          <input size="2" type="text" name="b_lowValue" id="b_lowValue" />
+          <input size="2" value="0.0" type="text" name="b_lowValue" id="b_lowValue" />
         </div>
       </div>
 
       <div class="row">
         <div class="col-6 bold">Tolerantie schakelpunt laag [ + ] [ - ]</div>
         <div class="col center border">
-          <input size="2" type="text" name="a_lvPlus" id="a_lvPlus" />
-          <input size="2" type="text" name="a_lvMin" id="a_lvMin" />
+          <input size="2" value="0.0" type="text" name="a_lvPlus" id="a_lvPlus" />
+          <input size="2" value="0.0" type="text" name="a_lvMin" id="a_lvMin" />
         </div>
         <div class="col center border">
-          <input size="2" type="text" name="b_lvPlus" id="b_lvPlus" />
-          <input size="2" type="text" name="b_lvMin" id="b_lvMin" />
+          <input size="2" value="0.0" type="text" name="b_lvPlus" id="b_lvPlus" />
+          <input size="2" value="0.0" type="text" name="b_lvMin" id="b_lvMin" />
         </div>
       </div>
 
