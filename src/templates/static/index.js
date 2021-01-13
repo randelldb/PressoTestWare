@@ -8,10 +8,22 @@ $(document).ready(function () {
   complete_calibration()
   get_count()
   controle_calibration()
+  display_modbus_data()
 })
 
+var display_modbus_data = function () {
+  setInterval(function(){
+    $.getJSON('/modbusData', function (response) {
+      $('#rt_press').html(response.press + ' Bar')
+      $('#rt_rv').html(response.rv + ' %')
+      $('#rt_temp').html(response.temp + ' °')
+      $('#rt_switch').html(response.switch)
+    })
+  }, 100)
+}
+
 var controle_calibration = function () {
-  $('.start_graph').click(function(){
+  $('.start_graph').click(function () {
     var getId = $(this).attr('id')
     var stripId = getId.split('start_').pop()
     $.ajax({
@@ -24,7 +36,7 @@ var controle_calibration = function () {
     })
   })
 
-  $('.stop_graph').click(function(){
+  $('.stop_graph').click(function () {
     var getId = $(this).attr('id')
     var stripId = getId.split('stop_').pop()
     $.ajax({
@@ -36,7 +48,6 @@ var controle_calibration = function () {
       error: function (xhr) {}
     })
   })
-
 }
 
 var get_model_data = function (NewID = 1) {

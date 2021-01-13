@@ -20,12 +20,14 @@
       integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
       crossorigin="anonymous"
     />
-    <title>{% block title %}{% endblock %} - My Webpage</title>
+    <title>{% block title %}{% endblock %} - PressoTestWare</title>
     {% endblock %}
   </head>
   <body>
     <div class="wrapper">
+      
       <div class="container">
+        <div id="logo"><img src="{{ url_for('static', filename='img/logo_bw.png') }}" alt=""></div>
         {% block content %}{% endblock %}
       </div>
     </div>

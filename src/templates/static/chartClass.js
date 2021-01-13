@@ -1,12 +1,12 @@
 //////////////////////////////////////////////////////
 
-
-
-var chart_a = function(){
+var chart_a = function () {
   var chart
-  var x = []
   var data = []
+  var start_stop = true
   var ctx = document.getElementById('a_chart').getContext('2d')
+  var streamingOpts
+
   var chart_options = {
     type: 'line',
     data: {
@@ -24,7 +24,7 @@ var chart_a = function(){
     options: {
       legend: {
         display: false
-    },
+      },
       events: ['click'],
       tooltips: {
         enabled: false
@@ -41,7 +41,7 @@ var chart_a = function(){
               duration: 20000, // data in the past 20000 ms will be displayed
               refresh: 100, // onRefresh callback will be called every 1000 ms
               delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
-              pause: false, // chart is not paused
+              pause: false,
               ttl: undefined // data will be automatically deleted as it disappears off the chart
             }
           }
@@ -98,11 +98,11 @@ var chart_a = function(){
       }
     }
   }
-  
+
   chart = new Chart(ctx, chart_options)
-  
+
   function onRefresh (chart) {
-      chart.data.datasets.forEach(function (dataset) {
+    chart.data.datasets.forEach(function (dataset) {
       $.getJSON('/modbusData', function (response) {
         dataset.data.push({
           x: Date.now(),
@@ -111,33 +111,37 @@ var chart_a = function(){
       })
     })
   }
-  
-  function set_bounds(id){
+
+  function set_bounds (id) {
     console.log('Triggerd')
     get_model_data(id)
-    $.getJSON('set_graph_bounds/' + id, function(get_bounds){
-      chart.annotation.elements['a_lvPlus'].options.value = get_bounds['a_lvPlus']
+    $.getJSON('set_graph_bounds/' + id, function (get_bounds) {
+      chart.annotation.elements['a_lvPlus'].options.value =
+        get_bounds['a_lvPlus']
       chart.annotation.elements['a_lvMin'].options.value = get_bounds['a_lvMin']
-      chart.annotation.elements['a_hvPlus'].options.value = get_bounds['a_hvPlus']
+      chart.annotation.elements['a_hvPlus'].options.value =
+        get_bounds['a_hvPlus']
       chart.annotation.elements['a_hvMin'].options.value = get_bounds['a_hvMin']
-  
+
       chart.options.scales = {
-        yAxes: [{
+        yAxes: [
+          {
             display: true,
             ticks: {
               max: get_bounds['a_hvPlus'] + 1,
               min: get_bounds['a_lvMin'] - 1,
               stepSize: 1
             }
-        }]
-    };
-  
+          }
+        ]
+      }
+
       chart.update()
     })
   }
 }
 
-var chart_b = function(){
+var chart_b = function () {
   var chart
   var x = []
   var data = []
@@ -159,7 +163,7 @@ var chart_b = function(){
     options: {
       legend: {
         display: false
-    },
+      },
       events: ['click'],
       tooltips: {
         enabled: false
@@ -233,11 +237,11 @@ var chart_b = function(){
       }
     }
   }
-  
+
   chart = new Chart(ctx, chart_options)
-  
+
   function onRefresh (chart) {
-      chart.data.datasets.forEach(function (dataset) {
+    chart.data.datasets.forEach(function (dataset) {
       $.getJSON('/modbusData', function (response) {
         dataset.data.push({
           x: Date.now(),
@@ -246,32 +250,35 @@ var chart_b = function(){
       })
     })
   }
-  
-  function set_bounds(id){
+
+  function set_bounds (id) {
     console.log('Triggerd')
     get_model_data(id)
-    $.getJSON('set_graph_bounds/' + id, function(get_bounds){
-      chart.annotation.elements['b_lvPlus'].options.value = get_bounds['b_lvPlus']
+    $.getJSON('set_graph_bounds/' + id, function (get_bounds) {
+      chart.annotation.elements['b_lvPlus'].options.value =
+        get_bounds['b_lvPlus']
       chart.annotation.elements['b_lvMin'].options.value = get_bounds['b_lvMin']
-      chart.annotation.elements['b_hvPlus'].options.value = get_bounds['b_hvPlus']
+      chart.annotation.elements['b_hvPlus'].options.value =
+        get_bounds['b_hvPlus']
       chart.annotation.elements['b_hvMin'].options.value = get_bounds['b_hvMin']
-  
+
       chart.options.scales = {
-        yAxes: [{
+        yAxes: [
+          {
             display: true,
             ticks: {
               max: get_bounds['b_hvPlus'] + 1,
               min: get_bounds['b_lvMin'] - 1,
               stepSize: 1
             }
-        }]
-    };
-  
+          }
+        ]
+      }
+
       chart.update()
     })
   }
 }
-
 
 chart_a()
 chart_b()

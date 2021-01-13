@@ -4,9 +4,18 @@ import minimalmodbus
 import serial
 from time import time, sleep
 
-def open_modbus_conn(port=None):
+
+def open_modbus_conn(port='test'):
     if port is None:
         print('Com not selected')
+    elif port == 'test':
+        reading = {
+            'rv': random.randint(30, 60),
+            'temp': random.randint(19, 21),
+            'press': random.randint(6, 8),
+            'switch': 5000
+        }
+        return reading
     else:
         try:
             instrument = minimalmodbus.Instrument(port, 1)  # port name, slave address (in decimal)
@@ -47,21 +56,7 @@ def serial_ports():
             pass
     return result
 
-# def read_data(instrument):
-#     rv = instrument.read_register(512, 1)  # Registernumber, number of decimals
-#     temperature = instrument.read_register(516, 1)  # Registernumber, number of decimals
-#     pressure = instrument.read_register(520, 1)  # Registernumber, number of decimals
-#     switch = instrument.read_register(528, 1)  # Registernumber, number of decimals
-#     reading = {
-#         'rv': rv,
-#         'temp': temperature,
-#         'press': pressure,
-#         'swt': switch
-#     }
-#     return reading
-#
 
-###
 #global debug data
 ###
 data = {

@@ -9,7 +9,7 @@ from jinja2.runtime import to_string
 from src import app
 from src import db
 from src import cache
-from src.handlers.modbusHandler import debug_data, reset
+from src.handlers.modbusHandler import open_modbus_conn, debug_data, reset
 from src.config import confReader
 
 from src.models import CalibrationModel, MainCounter, CertificateTemplate
@@ -135,17 +135,19 @@ def calibration_loop(selector):
 
     with app.app_context():
         data = cm.select_model(current_id)
+
+    parse_mb_data = json.loads(modbusData())
     hvPassFlag = 0
     lvPassFlag = 0
 
     global start_stop
     while start_stop:
-        if modbusData.switch > 5000:
+        if parse_mb_data['switch'] > 5000:
             validateHv = CalibrationValidator(selector,
                                               'hi',
-                                              modbusData.temp,
-                                              modbusData.rv,
-                                              modbusData.press,
+                                              parse_mb_data['temp'],
+                                              parse_mb_data['rv'],
+                                              parse_mb_data['press'],
                                               getattr(data, selector + '_highValue'),
                                               getattr(data, selector + '_hvPlus'),
                                               getattr(data, selector + '_hvMin'))
@@ -157,12 +159,12 @@ def calibration_loop(selector):
             else:
                 print(selector + " Fail hv test")
 
-        if modbusData.switch <= 5000 and hvPassFlag == 1:
+        if parse_mb_data['switch'] <= 5000 and hvPassFlag == 1:
             validateLv = CalibrationValidator(selector,
                                               'lo',
-                                              modbusData.temp,
-                                              modbusData.rv,
-                                              modbusData.press,
+                                              parse_mb_data['temp'],
+                                              parse_mb_data['rv'],
+                                              parse_mb_data['press'],
                                               getattr(data, selector + '_lowValue'),
                                               getattr(data, selector + '_lvPlus'),
                                               getattr(data, selector + '_lvMin'))
@@ -465,10 +467,8 @@ def set_ports(id):
 def modbusData():
     readConfig = confReader.readConfig()
     defaultCom = readConfig['default-settings']['com']
-    reading = modbusHandler.open_modbus_conn(defaultCom)
-    reading_object = json.dumps(reading, indent=4)
 
-    return reading_object
+    return json.dumps(open_modbus_conn(defaultCom))
 
 
 @app.route('/modbusDebug')

@@ -2,8 +2,8 @@ body {
   background-image: url('img/bg.png') !important;
 }
 
-.margin-auto{
-  margin:auto;
+.margin-auto {
+  margin: auto;
 }
 
 .wrapper {
@@ -22,11 +22,16 @@ body {
   background-color: #263d6b;
   height: 5px;
 }
+#logo {
+  position: relative;
+  margin: auto;
+  width: fit-content;
+}
 
-img {
+#logo > img {
+  width: 300px;
   padding: 10px;
-  max-width: 12%;
-  object-fit: cover;
+  margin-bottom: 20px;
 }
 
 .header {
@@ -66,6 +71,7 @@ img {
 }
 
 .reader {
+  margin-bottom: 20px;
   background-color: dimgray;
 }
 
@@ -85,8 +91,8 @@ img {
   margin-bottom: 10px;
 }
 
-.alt_dropdown{
+.alt_dropdown {
   font-weight: bold;
-  text-decoration:none;
-  color: black!important;
+  text-decoration: none;
+  color: black !important;
 }
