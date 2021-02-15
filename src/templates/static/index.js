@@ -2,6 +2,7 @@ $(document).ready(function () {
   console.log('ready!')
 
   get_model_data_list()
+  get_model_data()
   get_printers()
   get_writers()
   get_ports()

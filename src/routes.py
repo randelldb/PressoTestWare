@@ -32,8 +32,8 @@ start = False
 @app.route('/complete_calibration')
 def complete_calibration():
     # print label 3 times
-    for i in range(3):
-        printerHandler.print_label()
+    # for i in range(3):
+    #     printerHandler.print_label()
 
     # when completed update counter
     get_certificate_id = MainCounter.query.filter_by(id=1).first()
@@ -103,9 +103,9 @@ def manual_run(selector):
 
 @app.route('/run/<selector>', methods=['GET'])
 def run(selector):
-    # stop the function test
     global start_stop
     start_stop = True
+    print("start")
     return Response(manual_run(selector), mimetype="text/html")
 
 

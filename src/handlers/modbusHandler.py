@@ -12,7 +12,7 @@ def open_modbus_conn(port='test'):
         reading = {
             'rv': random.randint(30, 60),
             'temp': random.randint(19, 21),
-            'press': random.randint(6, 8),
+            'press': random.randint(0, 2),
             'switch': 5000
         }
         return reading
@@ -78,7 +78,7 @@ def debug_data():
         if key == "rv":
             if data['rv'] < 1:
                 randomchoice = +0.3
-            elif data['rv'] > 7:
+            elif data['rv'] > 20:
                 randomchoice = 2
 
         data[key] = data[key] + randomchoice
