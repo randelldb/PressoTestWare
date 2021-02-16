@@ -9,7 +9,7 @@ from jinja2.runtime import to_string
 from src import app
 from src import db
 from src import cache
-from src.handlers.modbusHandler import open_modbus_conn, debug_data, reset
+from src.handlers.modbusHandler import open_modbus_conn
 from src.config import confReader
 
 from src.models import CalibrationModel, MainCounter, CertificateTemplate
@@ -32,8 +32,8 @@ start = False
 @app.route('/complete_calibration')
 def complete_calibration():
     # print label 3 times
-    for i in range(3):
-        printerHandler.print_label()
+    # for i in range(3):
+    #     printerHandler.print_label()
 
     # when completed update counter
     get_certificate_id = MainCounter.query.filter_by(id=1).first()
@@ -103,9 +103,9 @@ def manual_run(selector):
 
 @app.route('/run/<selector>', methods=['GET'])
 def run(selector):
-    # stop the function test
     global start_stop
     start_stop = True
+    print("start")
     return Response(manual_run(selector), mimetype="text/html")
 
 
@@ -159,7 +159,11 @@ def set_graph_bounds(id):
         'a_hvPlus': items.a_highValue + items.a_hvPlus,
         'a_hvMin': items.a_highValue - items.a_hvMin,
         'a_lvPlus': items.a_lowValue + items.a_lvPlus,
-        'a_lvMin': items.a_lowValue - items.a_lvMin
+        'a_lvMin': items.a_lowValue - items.a_lvMin,
+        'b_hvPlus': items.b_highValue + items.b_hvPlus,
+        'b_hvMin': items.b_highValue - items.b_hvMin,
+        'b_lvPlus': items.b_lowValue + items.b_lvPlus,
+        'b_lvMin': items.b_lowValue - items.b_lvMin
     }
 
     toJson = json.dumps(data, indent=4, sort_keys=True)
@@ -360,24 +364,13 @@ def set_ports(id):
     confReader.writeConfig('default-settings', 'com', id)
 
 
-# function to open modbus connection
+#function to open modbus connection
 @app.route('/modbusData')
 def modbusData():
     readConfig = confReader.readConfig()
     defaultCom = readConfig['default-settings']['com']
 
     return json.dumps(open_modbus_conn(defaultCom))
-
-
-@app.route('/modbusDebug')
-def modbusDebug():
-    return json.dumps(debug_data())
-
-
-@app.route('/modbusReset')
-def modbusReset():
-    return reset()
-
 
 # ------------------------- Handling: Counter
 # Counter used as calibration id number

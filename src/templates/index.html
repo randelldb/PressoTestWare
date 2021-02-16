@@ -20,7 +20,7 @@ content %}
   type="text/javascript"
   src="{{ url_for('static', filename='chartjs-plugin-annotation.min.js') }}"
 ></script>
-
+<div id="kill" onclick="kill()">Kill A</div>
 <div class="row topline"></div>
 <div class="row menu" id="mainmenu">
   <div class="col btn-group">
@@ -123,27 +123,52 @@ content %}
     <div class="row justify-content-center" id="rt_switch"></div>
   </div>
 </div>
-<div class="row h-100 test">
+<div class="row">
+  <div class="col">
+    <button type="button" onclick="deel_a()" id="" class="btn btn-dark full-width-buttons full">
+      Deel A
+    </button>
+  </div>
+  <div class="col">
+    <button type="button" onclick="deel_b()" id="" class="btn btn-dark full-width-buttons full">
+      Deel B
+    </button>
+  </div>
+</div>
+<div class="row">
   <div class="row">
-    <div class="col-6">
-      <canvas id="a_chart"></canvas>
-    </div>
-    <div class="col-6">
-      <canvas id="b_chart"></canvas>
+    <div class="col">
+      <div class="chart-container" style="position: relative; height:40vh; width:100%">
+        <canvas class="chart" id="a_chart"></canvas>
+        <canvas class="chart" id="b_chart"></canvas>
+      </div>
     </div>
   </div>
 
-  <div class="row get_model_data"></div>
-
   <div class="row">
-    <div class="col">
-      <button type="button" class="btn btn-dark start_graph" id="start_a">Start</button>
-      <button type="button" class="btn btn-dark stop_graph" id="stop_a">Stop</button>
+    <div class="col-md-1 deel_a">
+      <button type="button" class="btn btn-dark start_graph full" id="start_a">
+        Start
+      </button>
+    </div>
+      <div class="col-md-1 deel_a">
+      <button type="button" class="btn btn-dark stop_graph full" id="stop_a">
+        Stop
+      </button>
     </div>
 
-    <div class="col">
-      <button type="button" class="btn btn-dark start_graph" id="start_b">Start</button>
-      <button type="button" class="btn btn-dark stop_graph" id="stop_b">Stop</button>
+    <div class="col-md-1 deel_b">
+      <button type="button" class="btn btn-dark start_graph full" id="start_b">
+        Start
+      </button>
+    </div>
+      <div class="col-md-1 deel_b">
+      <button type="button" class="btn btn-dark stop_graph full" id="stop_b">
+        Stop
+      </button>
+    </div>
+    <div class="col-md-10">
+      <div class="get_model_data"></div>
     </div>
   </div>
 </div>

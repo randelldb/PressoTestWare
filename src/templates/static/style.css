@@ -71,7 +71,6 @@ body {
 }
 
 .reader {
-  margin-bottom: 20px;
   background-color: dimgray;
 }
 
@@ -96,3 +95,26 @@ body {
   text-decoration: none;
   color: black !important;
 }
+.full{
+  width: 100%;
+}
+
+#a_chart{
+  display: block;
+}
+
+#b_chart{
+  display: none;
+}
+
+.deel_a{
+  display: block;
+}
+
+.deel_b{
+  display: none;
+}
+
+/* .chart{
+  width: 50%;
+} */

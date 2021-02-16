@@ -2,6 +2,7 @@ $(document).ready(function () {
   console.log('ready!')
 
   get_model_data_list()
+  get_model_data()
   get_printers()
   get_writers()
   get_ports()
@@ -13,12 +14,12 @@ $(document).ready(function () {
 
 var display_modbus_data = function () {
   setInterval(function(){
-    $.getJSON('/modbusData', function (response) {
-      $('#rt_press').html(response.press + ' Bar')
-      $('#rt_rv').html(response.rv + ' %')
-      $('#rt_temp').html(response.temp + ' °')
-      $('#rt_switch').html(response.switch)
-    })
+  $.getJSON('/modbusData', function (response) {
+    $('#rt_press').html(response.press + ' Bar')
+    $('#rt_rv').html(response.rv + ' %')
+    $('#rt_temp').html(response.temp + ' °')
+    $('#rt_switch').html(response.switch)
+  })
   }, 100)
 }
 
