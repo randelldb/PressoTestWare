@@ -190,9 +190,6 @@ var chart_options_b = {
 ////////////////////////////////////////////////
 var cta = document.getElementById('a_chart').getContext('2d')
 chart_a = new Chart(cta, chart_options_a)
-chart_b = new Chart(ctb, chart_options_b)
-
-
 
 function onRefresh (chart) {
   chart.data.datasets.forEach(function (dataset) {
@@ -214,13 +211,6 @@ function set_bounds (id = 1) {
     chart_a.annotation.elements['a_hvPlus'].options.value =
       get_bounds['a_hvPlus']
     chart_a.annotation.elements['a_hvMin'].options.value = get_bounds['a_hvMin']
-
-    chart_b.annotation.elements['b_lvPlus'].options.value =
-      get_bounds['b_lvPlus']
-    chart_b.annotation.elements['b_lvMin'].options.value = get_bounds['b_lvMin']
-    chart_b.annotation.elements['b_hvPlus'].options.value =
-      get_bounds['b_hvPlus']
-    chart_b.annotation.elements['b_hvMin'].options.value = get_bounds['b_hvMin']
 
     chart_a.options.scales = {
       xAxes: [
@@ -248,6 +238,18 @@ function set_bounds (id = 1) {
         }
       ]
     }
+  })
+}
+
+function set_bounds_b (id = 1) {
+  get_model_data(id)
+  $.getJSON('set_graph_bounds/' + id, function (get_bounds) {
+    chart_b.annotation.elements['b_lvPlus'].options.value =
+      get_bounds['b_lvPlus']
+    chart_b.annotation.elements['b_lvMin'].options.value = get_bounds['b_lvMin']
+    chart_b.annotation.elements['b_hvPlus'].options.value =
+      get_bounds['b_hvPlus']
+    chart_b.annotation.elements['b_hvMin'].options.value = get_bounds['b_hvMin']
 
     chart_b.options.scales = {
       xAxes: [
@@ -275,23 +277,16 @@ function set_bounds (id = 1) {
         }
       ]
     }
-
-    //chart_a.update()
-    // chart_b.update()
   })
 }
 
-// var deel_a = function(){
-//   chart_b.destroy();
-//   $("#b_chart").css('display','none')
-//   $(".deel_b").css('display','none')
-//   $(".deel_a").css('display','block')
-//   var cta = document.getElementById('a_chart').getContext('2d')
-//   chart_a = new Chart(cta, chart_options_a)
-// }
+var deel_a = function(){
+  
+}
 
 var deel_b = function(){
   chart_a.destroy();
+  set_bounds_b()
   $("#a_chart").css('display','none')
   $(".deel_a").css('display','none')
   $(".deel_b").css('display','block')
