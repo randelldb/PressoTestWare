@@ -56,7 +56,9 @@ def calibration_loop(selector):
 
     global start_stop
     while start_stop:
+        print(parse_mb_data)
         if parse_mb_data['switch'] > 5000:
+            print('Switch > 5000')
             validateHv = CalibrationValidator(selector,
                                               'hi',
                                               parse_mb_data['temp'],
@@ -69,11 +71,12 @@ def calibration_loop(selector):
             hvPassFlag = validateHv.validator()
 
             if hvPassFlag == 1:
-                print(selector + " pass hv")
+                print(selector + " pass hv, Pass flag raised")
             else:
-                print(selector + " Fail hv test")
+                print(selector + " Fail hv test, Failed flag raised")
 
         if parse_mb_data['switch'] <= 5000 and hvPassFlag == 1:
+            print('Switch <= 5000')
             validateLv = CalibrationValidator(selector,
                                               'lo',
                                               parse_mb_data['temp'],
@@ -86,12 +89,12 @@ def calibration_loop(selector):
             lvPassFlag = validateLv.validator()
 
             if lvPassFlag == 1:
-                print(selector + " pass lv")
+                print(selector + " pass lv, Pass flag raised")
             else:
-                print(selector + " Fail lv test")
+                print(selector + " Fail lv test, Fail flag raised")
 
         if hvPassFlag == 1 and lvPassFlag == 1:
-            print(selector + " test passed")
+            print(selector + " full test passed")
             break
 
 

@@ -24,7 +24,11 @@ class CalibrationValidator:
 
     def validator(self):
         if 19 <= self.temp <= 21 and 30 <= self.rv <= 60:
+            print('env vars passed cur values: ')
+            print(self.temp + '--' + self.rv)
             if self.pressureSet - self.tollMin <= self.pressureReading <= self.pressureSet + self.tollPlus:
+                print('Press passed cur value: ')
+                print(self.pressureReading + 'set point is' + self.pressureSet)
                 cache.set(str(self.selector) + '_' + str(self.subSelector) + '_temp', self.temp)
                 cache.set(str(self.selector) + '_' + str(self.subSelector) + '_rv', self.rv)
                 cache.set(str(self.selector) + '_' + str(self.subSelector) + '_pressureReading', self.pressureReading)

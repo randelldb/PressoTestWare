@@ -1,5 +1,6 @@
 rate = 100
 b_active = 0
+active_id = 1
 
 //////////////////////////////////////////////////////
 data = [0]
@@ -42,7 +43,7 @@ var chart_options_a = {
             duration: 20000, // data in the past 20000 ms will be displayed
             refresh: rate, // onRefresh callback will be called every 1000 ms
             delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
-            pause: false,
+            pause: true,
             ttl: undefined // data will be automatically deleted as it disappears off the chart
           }
         }
@@ -141,7 +142,7 @@ var chart_options_b = {
             duration: 20000, // data in the past 20000 ms will be displayed
             refresh: rate, // onRefresh callback will be called every 1000 ms
             delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
-            pause: false,
+            pause: true,
             ttl: undefined // data will be automatically deleted as it disappears off the chart
           }
         }
@@ -258,7 +259,7 @@ function set_bounds (id = 1) {
 }
 
 function set_bounds_b (id = 1) {
-  get_model_data(id)
+  //get_model_data(id)
   $.getJSON('set_graph_bounds/' + id, function (get_bounds) {
     chart_b.annotation.elements['b_lvPlus'].options.value =
       get_bounds['b_lvPlus']
@@ -299,12 +300,13 @@ function set_bounds_b (id = 1) {
   })
 }
 
-var reset = function (id) {
+var reset = function (id = active_id) {
   $('#deel_a').addClass('chartSelector-active')
   $('#deel_b').removeClass('chartSelector-active')
   $('#deel_a').prop('disabled', false)
-
-  set_bounds(id)
+  get_model_data(id)
+  active_id = id
+  //set_bounds(id)
 
   $('#a_chart').css('display', 'block')
   $('.deel_a').css('display', 'block')
@@ -326,7 +328,6 @@ var deel_b = function () {
   $('#deel_b').addClass('chartSelector-active')
 
   chart_a.destroy()
-  set_bounds_b()
 
   $('#a_chart').css('display', 'none')
   $('.deel_a').css('display', 'none')
@@ -334,6 +335,55 @@ var deel_b = function () {
 
   var ctb = document.getElementById('b_chart').getContext('2d')
   chart_b = new Chart(ctb, chart_options_b)
+  b_active = 1
+}
+
+var start_stop_chart = function(selector, action){
+  if(selector == 'a' && action == false){
+    set_bounds(active_id)
+  }else if(selector == 'b' && action == false){
+    set_bounds_b(active_id)
+  }else if(action == true){
+    chart_a.options.scales = {
+      xAxes: [
+        {
+          ticks: {
+            display: false //this will remove only the label
+          },
+          type: 'realtime',
+          realtime: {
+            onRefresh: onRefresh,
+            duration: 20000, // data in the past 20000 ms will be displayed
+            refresh: rate, // onRefresh callback will be called every 1000 ms
+            delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
+            pause: true,
+            ttl: undefined // data will be automatically deleted as it disappears off the chart
+          }
+        }
+      ]
+    }
+
+    if(b_active == 1){
+      chart_b.options.scales = {
+        xAxes: [
+          {
+            ticks: {
+              display: false //this will remove only the label
+            },
+            type: 'realtime',
+            realtime: {
+              onRefresh: onRefresh,
+              duration: 20000, // data in the past 20000 ms will be displayed
+              refresh: rate, // onRefresh callback will be called every 1000 ms
+              delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
+              pause: true,
+              ttl: undefined // data will be automatically deleted as it disappears off the chart
+            }
+          }
+        ]
+      }
+    }
+  }
 }
 
 // set_bounds()
