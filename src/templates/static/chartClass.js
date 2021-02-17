@@ -1,3 +1,6 @@
+rate = 100
+b_active = 0
+
 //////////////////////////////////////////////////////
 data = [0]
 var chart_options_a = {
@@ -15,6 +18,9 @@ var chart_options_a = {
     ]
   },
   options: {
+    animation: {
+      duration: 0
+    },
     responsive: true,
     maintainAspectRatio: false,
     legend: {
@@ -34,7 +40,7 @@ var chart_options_a = {
           realtime: {
             onRefresh: onRefresh,
             duration: 20000, // data in the past 20000 ms will be displayed
-            refresh: 1000, // onRefresh callback will be called every 1000 ms
+            refresh: rate, // onRefresh callback will be called every 1000 ms
             delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
             pause: false,
             ttl: undefined // data will be automatically deleted as it disappears off the chart
@@ -44,8 +50,10 @@ var chart_options_a = {
       yAxes: [
         {
           ticks: {
-            max: 10,
+            // suggestedMax: 10,
+            // suggestedMin: 0,
             min: 0,
+            max: 10,
             stepSize: 1
           }
         }
@@ -109,6 +117,9 @@ var chart_options_b = {
     ]
   },
   options: {
+    animation: {
+      duration: 0
+    },
     responsive: true,
     maintainAspectRatio: false,
     legend: {
@@ -128,7 +139,7 @@ var chart_options_b = {
           realtime: {
             onRefresh: onRefresh,
             duration: 20000, // data in the past 20000 ms will be displayed
-            refresh: 100, // onRefresh callback will be called every 1000 ms
+            refresh: rate, // onRefresh callback will be called every 1000 ms
             delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
             pause: false,
             ttl: undefined // data will be automatically deleted as it disappears off the chart
@@ -138,8 +149,10 @@ var chart_options_b = {
       yAxes: [
         {
           ticks: {
-            max: 10,
+            // suggestedMax: 10,
+            // suggestedMin: 0,
             min: 0,
+            max: 10,
             stepSize: 1
           }
         }
@@ -220,8 +233,9 @@ function set_bounds (id = 1) {
           },
           type: 'realtime',
           realtime: {
+            onRefresh: onRefresh,
             duration: 20000, // data in the past 20000 ms will be displayed
-            refresh: 100, // onRefresh callback will be called every 1000 ms
+            refresh: rate, // onRefresh callback will be called every 1000 ms
             delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
             pause: false,
             ttl: undefined // data will be automatically deleted as it disappears off the chart
@@ -231,6 +245,8 @@ function set_bounds (id = 1) {
       yAxes: [
         {
           ticks: {
+            // suggestedMax: get_bounds['a_hvPlus'] + 1,
+            // suggestedMin: get_bounds['a_lvMin'] - 1,
             max: get_bounds['a_hvPlus'] + 1,
             min: get_bounds['a_lvMin'] - 1,
             stepSize: 1
@@ -259,8 +275,9 @@ function set_bounds_b (id = 1) {
           },
           type: 'realtime',
           realtime: {
+            onRefresh: onRefresh,
             duration: 20000, // data in the past 20000 ms will be displayed
-            refresh: 1000, // onRefresh callback will be called every 1000 ms
+            refresh: rate, // onRefresh callback will be called every 1000 ms
             delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
             pause: false,
             ttl: undefined // data will be automatically deleted as it disappears off the chart
@@ -270,6 +287,8 @@ function set_bounds_b (id = 1) {
       yAxes: [
         {
           ticks: {
+            // suggestedMax: get_bounds['b_hvPlus'] + 1,
+            // suggestedMin: get_bounds['b_lvMin'] - 1,
             max: get_bounds['b_hvPlus'] + 1,
             min: get_bounds['b_lvMin'] - 1,
             stepSize: 1
@@ -280,19 +299,42 @@ function set_bounds_b (id = 1) {
   })
 }
 
-var deel_a = function(){
+var reset = function (id) {
+  $('#deel_a').addClass('chartSelector-active')
+  $('#deel_b').removeClass('chartSelector-active')
+  $('#deel_a').prop('disabled', false)
+
+  set_bounds(id)
+
+  $('#a_chart').css('display', 'block')
+  $('.deel_a').css('display', 'block')
+  $('.deel_b').css('display', 'none')
+  chart_a.destroy()
+  if ( b_active == 1) {
+
+    chart_b.destroy()
+ }
   
+
+  var cta = document.getElementById('a_chart').getContext('2d')
+  chart_a = new Chart(cta, chart_options_a)
 }
 
-var deel_b = function(){
-  chart_a.destroy();
+var deel_b = function () {
+  $('#deel_a').removeClass('chartSelector-active')
+  $('#deel_a').prop('disabled', true)
+  $('#deel_b').addClass('chartSelector-active')
+
+  chart_a.destroy()
   set_bounds_b()
-  $("#a_chart").css('display','none')
-  $(".deel_a").css('display','none')
-  $(".deel_b").css('display','block')
+
+  $('#a_chart').css('display', 'none')
+  $('.deel_a').css('display', 'none')
+  $('.deel_b').css('display', 'block')
+
   var ctb = document.getElementById('b_chart').getContext('2d')
   chart_b = new Chart(ctb, chart_options_b)
 }
 
-
+// set_bounds()
 ////////////////////////////////////////////////////////////////

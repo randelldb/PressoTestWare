@@ -35,7 +35,7 @@ def open_modbus_conn(port):
         reading = {
             'rv': random.randint(30, 60),
             'temp': random.randint(19, 21),
-            'press': random.randint(0, 2),
+            'press': random.randint(18, 20),
             'switch': 5000
         }
         return reading

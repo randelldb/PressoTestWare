@@ -251,23 +251,23 @@ def create_model():
 
     type_a = request.form['drop_a']
     a_highValue = request.form['a_highValue']
-    b_highValue = request.form['b_highValue']
     a_hvPlus = request.form['a_hvPlus']
     a_hvMin = request.form['a_hvMin']
-    b_hvPlus = request.form['b_hvPlus']
-    b_hvMin = request.form['b_hvMin']
-
-    type_b = request.form['drop_b']
     a_lowValue = request.form['a_lowValue']
-    b_lowValue = request.form['b_lowValue']
     a_lvPlus = request.form['a_lvPlus']
     a_lvMin = request.form['a_lvMin']
+
+    type_b = request.form['drop_b']
+    b_highValue = request.form['b_highValue']
+    b_hvPlus = request.form['b_hvPlus']
+    b_hvMin = request.form['b_hvMin']
+    b_lowValue = request.form['b_lowValue']
     b_lvPlus = request.form['b_lvPlus']
     b_lvMin = request.form['b_lvMin']
 
     cm.create_model(modelName, brand, model, customer, ref,
-                    type_a, a_highValue, b_highValue, a_hvPlus, a_hvMin, b_hvPlus, b_hvMin,
-                    type_b, a_lowValue, b_lowValue, a_lvPlus, a_lvMin, b_lvPlus, b_lvMin)
+                    type_a, a_highValue, a_hvPlus, a_hvMin, a_lowValue, a_lvPlus, a_lvMin,
+                    type_b, b_highValue, b_hvPlus, b_hvMin, b_lowValue, b_lvPlus, b_lvMin,)
 
     return render_template('model_view.html')
 

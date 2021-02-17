@@ -115,6 +115,10 @@ body {
   display: none;
 }
 
+.chartSelector-active{
+  background-color: chocolate!important;
+}
+
 /* .chart{
   width: 50%;
 } */
