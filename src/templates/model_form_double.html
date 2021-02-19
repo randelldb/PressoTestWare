@@ -35,11 +35,32 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-6"></div>
+    <!-- <div class="col-6"></div>
     <div class="col center bold">{{ items.type_a }}</div>
     <div class="col center bold">{{ items.type_b }}</div>
     <br />
-    <br />
+    <br /> -->
+    <div class="col-6"></div>
+        <div class="col center bold">
+          <select name="drop_a" id="drop_a">
+            <option selected="{{ items.type_a }}" value="{{ items.type_a }}">-- {{ items.type_a }} --</option>
+            <option value="Leeg">Leeg</option>
+            <option value="Lagedruk">Lagedruk</option>
+            <option value="Hogedruk">Hogedruk</option>
+            <option value="Condensordruk">Condensordruk</option>
+          </select>
+        </div>
+        <div class="col center bold">
+          <select name="drop_b" id="drop_b" >
+            <option selected="{{ items.type_b }}" value="{{ items.type_b }}">-- {{ items.type_b }} --</option>
+            <option value="Leeg">Leeg</option>
+            <option value="Lagedruk">Lagedruk</option>
+            <option value="Hogedruk">Hogedruk</option>
+            <option value="Condensordruk">Condensordruk</option>
+          </select>
+        </div>
+        <br />
+        <br />
   </div>
 
   <div class="row">

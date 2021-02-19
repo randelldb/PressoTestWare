@@ -46,56 +46,64 @@ def complete_calibration():
 
 
 def calibration_loop(selector):
-
     with app.app_context():
         data = cm.select_model(current_id)
 
     parse_mb_data = json.loads(modbusData())
+
+    # activate realtime data reading
+    # while True:
+    #     time.sleep(1)
+    #     #parse_mb_data = json.loads(modbusData())
+
     hvPassFlag = 0
     lvPassFlag = 0
 
     global start_stop
     while start_stop:
-        print(parse_mb_data)
-        if parse_mb_data['switch'] > 5000:
-            print('Switch > 5000')
-            validateHv = CalibrationValidator(selector,
-                                              'hi',
-                                              parse_mb_data['temp'],
-                                              parse_mb_data['rv'],
-                                              parse_mb_data['press'],
-                                              getattr(data, selector + '_highValue'),
-                                              getattr(data, selector + '_hvPlus'),
-                                              getattr(data, selector + '_hvMin'))
+        while True:
+            if parse_mb_data['switch'] > 5000:
+                print('Switch > 5000')
+                validateHv = CalibrationValidator(selector,
+                                                  'hi',
+                                                  parse_mb_data['temp'],
+                                                  parse_mb_data['rv'],
+                                                  parse_mb_data['press'],
+                                                  getattr(data, selector + '_highValue'),
+                                                  getattr(data, selector + '_hvPlus'),
+                                                  getattr(data, selector + '_hvMin'))
 
-            hvPassFlag = validateHv.validator()
+                hvPassFlag = validateHv.validator()
 
-            if hvPassFlag == 1:
-                print(selector + " pass hv, Pass flag raised")
-            else:
-                print(selector + " Fail hv test, Failed flag raised")
+                if hvPassFlag == 1:
+                    print(selector + " pass hv, Pass flag raised")
+                    print("!!" + hvPassFlag + 'Hi !!')
+                else:
+                    print(selector + " Fail hv test, Failed flag raised")
 
-        if parse_mb_data['switch'] <= 5000 and hvPassFlag == 1:
-            print('Switch <= 5000')
-            validateLv = CalibrationValidator(selector,
-                                              'lo',
-                                              parse_mb_data['temp'],
-                                              parse_mb_data['rv'],
-                                              parse_mb_data['press'],
-                                              getattr(data, selector + '_lowValue'),
-                                              getattr(data, selector + '_lvPlus'),
-                                              getattr(data, selector + '_lvMin'))
+            if parse_mb_data['switch'] <= 5000 and hvPassFlag == 1:
+                print('Switch <= 5000')
+                validateLv = CalibrationValidator(selector,
+                                                  'lo',
+                                                  parse_mb_data['temp'],
+                                                  parse_mb_data['rv'],
+                                                  parse_mb_data['press'],
+                                                  getattr(data, selector + '_lowValue'),
+                                                  getattr(data, selector + '_lvPlus'),
+                                                  getattr(data, selector + '_lvMin'))
 
-            lvPassFlag = validateLv.validator()
+                lvPassFlag = validateLv.validator()
 
-            if lvPassFlag == 1:
-                print(selector + " pass lv, Pass flag raised")
-            else:
-                print(selector + " Fail lv test, Fail flag raised")
+                if lvPassFlag == 1:
+                    print(selector + " pass lv, Pass flag raised")
+                    print("!!" + lvPassFlag + 'Lo !!')
 
-        if hvPassFlag == 1 and lvPassFlag == 1:
-            print(selector + " full test passed")
-            break
+                else:
+                    print(selector + " Fail lv test, Fail flag raised")
+
+            if hvPassFlag == 1 and lvPassFlag == 1:
+                print(selector + " full test passed")
+                break
 
 
 def manual_run(selector):
@@ -226,6 +234,12 @@ def get_calibration_model():
     return render_template('get_calibration_model.html', items=items)
 
 
+@app.route('/get_calibration_model_for_view')
+def get_calibration_model_for_view():
+    items = CalibrationModel.query.all()
+    return render_template('get_calibration_model_for_view.html', items=items)
+
+
 @app.route('/get_model_data/<id>')
 def get_model_data(id):
     items = CalibrationModel.query.filter_by(id=id).first()
@@ -270,7 +284,7 @@ def create_model():
 
     cm.create_model(modelName, brand, model, customer, ref,
                     type_a, a_highValue, a_hvPlus, a_hvMin, a_lowValue, a_lvPlus, a_lvMin,
-                    type_b, b_highValue, b_hvPlus, b_hvMin, b_lowValue, b_lvPlus, b_lvMin,)
+                    type_b, b_highValue, b_hvPlus, b_hvMin, b_lowValue, b_lvPlus, b_lvMin, )
 
     return render_template('model_view.html')
 
@@ -363,17 +377,18 @@ def get_ports():
 # Set the chosen port from get_ports() as active
 @app.route('/set_ports/<id>')
 def set_ports(id):
-    #set port in config file
+    # set port in config file
     confReader.writeConfig('default-settings', 'com', id)
 
 
-#function to open modbus connection
+# function to open modbus connection
 @app.route('/modbusData')
 def modbusData():
     readConfig = confReader.readConfig()
     defaultCom = readConfig['default-settings']['com']
-
+    # print(open_modbus_conn(defaultCom))
     return json.dumps(open_modbus_conn(defaultCom))
+
 
 # ------------------------- Handling: Counter
 # Counter used as calibration id number
@@ -385,6 +400,13 @@ def get_count():
 
 
 # ------------------------- Handling: Index
+
+@app.route('/get_part_divider/<id>')
+def get_part_divider(id):
+    items = CalibrationModel.query.filter_by(id=id).first()
+    return render_template('part_divider.html', items=items)
+
+
 @app.route("/")
 def index(name=None):
     return render_template('index.html', name=name)

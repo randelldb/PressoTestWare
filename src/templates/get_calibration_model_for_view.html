@@ -1,0 +1,9 @@
+{% for item in items %}
+    <tr class="model_item" onclick="get_model_form_data({{ item.id }})">
+        <td>
+        	<p>{{ item.name }}</p>
+        </td>
+    </tr>
+{% endfor %}
+
+       

@@ -1,4 +1,4 @@
-rate = 100
+rate = 1000
 b_active = 0
 active_id = 1
 

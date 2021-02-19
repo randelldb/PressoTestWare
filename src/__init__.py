@@ -1,3 +1,7 @@
+import serial
+
+from src.config import confReader
+
 debug = True
 import os
 
@@ -6,6 +10,21 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
 from flask_caching import Cache
+import atexit
+
+
+def OnExitApp():
+    print("Exit Python application")
+    readConfig = confReader.readConfig()
+    defaultCom = readConfig['default-settings']['com']
+    if defaultCom != 'test':
+        s = serial.Serial(defaultCom)
+        s.close()
+        atexit.unregister(OnExitApp)
+    atexit.unregister(OnExitApp)
+
+
+atexit.register(OnExitApp)
 
 # Flask instance
 dir_path = os.path.dirname(os.path.realpath(__file__))

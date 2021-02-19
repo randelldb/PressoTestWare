@@ -12,6 +12,17 @@ $(document).ready(function () {
   //display_modbus_data()
 })
 
+var get_part_divider = function (NewID = 1) {
+  $.ajax({
+    url: '/get_part_divider/' + NewID,
+    type: 'get',
+    success: function (response) {
+      $('#get_part_divider').html(response)
+    },
+    error: function (xhr) {}
+  })
+}
+
 var display_modbus_data = function () {
   setInterval(function(){
   $.getJSON('/modbusData', function (response) {
@@ -66,6 +77,7 @@ var get_model_data = function (NewID = 1) {
     type: 'get',
     success: function (response) {
       $('.get_model_data').html(response)
+      get_part_divider(NewID)
     },
     error: function (xhr) {}
   })

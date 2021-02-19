@@ -5,7 +5,7 @@ $(document).ready(function () {
 // get data for dropdown
 var get_model_data_list = function () {
   $.ajax({
-    url: '/get_calibration_model',
+    url: '/get_calibration_model_for_view',
     type: 'get',
     success: function (response) {
       $("[aria-labelledby='select_model']").html(response)
@@ -16,8 +16,7 @@ var get_model_data_list = function () {
   })
 }
 
-// bad naming, should be fixxed
-var set_bounds = function (id = 1) {
+var get_model_form_data = function (id = 1) {
   $.ajax({
     url: '/get_model_form_data/' + id,
     type: 'get',
