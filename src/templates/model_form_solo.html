@@ -35,11 +35,69 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-6"></div>
+    <!-- <div class="col-6"></div>
     <div class="col center bold">{{ items.type_a }}</div>
     <br />
-    <br />
+    <br /> -->
+    <div class="col-6"></div>
+
+    <div class="col center bold">
+      <select name="drop_a" id="drop_a">
+        <option value="{{ items.type_a }}">-- {{ items.type_a }} --</option>
+        <!-- <option value="Leeg">Leeg</option> -->
+        <option value="Lagedruk">Lagedruk</option>
+        <option value="Hogedruk">Hogedruk</option>
+        <option value="Condensordruk">Condensordruk</option>
+      </select>
+      <input type="hidden" name="drop_b" id="drop_b" value="Leeg">
+    </div>
   </div>
+
+  <input
+        size="2"
+        type="hidden"
+        name="b_highValue"
+        id="b_highValue"
+        value="0"
+      />
+  
+      <input
+        size="2"
+        type="hidden"
+        name="b_hvPlus"
+        id="b_hvPlus"
+        value="0"
+      />
+      <input
+        size="2"
+        type="hidden"
+        name="b_hvMin"
+        id="b_hvMin"
+        value="0"
+      />
+
+      <input
+        size="2"
+        type="hidden"
+        name="b_lowValue"
+        id="b_lowValue"
+        value="0"
+      />
+
+      <input
+        size="2"
+        type="hidden"
+        name="b_lvvPlus"
+        id="b_lvPlus"
+        value="0"
+      />
+      <input
+        size="2"
+        type="hidden"
+        name="b_lvvMin"
+        id="b_lvMin"
+        value="0"
+      />
 
   <div class="row">
     <div class="col-6 bold">Voorinstelling schakelpunt hoog</div>

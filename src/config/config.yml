@@ -1,4 +1,4 @@
 default-settings:
-  com: test
-  printer: root
-  writer: HP ENVY Photo 6200 series PCL-3
+  com: l
+  printer: RICOH Aficio MP C3002
+  writer: RICOH Aficio MP C3002

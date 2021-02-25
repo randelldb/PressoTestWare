@@ -38,7 +38,7 @@ var model_update = function (id) {
   var customer = $('#customer').val()
   var ref = $('#ref').val()
 
-  var type_a = 1
+  var type_a = $('#drop_a').val()
 
   var a_highValue = $('#a_highValue').val()
   var b_highValue = $('#b_highValue').val()
@@ -47,7 +47,7 @@ var model_update = function (id) {
   var b_hvPlus = $('#b_hvPlus').val()
   var b_hvMin = $('#b_hvMin').val()
 
-  var type_b = 2
+  var type_b = $('#drop_b').val()
 
   var a_lowValue = $('#a_lowValue').val()
   var b_lowValue = $('#b_lowValue').val()

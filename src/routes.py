@@ -6,14 +6,14 @@ from datetime import date
 from flask import render_template, request, redirect, Response
 from jinja2.runtime import to_string
 
+import src
 from src import app
 from src import db
 from src import cache
-from src.handlers.modbusHandler import open_modbus_conn
 from src.config import confReader
 
 from src.models import CalibrationModel, MainCounter, CertificateTemplate
-from src.handlers import modbusHandler, printerHandler, certificateWriter
+from src.handlers import printerHandler, certificateWriter, modbusHandler
 from src.handlers.calibrationModelHandler import CalibrationModelHandler
 from src.handlers.templateHandler import TemplateHandler
 from src.processor.calibrationProcessor import CalibrationValidator
@@ -25,6 +25,7 @@ today = date.today()
 ### GLOBALS ###
 current_id = 1
 start = False
+readingLoop = {}
 
 
 # ------------------------- Handling: Calibration
@@ -46,21 +47,24 @@ def complete_calibration():
 
 
 def calibration_loop(selector):
+    print(selector)
     with app.app_context():
         data = cm.select_model(current_id)
 
     parse_mb_data = json.loads(modbusData())
+    print(parse_mb_data)
 
     # activate realtime data reading
     # while True:
     #     time.sleep(1)
-    #     #parse_mb_data = json.loads(modbusData())
+    # parse_mb_data = readingLoop
 
     hvPassFlag = 0
     lvPassFlag = 0
 
     global start_stop
     while start_stop:
+        print('Validate Loop started')
         while True:
             if parse_mb_data['switch'] > 5000:
                 print('Switch > 5000')
@@ -294,7 +298,7 @@ def create_model():
 def get_model_form_data(id):
     items = CalibrationModel.query.filter_by(id=id).first()
 
-    if items.type_a == 0 or items.type_b == 0:
+    if items.type_b == "Leeg":
         return render_template('model_form_solo.html', items=items)
     else:
         return render_template('model_form_double.html', items=items)
@@ -311,20 +315,19 @@ def model_delete(id):
 # Update function to update a calibration model from the 'Model configuratie' view
 @app.route('/model_update/<id>', methods=['GET', 'POST'])
 def model_update(id):
-    print('if')
     modelName = request.form['modelName']
     brand = request.form['brand']
     model = request.form['model']
     customer = request.form['customer']
     ref = request.form['ref']
-    type_a = 1
+    type_a = request.form['type_a']
     a_highValue = request.form['a_highValue']
     a_hvPlus = request.form['a_hvPlus']
     a_hvMin = request.form['a_hvMin']
     a_lowValue = request.form['a_lowValue']
     a_lvPlus = request.form['a_lvPlus']
     a_lvMin = request.form['a_lvMin']
-    type_b = 2
+    type_b = request.form['type_b']
     b_highValue = request.form['b_highValue']
     b_hvPlus = request.form['b_hvPlus']
     b_hvMin = request.form['b_hvMin']
@@ -341,7 +344,7 @@ def model_update(id):
 # Set the chosen printer from get_printers() as active
 @app.route('/set_printer/<selectedPrinter>')
 def set_printers(selectedPrinter):
-    confReader.writeConfig('default-settings', 'writer', selectedPrinter)
+    confReader.writeConfig('default-settings', 'printer', selectedPrinter)
     return ''
 
 
@@ -370,7 +373,8 @@ def get_writers():
 # Display list of serial ports available on the system
 @app.route('/get_ports')
 def get_ports():
-    ports = modbusHandler.serial_ports()
+    # ports = modbusHandler.serial_ports()
+    ports = 'leeg'
     return render_template('get_ports.html', ports=ports)
 
 
@@ -381,13 +385,27 @@ def set_ports(id):
     confReader.writeConfig('default-settings', 'com', id)
 
 
+@app.route('/modbusTransporter/<pressLoop>/<rvLoop>/<tempLoop>/<swtLoop>')
+def modbusTransporter(pressLoop, rvLoop, tempLoop, swtLoop):
+    global readingLoop
+    readingLoop = {
+        'press': pressLoop,
+        'rv': rvLoop,
+        'temp': tempLoop,
+        'switch': swtLoop
+    }
+    return ''
+
+
 # function to open modbus connection
 @app.route('/modbusData')
 def modbusData():
-    readConfig = confReader.readConfig()
-    defaultCom = readConfig['default-settings']['com']
-    # print(open_modbus_conn(defaultCom))
-    return json.dumps(open_modbus_conn(defaultCom))
+    # readConfig = confReader.readConfig()
+    # defaultCom = readConfig['default-settings']['com']
+    # return json.dumps(modbusHandler.readModbus())
+    # return json.dumps(modbusThreadData)
+
+    return json.dumps(src.modbusTransporter())
 
 
 # ------------------------- Handling: Counter

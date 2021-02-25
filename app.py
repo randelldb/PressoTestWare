@@ -1,7 +1,8 @@
 from src import create_app
-from src import routes ## DO NOT DELETE ##
+from src import routes  ## DO NOT DELETE ##
 
 import logging
+
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)

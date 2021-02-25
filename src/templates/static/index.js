@@ -9,8 +9,52 @@ $(document).ready(function () {
   complete_calibration()
   get_count()
   controle_calibration()
-  //display_modbus_data()
+  display_modbus_data()
+  modbusCollector()
 })
+
+var modbusCollection = {}
+
+var modbusCollector = function(){
+
+  setInterval(() => {
+    $.getJSON('/modbusData', function (response) {
+      if (response == null){
+      }else{
+        modbusCollection = response
+      }
+    })
+    // console.log(modbusCollection)
+    // modbusTransporter()
+    display_modbus_data()
+  }, 200);
+}
+
+
+var modbusTransporter = function () {
+  pressLoop = modbusCollection.press
+  rvLoop = modbusCollection.rv
+  tempLoop = modbusCollection.temp
+  swtLoop = modbusCollection.switch
+
+  $.ajax({
+    url: '/modbusTransporter/' + pressLoop + '/' + rvLoop + '/' + tempLoop + '/' + swtLoop,
+    type: 'get',
+    success: function (response) {},
+    error: function (xhr) {
+      //Do Something to handle error
+    }
+  })
+   
+}
+
+var display_modbus_data = function () {
+  $('#rt_press').html(modbusCollection.press + ' Bar')
+  $('#rt_rv').html(modbusCollection.rv + ' %')
+  $('#rt_temp').html(modbusCollection.temp + ' °')
+  $('#rt_switch').html(modbusCollection.switch)
+}
+
 
 var get_part_divider = function (NewID = 1) {
   $.ajax({
@@ -23,16 +67,6 @@ var get_part_divider = function (NewID = 1) {
   })
 }
 
-var display_modbus_data = function () {
-  setInterval(function(){
-  $.getJSON('/modbusData', function (response) {
-    $('#rt_press').html(response.press + ' Bar')
-    $('#rt_rv').html(response.rv + ' %')
-    $('#rt_temp').html(response.temp + ' °')
-    $('#rt_switch').html(response.switch)
-  })
-  }, 1000)
-}
 
 var controle_calibration = function () {
   $('.start_graph').click(function () {
@@ -112,14 +146,14 @@ var complete_calibration = function () {
 }
 
 var modbusCall = function () {
-  $.ajax({
-    url: '/modbusData',
-    type: 'get',
-    success: function (response) {},
-    error: function (xhr) {
-      //Do Something to handle error
-    }
-  })
+  // $.ajax({
+  //   url: '/modbusData',
+  //   type: 'get',
+  //   success: function (response) {},
+  //   error: function (xhr) {
+  //     //Do Something to handle error
+  //   }
+  // })
 }
 
 var get_model_data_list = function () {

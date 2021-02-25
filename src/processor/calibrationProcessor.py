@@ -16,12 +16,6 @@ class CalibrationValidator:
         self.tollMin = tollMin
         self.checks = []
 
-    def add(self):
-        pass
-
-    def validate(self):
-        pass
-
     def validator(self):
         if 19 <= self.temp <= 21 and 30 <= self.rv <= 60:
             print('env vars passed cur values: ')

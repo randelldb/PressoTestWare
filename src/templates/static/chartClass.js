@@ -1,4 +1,5 @@
-rate = 1000
+rate = 200
+durationttl = 20000
 b_active = 0
 active_id = 1
 
@@ -40,11 +41,11 @@ var chart_options_a = {
           type: 'realtime',
           realtime: {
             onRefresh: onRefresh,
-            duration: 20000, // data in the past 20000 ms will be displayed
+            duration: durationttl, // data in the past 20000 ms will be displayed
             refresh: rate, // onRefresh callback will be called every 1000 ms
             delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
             pause: true,
-            ttl: undefined // data will be automatically deleted as it disappears off the chart
+            ttl: durationttl // data will be automatically deleted as it disappears off the chart
           }
         }
       ],
@@ -139,11 +140,11 @@ var chart_options_b = {
           type: 'realtime',
           realtime: {
             onRefresh: onRefresh,
-            duration: 20000, // data in the past 20000 ms will be displayed
+            duration: durationttl, // data in the past 20000 ms will be displayed
             refresh: rate, // onRefresh callback will be called every 1000 ms
             delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
             pause: true,
-            ttl: undefined // data will be automatically deleted as it disappears off the chart
+            ttl: durationttl // data will be automatically deleted as it disappears off the chart
           }
         }
       ],
@@ -207,12 +208,16 @@ chart_a = new Chart(cta, chart_options_a)
 
 function onRefresh (chart) {
   chart.data.datasets.forEach(function (dataset) {
-    $.getJSON('/modbusData', function (response) {
-      dataset.data.push({
-        x: Date.now(),
-        y: response.press
-      })
-    })
+    // $.getJSON('/modbusData', function (response) {
+    //   dataset.data.push({
+    //     x: Date.now(),
+    //     y: response.press
+    //   })
+    // })
+    // dataset.data.push({
+    //     x: Date.now(),
+    //     y: modbusCollection.press
+    //   })
   })
 }
 
@@ -235,11 +240,11 @@ function set_bounds (id = 1) {
           type: 'realtime',
           realtime: {
             onRefresh: onRefresh,
-            duration: 20000, // data in the past 20000 ms will be displayed
+            duration: durationttl, // data in the past 20000 ms will be displayed
             refresh: rate, // onRefresh callback will be called every 1000 ms
             delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
             pause: false,
-            ttl: undefined // data will be automatically deleted as it disappears off the chart
+            ttl: durationttl // data will be automatically deleted as it disappears off the chart
           }
         }
       ],
@@ -250,7 +255,7 @@ function set_bounds (id = 1) {
             // suggestedMin: get_bounds['a_lvMin'] - 1,
             max: get_bounds['a_hvPlus'] + 1,
             min: get_bounds['a_lvMin'] - 1,
-            stepSize: 1
+            stepSize: 0.2
           }
         }
       ]
@@ -277,11 +282,11 @@ function set_bounds_b (id = 1) {
           type: 'realtime',
           realtime: {
             onRefresh: onRefresh,
-            duration: 20000, // data in the past 20000 ms will be displayed
+            duration: durationttl, // data in the past 20000 ms will be displayed
             refresh: rate, // onRefresh callback will be called every 1000 ms
             delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
             pause: false,
-            ttl: undefined // data will be automatically deleted as it disappears off the chart
+            ttl: durationttl // data will be automatically deleted as it disappears off the chart
           }
         }
       ],
@@ -292,7 +297,7 @@ function set_bounds_b (id = 1) {
             // suggestedMin: get_bounds['b_lvMin'] - 1,
             max: get_bounds['b_hvPlus'] + 1,
             min: get_bounds['b_lvMin'] - 1,
-            stepSize: 1
+            stepSize: 0.2
           }
         }
       ]
@@ -353,11 +358,11 @@ var start_stop_chart = function(selector, action){
           type: 'realtime',
           realtime: {
             onRefresh: onRefresh,
-            duration: 20000, // data in the past 20000 ms will be displayed
+            duration: durationttl, // data in the past 20000 ms will be displayed
             refresh: rate, // onRefresh callback will be called every 1000 ms
             delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
             pause: true,
-            ttl: undefined // data will be automatically deleted as it disappears off the chart
+            ttl: durationttl // data will be automatically deleted as it disappears off the chart
           }
         }
       ]
@@ -373,11 +378,11 @@ var start_stop_chart = function(selector, action){
             type: 'realtime',
             realtime: {
               onRefresh: onRefresh,
-              duration: 20000, // data in the past 20000 ms will be displayed
+              duration: durationttl, // data in the past 20000 ms will be displayed
               refresh: rate, // onRefresh callback will be called every 1000 ms
               delay: 0, // delay of 1000 ms, so upcoming values are known before plotting a line
               pause: true,
-              ttl: undefined // data will be automatically deleted as it disappears off the chart
+              ttl: durationttl // data will be automatically deleted as it disappears off the chart
             }
           }
         ]

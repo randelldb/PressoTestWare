@@ -1,30 +1,16 @@
+import atexit
+import threading
 import serial
-
 from src.config import confReader
 
 debug = True
 import os
-
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
 from flask_caching import Cache
-import atexit
-
-
-def OnExitApp():
-    print("Exit Python application")
-    readConfig = confReader.readConfig()
-    defaultCom = readConfig['default-settings']['com']
-    if defaultCom != 'test':
-        s = serial.Serial(defaultCom)
-        s.close()
-        atexit.unregister(OnExitApp)
-    atexit.unregister(OnExitApp)
-
-
-atexit.register(OnExitApp)
+from src.handlers.modbusHandler import readModbus, opennModbus
 
 # Flask instance
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -41,8 +27,49 @@ migrate = Migrate()
 # Marshmallow Instance
 ma = Marshmallow()
 
+# Seconds
+POOL_TIME = 0.2
+# variables that are accessible from anywhere
+modbusThreadData = {}
+# lock to control access to variable
+dataLock = threading.Lock()
+# thread handler
+yourThread = threading.Thread()
+
 
 def create_app(test_config=None):
+    opennModbus()
+
+    def interrupt():
+        global yourThread
+        yourThread.cancel()
+
+    def doStuff():
+        global modbusThreadData
+        global yourThread
+        with dataLock:
+            modbusThreadData = readModbus()
+            modbusCollector(modbusThreadData)
+
+            # Set the next thread to happen
+            yourThread = threading.Timer(POOL_TIME, doStuff, ())
+            yourThread.start()
+
+    def doStuffStart():
+        # Do initialisation stuff here
+        global yourThread
+        # Create your thread
+        yourThread = threading.Timer(POOL_TIME, doStuff, ())
+        yourThread.start()
+
+    # Initiate
+    doStuffStart()
+    # When you kill Flask (SIGTERM), clear the trigger for the next thread
+    atexit.register(interrupt)
+
+    def modbusCollector(data):
+        modbusGlobal(data)
+
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + dir_path + '/data/db.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
@@ -51,3 +78,16 @@ def create_app(test_config=None):
     cache.init_app(app)
 
     return app
+
+
+def modbusGlobal(data):
+    global modbusThreadData
+    modbusThreadData = data
+
+
+def modbusTransporter():
+    global modbusThreadData
+    if modbusThreadData is None:
+        return {}
+    else:
+        return modbusThreadData

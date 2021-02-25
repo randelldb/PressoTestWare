@@ -1,46 +1,55 @@
 import random
 
 import minimalmodbus
+
+minimalmodbus.CLOSE_PORT_AFTER_EACH_CALL = True
 import serial
-from time import time, sleep
+import time
+
+instrument = {}
 
 
-def open_modbus_conn(port):
-    if port is None:
-        print('Com not selected')
-    elif port == 'test':
-        reading = {
-            'rv': random.randint(30, 60),
-            'temp': random.randint(5, 21),
-            'press': random.randint(5, 20),
-            'switch': 5000
-        }
-        return reading
-    else:
-        instrument = minimalmodbus.Instrument('' + port + '', 1)  # port name, slave address (in decimal)
-        # instrument.serial.port  # this is the serial port name
-        instrument.serial.baudrate = 115200  # Baud
+def opennModbus(port='COM9'):
+    try:
+        print('openmodbus')
+        global instrument
+        instrument = minimalmodbus.Instrument(port, 1, minimalmodbus.MODE_RTU)
+        instrument.serial.baudrate = 115200
         instrument.serial.bytesize = 8
         instrument.serial.parity = serial.PARITY_NONE
         instrument.serial.stopbits = 1
-        instrument.serial.timeout = 0.2  # seconds
-        # instrument.address  # this is the slave address number
-        instrument.mode = minimalmodbus.MODE_RTU  # rtu or ascii mode
+        instrument.serial.timeout = 0.2  # 0.2 seconds
         instrument.clear_buffers_before_each_transaction = True
         instrument.close_port_after_each_call = True
-        instrument.debug = True
-        rv = float(instrument.read_register(512, 1))  # Registernumber, number of decimals
-        temp = float(instrument.read_register(516, 1))
-        press = float(instrument.read_register(520, 1))
-        switch = float(instrument.read_register(528, 1))
+        # instrument.debug = True
+    except:
+        print('Error in communication')
+
+
+def readModbus():
+    global instrument
+    if instrument is None:
+        opennModbus()
+    try:
+        rv = instrument.read_register(512, 2, signed=True)
+        temp = instrument.read_register(516, 2, signed=True)
+        press = instrument.read_register(520, 2, signed=True)
+        switch = instrument.read_register(528, 2, signed=True)
 
         reading = {
-            'rv': rv,
-            'temp': temp,
-            'press': press,
-            'switch': switch
+            'rv': rv + random.randint(1, 5),
+            'temp': temp + random.randint(1, 5),
+            'press': press + random.randint(1, 5),
+            'switch': switch + random.randint(1, 5)
+            # 'rv': random.randint(1, 5),
+            # 'temp': random.randint(1, 5),
+            # 'press':random.randint(1, 5),
+            # 'switch': random.randint(1, 5)
         }
         return reading
+    except:
+        # print('Error in Reading registers')
+        pass
 
 
 def serial_ports():
