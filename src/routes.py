@@ -404,7 +404,7 @@ def modbusData():
     # defaultCom = readConfig['default-settings']['com']
     # return json.dumps(modbusHandler.readModbus())
     # return json.dumps(modbusThreadData)
-
+    print(json.dumps(src.modbusTransporter()))
     return json.dumps(src.modbusTransporter())
 
 

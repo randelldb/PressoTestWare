@@ -87,7 +87,4 @@ def modbusGlobal(data):
 
 def modbusTransporter():
     global modbusThreadData
-    if modbusThreadData is None:
-        return {}
-    else:
-        return modbusThreadData
+    return modbusThreadData

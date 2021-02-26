@@ -1,12 +1,9 @@
 import random
 
 import minimalmodbus
-
-minimalmodbus.CLOSE_PORT_AFTER_EACH_CALL = True
 import serial
-import time
 
-instrument = {}
+instrument = None
 
 
 def opennModbus(port='COM9'):
@@ -14,7 +11,7 @@ def opennModbus(port='COM9'):
         print('openmodbus')
         global instrument
         instrument = minimalmodbus.Instrument(port, 1, minimalmodbus.MODE_RTU)
-        instrument.serial.baudrate = 115200
+        instrument.serial.baudrate = 9600 #115200
         instrument.serial.bytesize = 8
         instrument.serial.parity = serial.PARITY_NONE
         instrument.serial.stopbits = 1
@@ -28,8 +25,8 @@ def opennModbus(port='COM9'):
 
 def readModbus():
     global instrument
-    if instrument is None:
-        opennModbus()
+    # if instrument is None:
+    #     opennModbus()
     try:
         rv = instrument.read_register(512, 2, signed=True)
         temp = instrument.read_register(516, 2, signed=True)
@@ -50,17 +47,16 @@ def readModbus():
     except:
         # print('Error in Reading registers')
         pass
-
-
-def serial_ports():
-    ports = ['COM%s' % (i + 1) for i in range(256)]
-
-    result = []
-    for port in ports:
-        try:
-            s = serial.Serial(port)
-            s.close()
-            result.append(port)
-        except (OSError, serial.SerialException):
-            pass
-    return result
+#
+# def serial_ports():
+#     ports = ['COM%s' % (i + 1) for i in range(256)]
+#
+#     result = []
+#     for port in ports:
+#         try:
+#             s = serial.Serial(port)
+#             s.close()
+#             result.append(port)
+#         except (OSError, serial.SerialException):
+#             pass
+#     return result
